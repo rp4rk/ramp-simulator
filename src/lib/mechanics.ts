@@ -1,5 +1,4 @@
-import memo from "memoizee";
-import { createEmitAndSemanticDiagnosticsBuilderProgram } from "typescript";
+
 import { hasAura, getActiveBuffs, getActiveDoTs, numBuffsActive } from "./buff";
 import {
   getCritPerc,
@@ -7,7 +6,6 @@ import {
   getMasteryPerc,
   getVersPerc,
 } from "./player";
-// import { AscendedEruption } from "./spells";
 import { Spell, SimState, Buff, DoT, StateSpellReducer } from "./types";
 
 /**

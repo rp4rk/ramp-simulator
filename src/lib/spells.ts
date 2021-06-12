@@ -13,6 +13,8 @@ import { getHastePerc } from "./player";
 import { Spell } from "./types";
 
 export const PurgeTheWicked: Spell = {
+  id: 204197,
+  icon: "ability_mage_firestarter",
   name: "Purge the Wicked",
   damage: 22.3,
   effect: [
@@ -33,6 +35,8 @@ export const PurgeTheWicked: Spell = {
 };
 
 export const ShadowWordPain: Spell = {
+  id: 579,
+  icon: "spell_shadow_shadowwordpain",
   name: "Shadow Word: Pain",
   damage: 12.92,
   effect: [
@@ -53,6 +57,8 @@ export const ShadowWordPain: Spell = {
 };
 
 export const Shadowfiend: Spell = {
+  id: 34433,
+  icon: "spell_shadow_shadowfiend",
   name: "Shadowfiend",
   damage: 46.2,
   effect: [
@@ -76,6 +82,8 @@ export const Shadowfiend: Spell = {
 };
 
 export const Mindbender: Spell = {
+  id: 123040,
+  icon: "spell_shadow_soulleech_3",
   name: "Mindbender",
   damage: 33.88,
   effect: [
@@ -99,7 +107,9 @@ export const Mindbender: Spell = {
 };
 
 export const SpiritShell: Spell = {
-  name: "SpiritShell",
+  id: 109964,
+  icon: "ability_shaman_astralshift",
+  name: "Spirit Shell",
   effect: [
     (state, spell) =>
       applyAura(state, {
@@ -113,6 +123,8 @@ export const SpiritShell: Spell = {
 };
 
 export const Penance: Spell = {
+  id: 47540,
+  icon: "spell_holy_penance",
   name: "Penance",
   damage: (state) => {
     const hasThePenitentOne = hasAura(state, "The Penitent One");
@@ -125,6 +137,8 @@ export const Penance: Spell = {
 };
 
 export const BoonOfTheAscended: Spell = {
+  id: 325013,
+  icon: "ability_bastion_priest",
   name: "Boon of the Ascended",
   castTime: 1500,
   effect: [
@@ -148,6 +162,8 @@ export const BoonOfTheAscended: Spell = {
 };
 
 export const AscendedBlast: Spell = {
+  id: 325315,
+  icon: "spell_animabastion_missile",
   name: "Ascended Blast",
   damage: (state) => {
     const hasCourageousAscension = hasAura(state, "Courageous Ascension");
@@ -185,6 +201,8 @@ export const AscendedBlast: Spell = {
 };
 
 export const AscendedNova: Spell = {
+  id: 325020,
+  icon: "spell_animabastion_nova",
   name: "Ascended Nova",
   damage: (state) => (hasAura(state, "Boon of the Ascended") ? 69.56 : 0),
   healing: (state) => (hasAura(state, "Boon of the Ascended") ? 135.36 : 0),
@@ -207,6 +225,8 @@ export const AscendedNova: Spell = {
 };
 
 export const AscendedEruption: Spell = {
+  id: 3565449,
+  icon: "ability_bastion_priest",
   name: "Ascended Eruption",
   damage: (state) => {
     const hasCourageousAscension = hasAura(state, "Courageous Ascension");
@@ -221,6 +241,8 @@ export const AscendedEruption: Spell = {
 };
 
 export const Schism: Spell = {
+  id: 214621,
+  icon: "spell_warlock_focusshadow",
   name: "Schism",
   damage: 141,
   castTime: 1500,
@@ -242,6 +264,8 @@ export const Schism: Spell = {
 };
 
 export const Smite: Spell = {
+  id: 585,
+  icon: "spell_holy_holysmite",
   name: "Smite",
   damage: 49.7,
   castTime: 1500,
@@ -249,6 +273,8 @@ export const Smite: Spell = {
 };
 
 export const Halo: Spell = {
+  id: 120517,
+  icon: "ability_priest_halo",
   name: "Halo",
   damage: 96.82,
   healing: 864,
@@ -257,6 +283,8 @@ export const Halo: Spell = {
 };
 
 export const MindBlast: Spell = {
+  id: 8092,
+  icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
   damage: 74.42,
   absorb: 300,
@@ -265,6 +293,8 @@ export const MindBlast: Spell = {
 };
 
 export const Mindgames: Spell = {
+  id: 323673,
+  icon: "ability_revendreth_priest",
   name: "Mindgames",
   damage: (state) => {
     const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
@@ -276,12 +306,16 @@ export const Mindgames: Spell = {
 };
 
 export const PowerWordSolace: Spell = {
+  id: 129250,
+  icon: "ability_priest_flashoflight",
   name: "Power Word: Solace",
   damage: 75.2,
   effect: [damage, atonement, advanceTime],
 };
 
 export const PowerWordRadiance: Spell = {
+  id: 194509,
+  icon: "spell_priest_powerword",
   name: "Power Word: Radiance",
   healing: 525,
   castTime: 2000,
@@ -304,6 +338,8 @@ export const PowerWordRadiance: Spell = {
 };
 
 export const PowerWordShield: Spell = {
+  id: 17,
+  icon: "spell_holy_powerwordshield",
   name: "Power Word: Shield",
   absorb: 0,
   effect: [
@@ -320,7 +356,9 @@ export const PowerWordShield: Spell = {
 };
 
 export const Shadowmend: Spell = {
-  name: "Shadowmend",
+  id: 136202,
+  icon: "spell_shadow_shadowmend",
+  name: "Shadow Mend",
   healing: 320,
   castTime: 1500,
   effect: [

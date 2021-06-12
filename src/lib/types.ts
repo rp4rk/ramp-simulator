@@ -5,7 +5,20 @@ export type StateSpellReducer = (
 ) => SimState;
 type Calculated = (state: SimState) => number;
 
+export enum ItemType {
+  Legendary,
+  Conduit,
+}
+
+export interface Item extends Buff {
+  id: number;
+  icon: string;
+  type: ItemType;
+}
+
 export interface Spell {
+  id?: number;
+  icon?: string;
   name: string;
   damage?: number | Calculated;
   healing?: number | Calculated;
