@@ -2,7 +2,6 @@ import React, { ComponentProps } from "react";
 import { Story } from "@storybook/react";
 
 import { SpellList } from ".";
-import { Spells } from "lib";
 
 export default {
   title: "Spell List",

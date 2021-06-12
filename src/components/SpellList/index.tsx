@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { SpellListContainer } from "./styled";
 
 import { Spells } from "lib";

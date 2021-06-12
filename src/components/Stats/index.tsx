@@ -1,5 +1,4 @@
 import React, { useReducer } from "react";
-import { Card } from "components/Card";
 import { StatContainer } from "./styled";
 import { useEffect } from "react";
 
