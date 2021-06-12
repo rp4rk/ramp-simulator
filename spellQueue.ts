@@ -10,12 +10,12 @@ type SpellQueueIterator = (
 
 function reduceState(state: SimState, spell: Spell): SimState {
   const effects = [executeDoT, Eruption, ...(spell.effect || [])];
-  console.log(
-    `[${`${Math.round(state.time / 10) / 100}`.padEnd(5, "0")}] Casting ${
-      spell.name
-    }`
+
+  return (
+    effects.reduce((acc, curr) => {
+      return curr(acc, spell);
+    }, state) || state
   );
-  return effects.reduce((acc, curr) => curr(acc, spell), state) || state;
 }
 
 export const iterator: SpellQueueIterator = (

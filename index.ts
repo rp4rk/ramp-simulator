@@ -17,32 +17,20 @@ import {
   SpiritShell,
   Mindgames,
   PurgeTheWicked,
+  Shadowfiend,
+  Mindbender,
+  MindBlast,
+  ShadowWordPain,
+  Halo,
 } from "./spells";
 
 function repeat<T>(item: T, num: number): T[] {
   return Array.from({ length: num }, () => item);
 }
 
-const priestSpellQueue: SpellQueue = [
-  PurgeTheWicked,
-  PurgeTheWicked,
-  Shadowmend,
-  ...repeat(PowerWordShield, 9),
-  BoonOfTheAscended,
-  SpiritShell,
-  AscendedBlast,
-  PowerWordRadiance,
-  AscendedBlast,
-  PowerWordRadiance,
-  AscendedBlast,
-  Schism,
-  AscendedNova,
-  AscendedBlast,
-  AscendedNova,
-  AscendedNova,
-  AscendedBlast,
-  AscendedNova,
-];
+/**
+ * Conduits + Legendaries
+ */
 
 const ClarityOfMind = {
   name: "Clarity of Mind",
@@ -93,6 +81,110 @@ const ShatteredPerceptions = {
   expires: Infinity,
 };
 
+/**
+ * Queues
+ */
+const CoomBoonQueue: SpellQueue = [
+  PurgeTheWicked,
+  PurgeTheWicked,
+  Shadowmend,
+  ...repeat(PowerWordShield, 9),
+  PowerWordRadiance,
+  BoonOfTheAscended,
+  SpiritShell,
+  AscendedBlast,
+  PowerWordRadiance,
+  AscendedBlast,
+  Schism,
+  // AscendedNova,
+  // AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+];
+
+const BoonQueue: SpellQueue = [
+  PurgeTheWicked,
+  PurgeTheWicked,
+  Shadowmend,
+  ...repeat(PowerWordShield, 9),
+  BoonOfTheAscended,
+  SpiritShell,
+  AscendedBlast,
+  PowerWordRadiance,
+  AscendedBlast,
+  PowerWordRadiance,
+  AscendedBlast,
+  Schism,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+];
+
+const BoonBendingQueue: SpellQueue = [
+  PurgeTheWicked,
+  PurgeTheWicked,
+  Shadowmend,
+  ...repeat(PowerWordShield, 9),
+  // ...repeat(PowerWordShield, 2),
+  Mindbender,
+  BoonOfTheAscended,
+  SpiritShell,
+  AscendedBlast,
+  PowerWordRadiance,
+  AscendedBlast,
+  PowerWordRadiance,
+  AscendedBlast,
+  Schism,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+  AscendedBlast,
+  AscendedNova,
+  AscendedNova,
+];
+
+const ShadowfiendQueue: SpellQueue = [
+  PurgeTheWicked,
+  PurgeTheWicked,
+  Shadowmend,
+  ...repeat(PowerWordShield, 9),
+  PowerWordRadiance,
+  Shadowfiend,
+  PowerWordRadiance,
+  SpiritShell,
+  Schism,
+  Penance,
+  MindBlast,
+  Smite,
+  Smite,
+  Smite,
+  Smite,
+  Smite,
+  Smite,
+];
+
+/**
+ * Iterator
+ */
 const test = iterator(
   {
     healing: 0,
@@ -100,16 +192,25 @@ const test = iterator(
     absorb: 0,
     buffs: new Map(),
     time: 0,
-    player: createPlayer(1, 886, 0, 0, 0),
+    player: createPlayer(2200, 33 * 40, 35 * 25, 35 * 10, 202),
     cooldowns: new Map(),
   },
-  priestSpellQueue,
+  // BoonQueue,
+  CoomBoonQueue,
+  // ShadowfiendQueue,
   [
     ClarityOfMind,
+    Exaltation,
+    RabidShadows,
     // ThePenitentOne,
     CourageousAscension,
     // ShatteredPerceptions,
   ]
 );
 
-console.log(test.absorb);
+console.log({
+  healing: test.healing,
+  damage: test.damage,
+  absorb: test.absorb,
+  time: test.time,
+});

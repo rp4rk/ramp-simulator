@@ -1,9 +1,6 @@
-import {
-  buffActive,
-  getActiveBuffs,
-  getActiveDoTs,
-  numBuffsActive,
-} from "./buff";
+import memo from "memoizee";
+import { createEmitAndSemanticDiagnosticsBuilderProgram } from "typescript";
+import { hasAura, getActiveBuffs, getActiveDoTs, numBuffsActive } from "./buff";
 import {
   getCritPerc,
   getHastePerc,
@@ -38,20 +35,21 @@ export const advanceTime = (state: SimState, spell: Spell): SimState => {
   return { ...state, time: state.time + Math.max(1500 / playerHaste, 750) };
 };
 
-function calculateDamage(state: SimState, spell: Spell): number {
+const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender"];
+function calculateDamage(state: SimState, spell: Spell | DoT): number {
   if (!spell.damage) return 0;
 
   const initialDamage =
     typeof spell.damage === "function" ? spell.damage(state) : spell.damage;
 
-  const isSchismActive = buffActive(state, "Schism");
+  const isSchismActive = hasAura(state, "Schism");
   const schismMultiplier = isSchismActive ? 1.25 : 1;
 
   const { player } = state;
 
   return (
     (initialDamage / 100) *
-    schismMultiplier *
+    (IGNORED_FOR_SCHISM.includes(spell.name) ? schismMultiplier : 1) *
     player.spellpower *
     getCritPerc(player) *
     getVersPerc(player) *
@@ -68,7 +66,7 @@ function calculateDamage(state: SimState, spell: Spell): number {
 export const damage: StateSpellReducer = (state, spell): SimState => {
   return {
     ...state,
-    damage: Math.round(state.damage + calculateDamage(state, spell)),
+    damage: state.damage + calculateDamage(state, spell),
   };
 };
 
@@ -79,6 +77,7 @@ export const damage: StateSpellReducer = (state, spell): SimState => {
  * @returns
  */
 export const absorb: StateSpellReducer = (state, spell): SimState => {
+  if ("interval" in spell) return state;
   if (!spell.absorb) return state;
   const { player } = state;
   const initialAbsorb =
@@ -86,13 +85,12 @@ export const absorb: StateSpellReducer = (state, spell): SimState => {
 
   return {
     ...state,
-    absorb: Math.round(
+    absorb:
       state.absorb +
-        (initialAbsorb / 100) *
-          player.spellpower *
-          getCritPerc(player) *
-          getVersPerc(player)
-    ),
+      (initialAbsorb / 100) *
+        player.spellpower *
+        getCritPerc(player) *
+        getVersPerc(player),
   };
 };
 
@@ -103,10 +101,11 @@ export const absorb: StateSpellReducer = (state, spell): SimState => {
  * @returns
  */
 export const healing: StateSpellReducer = (state, spell): SimState => {
+  if ("interval" in spell) return state;
   if (!spell.healing) return state;
   const initialHealing =
     typeof spell.healing === "function" ? spell.healing(state) : spell.healing;
-  const spiritShellActive = buffActive(state, "Spirit Shell");
+  const spiritShellActive = hasAura(state, "Spirit Shell");
   const { player } = state;
 
   const calculatedHealing =
@@ -117,15 +116,15 @@ export const healing: StateSpellReducer = (state, spell): SimState => {
     player.spellpower;
 
   if (spell.name === "Power Word: Radiance" && spiritShellActive) {
-    const shellAmount = Math.round(calculatedHealing);
+    const shellAmount = calculatedHealing;
 
     return {
       ...state,
-      absorb: Math.round(state.absorb + shellAmount),
+      absorb: state.absorb + shellAmount,
     };
   }
 
-  return { ...state, healing: Math.round(state.healing + calculatedHealing) };
+  return { ...state, healing: state.healing + calculatedHealing };
 };
 
 /**
@@ -168,7 +167,6 @@ export const applyAura = (
   // Calculate Pandemic and Apply It
   const { duration } = aura;
   const pandemicWindow = Math.round(duration * 0.3);
-  const durationCeiling = duration + pandemicWindow;
 
   const originalDurationRemaining = expires - time;
   const pandemicValue = Math.min(originalDurationRemaining, pandemicWindow);
@@ -186,28 +184,26 @@ export const applyAura = (
  * @returns
  */
 export const atonement: StateSpellReducer = (state, spell): SimState => {
-  const spiritShellActive = buffActive(state, "Spirit Shell");
+  const spiritShellActive = hasAura(state, "Spirit Shell");
   const calculatedDamage = calculateDamage(state, spell);
   const activeAtonementCount = numBuffsActive(state, "Atonement");
   const { player } = state;
   const mastery = getMasteryPerc(player);
 
   if (spiritShellActive) {
-    const shellAmount = Math.round(
-      calculatedDamage * 0.5 * 0.864 * activeAtonementCount * mastery
-    );
+    const shellAmount =
+      calculatedDamage * 0.5 * 0.864 * activeAtonementCount * mastery;
 
     return {
       ...state,
-      absorb: Math.round(state.absorb + shellAmount),
+      absorb: state.absorb + shellAmount,
     };
   }
 
   return {
     ...state,
-    healing: Math.round(
-      state.healing + calculatedDamage * 0.5 * activeAtonementCount * mastery
-    ),
+    healing:
+      state.healing + calculatedDamage * 0.5 * activeAtonementCount * mastery,
   };
 };
 
@@ -219,7 +215,7 @@ export const atonement: StateSpellReducer = (state, spell): SimState => {
  * @returns
  */
 export const ClarityOfMind: StateSpellReducer = (state, spell): SimState => {
-  if (!buffActive(state, "Clarity of Mind")) return state;
+  if (!hasAura(state, "Clarity of Mind")) return state;
   const atonements = getActiveBuffs(state, "Atonement");
 
   atonements.forEach((buff) => {
@@ -237,6 +233,7 @@ export const ClarityOfMind: StateSpellReducer = (state, spell): SimState => {
  * @returns
  */
 export const Cooldown: StateSpellReducer = (state, spell): SimState => {
+  if ("interval" in spell) return state;
   if (!spell.cooldown) return state;
 
   // Advance time if needed
@@ -269,26 +266,55 @@ export const executeDoT: StateSpellReducer = (state, spell): SimState => {
   const activeDoTs = getActiveDoTs(state);
   if (activeDoTs.length === 0) return state;
 
-  const exampleDoT = activeDoTs[0];
-  const exampleDoTDuration = exampleDoT.expires - exampleDoT.applied;
-  const hastedInterval = exampleDoT.interval / haste;
+  const tickTimes = activeDoTs
+    .map((dot) => getTickTimes(dot, haste, state))
+    .flatMap((i) => pickBetween(time, projectedTime, i));
+
+  // return state;
+  return tickTimes.reduce((prevState, tick) => {
+    const { time } = prevState;
+    const [dot, calcaulatedDamage, projectedTime] = tick;
+    const partialDot = { ...dot, damage: calcaulatedDamage };
+    const nextState = atonement(
+      damage({ ...prevState, time: projectedTime }, partialDot),
+      partialDot
+    );
+
+    return {
+      ...nextState,
+      time,
+    };
+  }, state);
+};
+
+type tick = [DoT, number, number];
+const getTickTimes = function getTickTimes(
+  dot: DoT,
+  haste: number,
+  state: SimState
+): tick[] {
+  const exampleDoTDuration = dot.expires - dot.applied;
+  const baseInterval =
+    typeof dot.interval === "function" ? dot.interval(state) : dot.interval;
+  const hastedInterval = baseInterval / haste;
   const totalTickCount = exampleDoTDuration / hastedInterval;
 
-  const tickTimes = Array.from(
-    { length: Math.ceil(totalTickCount) },
-    (_, i) => {
-      const isFinalTick = Math.ceil(totalTickCount) === i + 1;
+  return Array.from({ length: Math.ceil(totalTickCount) }, (_, i) => {
+    const isFinalTick = Math.ceil(totalTickCount) === i + 1;
 
-      if (!isFinalTick) {
-        return (i + 1) * hastedInterval;
-      }
-
-      const partialTickRatio = totalTickCount - Math.floor(totalTickCount);
-      return i * hastedInterval + hastedInterval * partialTickRatio;
+    if (!isFinalTick) {
+      return [dot, dot.damage, dot.applied + (i + 1) * hastedInterval];
     }
-  );
 
-  console.log(tickTimes);
-
-  return state;
+    const partialTickRatio = totalTickCount - Math.floor(totalTickCount);
+    return [
+      dot,
+      dot.damage * partialTickRatio,
+      dot.applied + (i * hastedInterval + hastedInterval * partialTickRatio),
+    ];
+  });
 };
+
+function pickBetween(n: number, o: number, numbers: tick[]): tick[] {
+  return numbers.filter(([_, , i]) => i > n && i < o);
+}

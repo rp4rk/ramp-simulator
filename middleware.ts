@@ -21,7 +21,6 @@ export const Eruption: StateSpellReducer = (state, spell): SimState => {
     return state;
   }
 
-  console.log("Erupting at", state.time);
   lastBoon.consumed = true;
   const projectedState = atonement(
     damage(

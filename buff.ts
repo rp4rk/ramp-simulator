@@ -6,7 +6,7 @@ import { Buff, SimState, DoT } from "./types";
  * @param name
  * @returns
  */
-export const buffActive = (state: SimState, name: string): Boolean => {
+export const hasAura = (state: SimState, name: string): Boolean => {
   return (
     state.buffs.get(name)?.reduceRight((acc, curr) => {
       if (acc === true) return acc;

@@ -1,5 +1,8 @@
 export type SpellQueue = Spell[];
-export type StateSpellReducer = (state: SimState, spell: Spell) => SimState;
+export type StateSpellReducer = (
+  state: SimState,
+  spell: Spell | DoT
+) => SimState;
 type Calculated = (state: SimState) => number;
 
 export interface Spell {
@@ -32,7 +35,8 @@ export interface Buff {
 
 export interface DoT extends Buff {
   ticks: number;
-  interval: number;
+  interval: number | Calculated;
+  damage: number;
 }
 
 export interface SimState {

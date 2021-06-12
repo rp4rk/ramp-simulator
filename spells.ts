@@ -1,4 +1,4 @@
-import { buffActive, numBuffsActive } from "./buff";
+import { hasAura, numBuffsActive } from "./buff";
 import {
   absorb,
   advanceTime,
@@ -24,6 +24,73 @@ export const PurgeTheWicked: Spell = {
         expires: state.time + 20000,
         interval: 2000,
         ticks: 10,
+        damage: 11.656,
+      }),
+    damage,
+    atonement,
+    advanceTime,
+  ],
+};
+
+export const ShadowWordPain: Spell = {
+  name: "Shadow Word: Pain",
+  damage: 12.92,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Shadow Word: Pain",
+        duration: 16000,
+        applied: state.time,
+        expires: state.time + 16000,
+        interval: 2000,
+        ticks: 8,
+        damage: 9.588,
+      }),
+    damage,
+    atonement,
+    advanceTime,
+  ],
+};
+
+export const Shadowfiend: Spell = {
+  name: "Shadowfiend",
+  damage: 46.2,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Shadowfiend",
+        duration: 15000,
+        applied: state.time,
+        expires: state.time + 15000,
+        interval: (state) =>
+          hasAura(state, "Rabid Shadows")
+            ? 1500 / getHastePerc(state.player)
+            : 1500,
+        ticks: 10,
+        damage: 46.2,
+      }),
+    damage,
+    atonement,
+    advanceTime,
+  ],
+};
+
+export const Mindbender: Spell = {
+  name: "Mindbender",
+  damage: 33.88,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Mindbender",
+        duration: 1200,
+        applied: state.time,
+        expires: state.time + 12000,
+        interval: (state) =>
+          hasAura(state, "Rabid Shadows")
+            ? 1500 / getHastePerc(state.player)
+            : 1500,
+        ticks: 10,
+        damage: 33.88,
       }),
     damage,
     atonement,
@@ -48,7 +115,7 @@ export const SpiritShell: Spell = {
 export const Penance: Spell = {
   name: "Penance",
   damage: (state) => {
-    const hasThePenitentOne = buffActive(state, "The Penitent One");
+    const hasThePenitentOne = hasAura(state, "The Penitent One");
 
     return hasThePenitentOne ? 112.8 * 1.84 : 112.8;
   },
@@ -83,12 +150,13 @@ export const BoonOfTheAscended: Spell = {
 export const AscendedBlast: Spell = {
   name: "Ascended Blast",
   damage: (state) => {
-    const hasCourageousAscension = buffActive(state, "Courageous Ascension");
+    const hasCourageousAscension = hasAura(state, "Courageous Ascension");
     const caMultiplier = 1 + (hasCourageousAscension ? 0.4 : 0);
+    const hasBoon = hasAura(state, "Boon of the Ascended");
 
-    return 168.26 * caMultiplier;
+    return hasBoon ? 168.26 * caMultiplier : 0;
   },
-  healing: 201.91,
+  healing: (state) => (hasAura(state, "Boon of the Ascended") ? 201.91 : 0),
   cooldown: (state) => {
     const { player } = state;
     const haste = getHastePerc(player);
@@ -118,19 +186,21 @@ export const AscendedBlast: Spell = {
 
 export const AscendedNova: Spell = {
   name: "Ascended Nova",
-  damage: 69.56,
-  healing: 135.36,
+  damage: (state) => (hasAura(state, "Boon of the Ascended") ? 69.56 : 0),
+  healing: (state) => (hasAura(state, "Boon of the Ascended") ? 135.36 : 0),
   shortGcd: true,
   effect: [
     healing,
     damage,
     (state) =>
-      applyAura(state, {
-        name: "Eruption Stacks",
-        duration: 11000,
-        applied: state.time,
-        expires: state.time + 11000,
-      }),
+      (hasAura(state, "Boon of the Ascended") &&
+        applyAura(state, {
+          name: "Eruption Stacks",
+          duration: 11000,
+          applied: state.time,
+          expires: state.time + 11000,
+        })) ||
+      state,
     atonement,
     advanceTime,
   ],
@@ -139,7 +209,7 @@ export const AscendedNova: Spell = {
 export const AscendedEruption: Spell = {
   name: "Ascended Eruption",
   damage: (state) => {
-    const hasCourageousAscension = buffActive(state, "Courageous Ascension");
+    const hasCourageousAscension = hasAura(state, "Courageous Ascension");
     const activeBoonStacks = numBuffsActive(state, "Eruption Stacks");
     const caMultiplier = hasCourageousAscension ? 0.04 : 0.03;
     const boonMultiplier = 1 + activeBoonStacks * caMultiplier;
@@ -178,6 +248,14 @@ export const Smite: Spell = {
   effect: [advanceTime, damage, atonement],
 };
 
+export const Halo: Spell = {
+  name: "Halo",
+  damage: 96.82,
+  healing: 864,
+  castTime: 1500,
+  effect: [advanceTime, healing, damage, atonement],
+};
+
 export const MindBlast: Spell = {
   name: "Mind Blast",
   damage: 74.42,
@@ -189,7 +267,7 @@ export const MindBlast: Spell = {
 export const Mindgames: Spell = {
   name: "Mindgames",
   damage: (state) => {
-    const mgAmp = buffActive(state, "Shattered Perceptions") ? 1.208 : 1;
+    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
 
     return 253.8 * mgAmp;
   },
@@ -227,7 +305,7 @@ export const PowerWordRadiance: Spell = {
 
 export const PowerWordShield: Spell = {
   name: "Power Word: Shield",
-  absorb: 165.6,
+  absorb: 0,
   effect: [
     absorb,
     (state) =>
