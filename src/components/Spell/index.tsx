@@ -89,15 +89,25 @@ export const SwappableSpell = function ({
       // Determine space on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
+      const clientOffset = monitor.getClientOffset();
       const hoverMiddleX =
         (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-      const clientOffset = monitor.getClientOffset();
       const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left;
+
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
         return;
       }
       if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
+        return;
+      }
+      if (dragIndex < hoverIndex && hoverMiddleY < hoverClientY) {
+        return;
+      }
+      if (dragIndex > hoverIndex && hoverMiddleY > hoverClientY) {
         return;
       }
 
@@ -113,6 +123,7 @@ export const SwappableSpell = function ({
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.SpellRearrange,
     item: () => {
+      console.log(index);
       return { id, index };
     },
     collect: (monitor: any) => ({

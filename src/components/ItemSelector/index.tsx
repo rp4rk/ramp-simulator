@@ -59,6 +59,7 @@ export const ItemSelector = function ItemSelector({
         <h4>Legendaries</h4>
         {LEGENDARIES.map((legendary) => (
           <Spell
+            key={legendary.name}
             spell={legendary}
             onClick={(spell) => toggleItems(spell)}
             toggled={!!selectedItems[legendary.name]}
@@ -67,11 +68,12 @@ export const ItemSelector = function ItemSelector({
       </div>
       <div>
         <h4>Conduits</h4>
-        {CONDUITS.map((legendary) => (
+        {CONDUITS.map((conduit) => (
           <Spell
-            spell={legendary}
+            key={conduit.name}
+            spell={conduit}
             onClick={(spell) => toggleItems(spell)}
-            toggled={!!selectedItems[legendary.name]}
+            toggled={!!selectedItems[conduit.name]}
           />
         ))}
       </div>

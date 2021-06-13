@@ -18,8 +18,12 @@ const SpellMap: { [key: string]: Spell } = Object.values(Spells).reduce(
   {} as { [key: string]: Spell }
 );
 
+export interface UniqueSpell extends Spell {
+  timestamp: number;
+}
+
 export const Timeline = function ({ onChange }: TimelineProps) {
-  const [spells, setSpells] = useState<Spell[]>([]);
+  const [spells, setSpells] = useState<UniqueSpell[]>([]);
 
   // Drag n' Drop
   const [, drop] = useDrop(
@@ -27,8 +31,12 @@ export const Timeline = function ({ onChange }: TimelineProps) {
       accept: ItemTypes.Spell,
       drop: (a: any) => {
         const targetSpell = SpellMap[a.id];
+        const uniqueSpell: UniqueSpell = {
+          ...targetSpell,
+          timestamp: new Date().getTime(),
+        };
 
-        setSpells([...spells, targetSpell]);
+        setSpells([...spells, uniqueSpell]);
       },
     }),
     [setSpells, spells]

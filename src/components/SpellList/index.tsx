@@ -4,14 +4,15 @@ import { SpellListContainer } from "./styled";
 import { Spells } from "lib";
 import { Spell as SpellType } from "lib/types";
 import { DragSpell, SwappableSpell } from "components/Spell";
+import { UniqueSpell } from "components/Timeline";
 
 type SpellProps = {
   /**
    * A spell from the quicksim library.
    */
-  spells?: SpellType[];
+  spells?: (SpellType | UniqueSpell)[];
   swappable?: boolean;
-  setSpells?: (spellList: SpellType[]) => void;
+  setSpells?: (spellList: UniqueSpell[]) => void;
 };
 
 const EXCLUDED_SPELLS = ["Ascended Eruption"];
@@ -45,11 +46,12 @@ export const SpellList = function ({
   return (
     <SpellListContainer>
       {spells.map((spell, index) =>
-        swappable ? (
+        swappable && "timestamp" in spell ? (
           <SwappableSpell
             swapHandler={swapSpells}
             index={index}
-            key={spell.id}
+            key={`${spell.id}-${spell.timestamp}`}
+            id={`${spell.id}-${spell.timestamp}`}
             spell={spell}
           />
         ) : (
