@@ -10,9 +10,10 @@ import {
   healing,
 } from "./mechanics";
 import { getHastePerc } from "./player";
-import { Spell } from "./types";
+import { Spell, SpellCategory } from "./types";
 
 export const PurgeTheWicked: Spell = {
+  category: SpellCategory.Damage,
   id: 204197,
   icon: "ability_mage_firestarter",
   name: "Purge the Wicked",
@@ -35,6 +36,7 @@ export const PurgeTheWicked: Spell = {
 };
 
 export const ShadowWordPain: Spell = {
+  category: SpellCategory.Damage,
   id: 579,
   icon: "spell_shadow_shadowwordpain",
   name: "Shadow Word: Pain",
@@ -57,6 +59,7 @@ export const ShadowWordPain: Spell = {
 };
 
 export const Shadowfiend: Spell = {
+  category: SpellCategory.Cooldown,
   id: 34433,
   icon: "spell_shadow_shadowfiend",
   name: "Shadowfiend",
@@ -82,6 +85,7 @@ export const Shadowfiend: Spell = {
 };
 
 export const Mindbender: Spell = {
+  category: SpellCategory.Cooldown,
   id: 123040,
   icon: "spell_shadow_soulleech_3",
   name: "Mindbender",
@@ -107,6 +111,7 @@ export const Mindbender: Spell = {
 };
 
 export const SpiritShell: Spell = {
+  category: SpellCategory.Cooldown,
   id: 109964,
   icon: "ability_shaman_astralshift",
   name: "Spirit Shell",
@@ -123,6 +128,7 @@ export const SpiritShell: Spell = {
 };
 
 export const Penance: Spell = {
+  category: SpellCategory.Damage,
   id: 47540,
   icon: "spell_holy_penance",
   name: "Penance",
@@ -137,6 +143,7 @@ export const Penance: Spell = {
 };
 
 export const BoonOfTheAscended: Spell = {
+  category: SpellCategory.Kyrian,
   id: 325013,
   icon: "ability_bastion_priest",
   name: "Boon of the Ascended",
@@ -162,6 +169,7 @@ export const BoonOfTheAscended: Spell = {
 };
 
 export const AscendedBlast: Spell = {
+  category: SpellCategory.Kyrian,
   id: 325315,
   icon: "spell_animabastion_missile",
   name: "Ascended Blast",
@@ -201,6 +209,7 @@ export const AscendedBlast: Spell = {
 };
 
 export const AscendedNova: Spell = {
+  category: SpellCategory.Kyrian,
   id: 325020,
   icon: "spell_animabastion_nova",
   name: "Ascended Nova",
@@ -225,6 +234,7 @@ export const AscendedNova: Spell = {
 };
 
 export const AscendedEruption: Spell = {
+  category: SpellCategory.Ignored,
   id: 3565449,
   icon: "ability_bastion_priest",
   name: "Ascended Eruption",
@@ -241,6 +251,7 @@ export const AscendedEruption: Spell = {
 };
 
 export const Schism: Spell = {
+  category: SpellCategory.Cooldown,
   id: 214621,
   icon: "spell_warlock_focusshadow",
   name: "Schism",
@@ -264,6 +275,7 @@ export const Schism: Spell = {
 };
 
 export const Smite: Spell = {
+  category: SpellCategory.Damage,
   id: 585,
   icon: "spell_holy_holysmite",
   name: "Smite",
@@ -273,6 +285,7 @@ export const Smite: Spell = {
 };
 
 export const Halo: Spell = {
+  category: SpellCategory.Cooldown,
   id: 120517,
   icon: "ability_priest_halo",
   name: "Halo",
@@ -283,6 +296,7 @@ export const Halo: Spell = {
 };
 
 export const MindBlast: Spell = {
+  category: SpellCategory.Damage,
   id: 8092,
   icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
@@ -293,6 +307,7 @@ export const MindBlast: Spell = {
 };
 
 export const Mindgames: Spell = {
+  category: SpellCategory.Venthyr,
   id: 323673,
   icon: "ability_revendreth_priest",
   name: "Mindgames",
@@ -306,6 +321,7 @@ export const Mindgames: Spell = {
 };
 
 export const PowerWordSolace: Spell = {
+  category: SpellCategory.Cooldown,
   id: 129250,
   icon: "ability_priest_flashoflight",
   name: "Power Word: Solace",
@@ -314,6 +330,7 @@ export const PowerWordSolace: Spell = {
 };
 
 export const PowerWordRadiance: Spell = {
+  category: SpellCategory.Applicator,
   id: 194509,
   icon: "spell_priest_powerword",
   name: "Power Word: Radiance",
@@ -338,6 +355,7 @@ export const PowerWordRadiance: Spell = {
 };
 
 export const PowerWordShield: Spell = {
+  category: SpellCategory.Applicator,
   id: 17,
   icon: "spell_holy_powerwordshield",
   name: "Power Word: Shield",
@@ -356,6 +374,7 @@ export const PowerWordShield: Spell = {
 };
 
 export const Shadowmend: Spell = {
+  category: SpellCategory.Applicator,
   id: 136202,
   icon: "spell_shadow_shadowmend",
   name: "Shadow Mend",

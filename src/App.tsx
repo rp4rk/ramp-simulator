@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { SpellList } from "components/SpellList";
 import { SimOrchestrator } from "components/SimOrchestrator";
 import { Card } from "components/Card";
+import { SpellSelection } from "components/SpellSelection";
 
 function App() {
   const [sims, setSims] = useState(0);
@@ -15,7 +15,7 @@ function App() {
           zIndex: 100,
         }}
       >
-        <SpellList />
+        <SpellSelection />
       </Card>
       <Card>
         <SimOrchestrator />

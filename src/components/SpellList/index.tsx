@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { SpellListContainer } from "./styled";
 
 import { Spells } from "lib";
@@ -66,7 +66,6 @@ export const SpellList = function ({
   const deleteSpell = useCallback(
     (idx: number) => {
       if (!setSpells) return;
-      console.log(idx, spells);
       setSpells(spells.filter((_, j) => idx !== j) as any[]);
     },
     [spells, setSpells]

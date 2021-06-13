@@ -107,13 +107,12 @@ export const healing: StateSpellReducer = (state, spell): SimState => {
 
   const calculatedHealing =
     (initialHealing / 100) *
-    0.864 *
     getCritPerc(player) *
     getVersPerc(player) *
     player.spellpower;
 
   if (spell.name === "Power Word: Radiance" && spiritShellActive) {
-    const shellAmount = calculatedHealing;
+    const shellAmount = calculatedHealing * 0.864;
 
     return {
       ...state,

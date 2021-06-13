@@ -16,7 +16,17 @@ export interface Item extends Buff {
   type: ItemType;
 }
 
+export enum SpellCategory {
+  Applicator = "Applicator",
+  Damage = "Damage",
+  Cooldown = "Cooldown",
+  Kyrian = "Kyrian",
+  Venthyr = "Venthyr",
+  Ignored = "Ignored",
+}
+
 export interface Spell {
+  category?: SpellCategory;
   id?: number;
   icon?: string;
   name: string;

@@ -8,13 +8,13 @@ export const TimelineContainer = styled.div`
   align-items: center;
 
   ${SpellListContainer} {
+    box-sizing: border-box;
     border-radius: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 1px 1px 0px 0px rgba(0, 0, 0, 0.05);
-    background: #cde0fe;
+    background: #bfd7ff;
     display: flex;
     justify-content: start;
-    height: 68px;
+    min-height: 68px;
+    padding: 12px 0;
     margin: 0 48px;
   }
 `;
