@@ -66,7 +66,7 @@ export const SpellList = function ({
   const deleteSpell = useCallback(
     (idx: number) => {
       if (!setSpells) return;
-
+      console.log(idx, spells);
       setSpells(spells.filter((_, j) => idx !== j) as any[]);
     },
     [spells, setSpells]

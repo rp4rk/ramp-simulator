@@ -125,7 +125,6 @@ export const SwappableSpell = function ({
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.SpellRearrange,
     item: () => {
-      console.log(index);
       return { id, index };
     },
     collect: (monitor: any) => ({
@@ -135,7 +134,8 @@ export const SwappableSpell = function ({
       const didDrop = monitor.didDrop();
 
       if (!didDrop) {
-        if (!deleteHandler || !item.index) return;
+        if (typeof item.index !== "number") return;
+        if (!deleteHandler) return;
 
         deleteHandler(item.index);
       }
