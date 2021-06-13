@@ -19,7 +19,12 @@ export const ItemSelector = function ItemSelector({
 }: ItemSelectorProps) {
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: Item;
-  }>({});
+  }>({
+    [Items.ClarityOfMind.name]: Items.ClarityOfMind,
+    [Items.Exaltation.name]: Items.Exaltation,
+    [Items.RabidShadows.name]: Items.RabidShadows,
+    [Items.CourageousAscension.name]: Items.CourageousAscension,
+  });
 
   /**
    * Toggle Item Callback
