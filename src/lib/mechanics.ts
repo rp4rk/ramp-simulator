@@ -1,4 +1,3 @@
-
 import { hasAura, getActiveBuffs, getActiveDoTs, numBuffsActive } from "./buff";
 import {
   getCritPerc,
@@ -47,7 +46,7 @@ function calculateDamage(state: SimState, spell: Spell | DoT): number {
 
   return (
     (initialDamage / 100) *
-    (IGNORED_FOR_SCHISM.includes(spell.name) ? schismMultiplier : 1) *
+    (IGNORED_FOR_SCHISM.includes(spell.name) ? 1 : schismMultiplier) *
     player.spellpower *
     getCritPerc(player) *
     getVersPerc(player) *
