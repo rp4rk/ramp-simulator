@@ -13,6 +13,7 @@ type SpellProps = {
   spells?: (SpellType | UniqueSpell)[];
   swappable?: boolean;
   setSpells?: (spellList: UniqueSpell[]) => void;
+  deleteSpell?: (idx: number) => void;
 };
 
 const EXCLUDED_SPELLS = ["Ascended Eruption"];
@@ -21,12 +22,31 @@ const SPELL_LIST_DEFAULTS = Object.values(Spells).filter(
 );
 
 const swap = (i: number, j: number, a: any[]) => {
-  const newArr = [...a];
-  const firstItem = newArr[i];
-  newArr[i] = newArr[j];
-  newArr[j] = firstItem;
+  const swappingItem = a[i];
+  const [first, second] = a.reduce(
+    (acc, curr, idx) => {
+      if (idx === i) return acc;
 
-  return newArr;
+      if (i > j) {
+        if (idx < j) {
+          acc[0].push(curr);
+          return acc;
+        }
+      }
+      if (i < j) {
+        if (idx <= j) {
+          acc[0].push(curr);
+          return acc;
+        }
+      }
+
+      acc[1].push(curr);
+      return acc;
+    },
+    [[], []]
+  );
+
+  return [...first, swappingItem, ...second];
 };
 
 export const SpellList = function ({
@@ -43,6 +63,15 @@ export const SpellList = function ({
     [spells, setSpells]
   );
 
+  const deleteSpell = useCallback(
+    (idx: number) => {
+      if (!setSpells) return;
+
+      setSpells(spells.filter((_, j) => idx !== j) as any[]);
+    },
+    [spells, setSpells]
+  );
+
   return (
     <SpellListContainer>
       {spells.map((spell, index) =>
@@ -53,6 +82,7 @@ export const SpellList = function ({
             key={`${spell.id}-${spell.timestamp}`}
             id={`${spell.id}-${spell.timestamp}`}
             spell={spell}
+            deleteHandler={deleteSpell}
           />
         ) : (
           <DragSpell key={spell.id} spell={spell} />

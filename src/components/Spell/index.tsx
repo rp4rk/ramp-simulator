@@ -30,6 +30,7 @@ type HoverSpellProps = {
   id?: string;
   index?: number;
   swapHandler?: (i: number, j: number) => void;
+  deleteHandler?: (idx: number) => void;
 };
 
 export const DragSpell = function ({ spell }: HoverSpellProps) {
@@ -63,6 +64,7 @@ export const SwappableSpell = function ({
   id,
   index,
   swapHandler,
+  deleteHandler,
 }: HoverSpellProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -129,6 +131,15 @@ export const SwappableSpell = function ({
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
     }),
+    end: (item, monitor) => {
+      const didDrop = monitor.didDrop();
+
+      if (!didDrop) {
+        if (!deleteHandler || !item.index) return;
+
+        deleteHandler(item.index);
+      }
+    },
   });
 
   const opacity = isDragging ? 0.1 : 1;

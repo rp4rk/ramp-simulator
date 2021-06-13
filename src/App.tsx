@@ -8,7 +8,13 @@ function App() {
   const [sims, setSims] = useState(0);
   return (
     <div>
-      <Card>
+      <Card
+        style={{
+          top: 20,
+          position: "sticky",
+          zIndex: 100,
+        }}
+      >
         <SpellList />
       </Card>
       <Card>
