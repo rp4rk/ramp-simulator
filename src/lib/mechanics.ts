@@ -135,7 +135,9 @@ export const applyAura = (
   num: number = 1
 ): SimState => {
   const existingAuras = state.buffs.get(aura.name) || [];
-  const newAuras = Array.from({ length: num }, () => aura);
+  const newAuras = Array.from({ length: num }, () => {
+    return { ...aura } as Buff | DoT;
+  });
   const newAuraArr = [...existingAuras, ...newAuras];
 
   // Regular buff handling
