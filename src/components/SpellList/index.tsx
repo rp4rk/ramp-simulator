@@ -4,7 +4,7 @@ import { SpellListContainer } from "./styled";
 import { Spells } from "lib";
 import { Spell as SpellType } from "lib/types";
 import { DragSpell, SwappableSpell } from "components/Spell";
-import { UniqueSpell } from "components/Timeline";
+import { UniqueSpell } from "components/SimOrchestrator";
 
 type SpellProps = {
   /**
@@ -74,12 +74,12 @@ export const SpellList = function ({
   return (
     <SpellListContainer>
       {spells.map((spell, index) =>
-        swappable && "timestamp" in spell ? (
+        swappable && "identifier" in spell ? (
           <SwappableSpell
             swapHandler={swapSpells}
             index={index}
-            key={`${spell.id}-${spell.timestamp}`}
-            id={`${spell.id}-${spell.timestamp}`}
+            key={`${spell.id}-${spell.identifier}`}
+            id={`${spell.id}-${spell.identifier}`}
             spell={spell}
             deleteHandler={deleteSpell}
           />

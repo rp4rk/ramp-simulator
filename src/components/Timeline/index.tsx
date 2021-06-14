@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "ItemTypes";
 import { Spell } from "lib/types";
 import { Spells } from "lib";
 import { TimelineContainer } from "./styled";
 import { SpellList } from "components/SpellList";
+import { UniqueSpell } from "components/SimOrchestrator";
 
 type TimelineProps = {
-  onChange?: (arg0: Spell[]) => any;
+  spells: UniqueSpell[];
+  setSpells: (arg0: UniqueSpell[]) => void;
 };
 
 const SpellMap: { [key: string]: Spell } = Object.values(Spells).reduce(
@@ -18,13 +19,7 @@ const SpellMap: { [key: string]: Spell } = Object.values(Spells).reduce(
   {} as { [key: string]: Spell }
 );
 
-export interface UniqueSpell extends Spell {
-  timestamp: number;
-}
-
-export const Timeline = function ({ onChange }: TimelineProps) {
-  const [spells, setSpells] = useState<UniqueSpell[]>([]);
-
+export const Timeline = function ({ spells, setSpells }: TimelineProps) {
   // Drag n' Drop
   const [, drop] = useDrop(
     () => ({
@@ -33,7 +28,7 @@ export const Timeline = function ({ onChange }: TimelineProps) {
         const targetSpell = SpellMap[a.id];
         const uniqueSpell: UniqueSpell = {
           ...targetSpell,
-          timestamp: new Date().getTime(),
+          identifier: new Date().getTime(),
         };
 
         setSpells([...spells, uniqueSpell]);
@@ -41,13 +36,6 @@ export const Timeline = function ({ onChange }: TimelineProps) {
     }),
     [setSpells, spells]
   );
-
-  // Relay changes
-  useEffect(() => {
-    if (!onChange) return;
-
-    onChange(spells);
-  }, [spells, onChange]);
 
   return (
     <TimelineContainer ref={drop}>
