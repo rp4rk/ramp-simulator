@@ -1,7 +1,25 @@
+import CopyToClipboard from "react-copy-to-clipboard";
 import { DragSpell } from "components/Spell";
 import { Spells } from "lib";
 import { Spell as SpellType, SpellCategory } from "lib/types";
 import { SelectionContainer, SelectionCategory } from "./styled";
+
+const RAMP_SEQUENCE = JSON.stringify({
+  spellNames: [
+    "Purge the Wicked",
+    "Purge the Wicked",
+    "Shadow Mend",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+    "Power Word: Shield",
+  ],
+});
 
 function set<T>(s: string, o: { [index: string]: T[] }, i: T) {
   if (o[s]) {
@@ -28,6 +46,9 @@ export const SpellSelection = function () {
     <>
       <div>
         <h4>Spell Selection</h4>
+        <CopyToClipboard text={RAMP_SEQUENCE}>
+          <button>Copy Ramp Sequence</button>
+        </CopyToClipboard>
       </div>
       <SelectionContainer>
         {Object.entries(SPELL_CATEGORIES).map(([key, spells]) => (
