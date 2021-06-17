@@ -316,7 +316,7 @@ export const Mindgames: Spell = {
 
     return 253.8 * mgAmp;
   },
-  castTime: 2250,
+  castTime: 1500,
   effect: [advanceTime, damage, atonement],
 };
 
