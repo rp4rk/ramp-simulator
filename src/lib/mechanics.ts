@@ -12,7 +12,7 @@ function logWrap(fn: (state: SimState, spell: Spell) => any) {
     const projectedState = fn(innerState, spell);
 
     console.log(
-      `[LOG][${innerState.time}]->[${projectedState.time}] Casting ${spell.name}`
+      `[TIME PROJECTION][${innerState.time}]->[${projectedState.time}] Casting ${spell.name}`
     );
 
     return projectedState;
@@ -282,6 +282,11 @@ export const executeDoT: StateSpellReducer = (state, spell): SimState => {
     .map((dot) => getTickTimes(dot, haste, state))
     .flatMap((i) => pickBetween(time, projectedTime, i));
 
+  // Log stuff out
+  tickTimes.forEach((tick) => {
+    console.log(`[DOT/PET][${tick[2]}] ${tick[0].name} hitting for ${tick[1]}`);
+  });
+
   // return state;
   return tickTimes.reduce((prevState, tick) => {
     const { time } = prevState;
@@ -309,12 +314,15 @@ const getTickTimes = function getTickTimes(
   const baseInterval =
     typeof dot.interval === "function" ? dot.interval(state) : dot.interval;
   const hastedInterval = baseInterval / haste;
-  const totalTickCount = exampleDoTDuration / hastedInterval;
+  const isPet = dot.name === "Shadowfiend" || dot.name === "Mindbender";
+  const totalTickCount = isPet
+    ? Math.floor(exampleDoTDuration / hastedInterval)
+    : Math.ceil(exampleDoTDuration / hastedInterval);
 
   return Array.from({ length: Math.ceil(totalTickCount) }, (_, i) => {
     const isFinalTick = Math.ceil(totalTickCount) === i + 1;
 
-    if (!isFinalTick) {
+    if (!isFinalTick || isPet) {
       return [dot, dot.damage, dot.applied + (i + 1) * hastedInterval];
     }
 
@@ -328,5 +336,5 @@ const getTickTimes = function getTickTimes(
 };
 
 function pickBetween(n: number, o: number, numbers: tick[]): tick[] {
-  return numbers.filter(([_, , i]) => i > n && i < o);
+  return numbers.filter(([_, , i]) => i >= n && i < o);
 }
