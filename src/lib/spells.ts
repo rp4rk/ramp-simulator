@@ -7,6 +7,7 @@ import {
   ClarityOfMind,
   Cooldown,
   damage,
+  executeDoT,
   healing,
 } from "./mechanics";
 import { getHastePerc } from "./player";
@@ -31,6 +32,7 @@ export const PurgeTheWicked: Spell = {
       }),
     damage,
     atonement,
+    executeDoT,
     advanceTime,
   ],
 };
@@ -54,6 +56,7 @@ export const ShadowWordPain: Spell = {
       }),
     damage,
     atonement,
+    executeDoT,
     advanceTime,
   ],
 };
@@ -80,6 +83,7 @@ export const Shadowfiend: Spell = {
       }),
     damage,
     atonement,
+    executeDoT,
     advanceTime,
   ],
 };
@@ -106,6 +110,7 @@ export const Mindbender: Spell = {
       }),
     damage,
     atonement,
+    executeDoT,
     advanceTime,
   ],
 };
