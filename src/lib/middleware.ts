@@ -33,5 +33,5 @@ export const Eruption: StateSpellReducer = (state, spell): SimState => {
     AscendedEruption
   );
 
-  return projectedState;
+  return { ...projectedState, time };
 };

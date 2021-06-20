@@ -28,7 +28,7 @@ export const defaultParams = (player = defaultPlayer()): SimState => ({
  * @returns
  */
 function reduceState(state: SimState, spell: Spell): SimState {
-  const effects = [executeDoT, Eruption, ...(spell.effect || [])];
+  const effects = [executeDoT, ...(spell.effect || []), Eruption];
 
   const projectedState =
     effects.reduce((acc, curr) => {
