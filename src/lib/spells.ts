@@ -73,8 +73,8 @@ export const Shadowfiend: Spell = {
         expires: state.time + 15000,
         interval: (state) =>
           hasAura(state, "Rabid Shadows")
-            ? 1500 / getHastePerc(state.player)
-            : 1500,
+            ? 1150 / getHastePerc(state.player)
+            : 1500 / getHastePerc(state.player),
         ticks: 10,
         damage: 46.2,
       }),
@@ -99,8 +99,8 @@ export const Mindbender: Spell = {
         expires: state.time + 12000,
         interval: (state) =>
           hasAura(state, "Rabid Shadows")
-            ? 1500 / getHastePerc(state.player)
-            : 1500,
+            ? 1150 / getHastePerc(state.player)
+            : 1500 / getHastePerc(state.player),
         ticks: 10,
         damage: 33.88,
       }),
@@ -318,7 +318,7 @@ export const Mindgames: Spell = {
 
     return 253.8 * mgAmp;
   },
-  castTime: 2250,
+  castTime: 1500,
   effect: [advanceTime, damage, atonement],
 };
 
