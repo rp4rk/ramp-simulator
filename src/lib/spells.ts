@@ -115,6 +115,7 @@ export const SpiritShell: Spell = {
   id: 109964,
   icon: "ability_shaman_astralshift",
   name: "Spirit Shell",
+  offGcd: true,
   effect: [
     (state, spell) =>
       applyAura(state, {
@@ -238,6 +239,7 @@ export const AscendedEruption: Spell = {
   id: 3565449,
   icon: "ability_bastion_priest",
   name: "Ascended Eruption",
+  offGcd: true,
   damage: (state) => {
     const hasCourageousAscension = hasAura(state, "Courageous Ascension");
     const activeBoonStacks = numBuffsActive(state, "Eruption Stacks");

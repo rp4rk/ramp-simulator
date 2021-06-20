@@ -7,30 +7,44 @@ import {
 } from "./player";
 import { Spell, SimState, Buff, DoT, StateSpellReducer } from "./types";
 
+function logWrap(fn: (state: SimState, spell: Spell) => any) {
+  return function (innerState: SimState, spell: Spell) {
+    const projectedState = fn(innerState, spell);
+
+    console.log(
+      `[LOG][${innerState.time}]->[${projectedState.time}] Casting ${spell.name}`
+    );
+
+    return projectedState;
+  };
+}
+
 /**
  * Advance time in the sim
  * @param state
  * @param spell
  * @returns
  */
-export const advanceTime = (state: SimState, spell: Spell): SimState => {
-  const playerHaste = getHastePerc(state.player);
+export const advanceTime = logWrap(
+  (state: SimState, spell: Spell): SimState => {
+    const playerHaste = getHastePerc(state.player);
 
-  if (spell.castTime) {
-    return {
-      ...state,
-      time: Math.round(state.time + spell.castTime / playerHaste),
-    };
-  }
-  if (spell.shortGcd) {
-    return { ...state, time: state.time + Math.max(1000 / playerHaste, 750) };
-  }
-  if (spell.offGcd) {
-    return state;
-  }
+    if (spell.castTime) {
+      return {
+        ...state,
+        time: Math.round(state.time + spell.castTime / playerHaste),
+      };
+    }
+    if (spell.shortGcd) {
+      return { ...state, time: state.time + Math.max(1000 / playerHaste, 750) };
+    }
+    if (spell.offGcd) {
+      return state;
+    }
 
-  return { ...state, time: state.time + Math.max(1500 / playerHaste, 750) };
-};
+    return { ...state, time: state.time + Math.max(1500 / playerHaste, 750) };
+  }
+);
 
 const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender"];
 function calculateDamage(state: SimState, spell: Spell | DoT): number {

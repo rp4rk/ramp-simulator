@@ -17,7 +17,7 @@ export const Eruption: StateSpellReducer = (state, spell): SimState => {
   if (!lastBoon) return state;
 
   // Boon hasn't expired yet
-  if (time < lastBoon.expires || lastBoon.consumed) {
+  if (time <= lastBoon.expires || lastBoon.consumed) {
     return state;
   }
 
