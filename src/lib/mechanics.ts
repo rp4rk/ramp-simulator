@@ -29,7 +29,10 @@ export const advanceTime = logWrap(
   (state: SimState, spell: Spell): SimState => {
     const playerHaste = getHastePerc(state.player);
 
-    if (spell.castTime) {
+    if (spell.fixedGcd && spell.castTime) {
+      return { ...state, time: state.time + spell.castTime}
+    }
+    if (!spell.fixedGcd && spell.castTime) {
       return {
         ...state,
         time: Math.round(state.time + spell.castTime / playerHaste),
@@ -237,6 +240,17 @@ export const ClarityOfMind: StateSpellReducer = (state, spell): SimState => {
 
   return state;
 };
+
+export const EvangelismExtension: StateSpellReducer = (state, spell): SimState => {
+  const atonements = getActiveBuffs(state, "Atonement");
+
+  atonements.forEach((buff) => {
+    buff.duration = buff.duration + 6000;
+    buff.expires = buff.expires + 6000;
+  });
+
+  return state;
+}
 
 /**
  * Advances the in game time to match the cooldown of spells

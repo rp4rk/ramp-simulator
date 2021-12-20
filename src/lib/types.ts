@@ -8,6 +8,7 @@ type Calculated = (state: SimState) => number;
 export enum ItemType {
   Legendary,
   Conduit,
+  Tier,
 }
 
 export interface Item extends Buff {
@@ -34,6 +35,7 @@ export interface Spell {
   healing?: number | Calculated;
   absorb?: number | Calculated;
   castTime?: number;
+  fixedGcd?: boolean;
   shortGcd?: boolean;
   effect?: StateSpellReducer[];
   offGcd?: boolean;

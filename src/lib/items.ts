@@ -72,3 +72,13 @@ export const ShatteredPerceptions: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const Tier4: Item = {
+  id: 363494,
+  icon: "ability_priest_innerlightandshadow",
+  type: ItemType.Tier,
+  name: "Til' Dawn",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+}

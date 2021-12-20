@@ -9,6 +9,9 @@ const LEGENDARIES = Object.values(Items).filter(
 const CONDUITS = Object.values(Items).filter(
   (item: Item) => item.type === ItemType.Conduit
 );
+const TIERS = Object.values(Items).filter(
+  (item: Item) => item.type === ItemType.Tier,
+);
 
 type ItemSelectorProps = {
   onChange?: (arg0: Item[]) => void;
@@ -74,6 +77,17 @@ export const ItemSelector = function ItemSelector({
             spell={conduit}
             onClick={(spell) => toggleItems(spell)}
             toggled={!!selectedItems[conduit.name]}
+          />
+        ))}
+      </div>
+      <div>
+        <h4>Tier Sets</h4>
+        {TIERS.map((tier) => (
+          <Spell
+            key={tier.name}
+            spell={tier}
+            onClick={(spell) => toggleItems(spell)}
+            toggled={!!selectedItems[tier.name]}
           />
         ))}
       </div>

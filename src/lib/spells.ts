@@ -9,6 +9,7 @@ import {
   damage,
   executeDoT,
   healing,
+  EvangelismExtension
 } from "./mechanics";
 import { getHastePerc } from "./player";
 import { Spell, SpellCategory } from "./types";
@@ -133,6 +134,17 @@ export const SpiritShell: Spell = {
   ],
 };
 
+export const Evangelism: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 246287,
+  icon: "spell_holy_divineillumination",
+  name: "Evangelism",
+  offGcd: false,
+  effect: [
+    EvangelismExtension,
+  ],
+};
+
 export const Penance: Spell = {
   category: SpellCategory.Damage,
   id: 47540,
@@ -140,8 +152,10 @@ export const Penance: Spell = {
   name: "Penance",
   damage: (state) => {
     const hasThePenitentOne = hasAura(state, "The Penitent One");
+    const hasTilDawn = hasAura(state, "Til' Dawn");
 
-    return hasThePenitentOne ? 112.8 * 1.84 : 112.8;
+    const multiplier = (hasThePenitentOne ? 2 : 1) * (hasTilDawn ? 1.95 : 1);
+    return 112.8 * multiplier;
   },
   healing: 375,
   castTime: 2000,
@@ -397,5 +411,17 @@ export const Shadowmend: Spell = {
         duration: 15000,
         expires: state.time + 15000,
       }),
+  ],
+};
+
+export const ScrawledWordOfRecall: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 136202,
+  icon: "inv_inscription_80_scroll",
+  name: "Scrawled Word of Recall",
+  fixedGcd: true,
+  castTime: 500,
+  effect: [
+    advanceTime,
   ],
 };
