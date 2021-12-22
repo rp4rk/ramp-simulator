@@ -136,7 +136,7 @@ export const Evangelism: Spell = {
   icon: "spell_holy_divineillumination",
   name: "Evangelism",
   offGcd: false,
-  effect: [EvangelismExtension],
+  effect: [EvangelismExtension, advanceTime],
 };
 
 export const Penance: Spell = {
