@@ -12,6 +12,8 @@ export interface Item extends Buff {
   id: number;
   icon: string;
   type: ItemType;
+  expires: number;
+  duration: number;
 }
 
 export enum SpellCategory {
