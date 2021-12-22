@@ -41,10 +41,24 @@ export const SimResults = function SimResults({ simState, setSimConfig, simConfi
       <div>Absorb: {Math.round(simState?.absorb || 0)}</div>
       <div>Damage: {Math.round(simState?.damage || 0)}</div>
       <div>Time: {Math.round((simState?.time || 0) / 1) / 1000}s</div>
-      <button onClick={() => console.log(simState)}>Debug</button>
-      <button onClick={importConfig}>Import</button>
+      <div className="mt-2">
+        <button
+          className="text-sm text-white font-semibold py-2 px-4 bg-sky-600 hover:bg-sky-700 rounded-full"
+          onClick={() => console.log(simState)}
+        >
+          Debug
+        </button>
+        <button
+          className="text-sm text-white font-semibold py-2 px-4 bg-sky-600 hover:bg-sky-700 rounded-full"
+          onClick={importConfig}
+        >
+          Import
+        </button>
+      </div>
       <CopyToClipboard text={serializeSimConfig(simConfig)}>
-        <button>Export</button>
+        <button className="text-sm text-white font-semibold py-2 px-4 bg-sky-600 hover:bg-sky-700 rounded-full">
+          Export
+        </button>
       </CopyToClipboard>
     </div>
   );
