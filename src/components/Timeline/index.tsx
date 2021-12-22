@@ -37,7 +37,7 @@ export const Timeline = function ({ spells, setSpells }: TimelineProps) {
   return (
     <TimelineContainer ref={drop}>
       <SpellList
-        className="bg-gray-100 p-2 rounded drop-shadow-sm"
+        className="bg-gray-300 p-2 rounded drop-shadow-sm"
         swappable={true}
         spells={spells}
         setSpells={setSpells}
