@@ -1,9 +1,9 @@
 import { executeDoT } from "./mechanics";
 import { Eruption } from "./middleware";
 import { createPlayer } from "./player";
-import { Buff, SimState, Spell, SpellQueue } from "./types";
+import { Buff, CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
 
-type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: Buff[]) => SimState;
+type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: CalculatedBuff[]) => SimState;
 
 const defaultPlayer = () => createPlayer(1, 33 * 40, 35 * 25, 35 * 10, 202);
 
@@ -44,7 +44,7 @@ function reduceState(state: SimState, spell: Spell): SimState {
 export const QuickSim: SpellQueueIterator = (
   state: SimState,
   queue: SpellQueue,
-  initialAuras?: Buff[],
+  initialAuras?: CalculatedBuff[],
   onComplete?: (arg0: SimState) => any
 ) => {
   initialAuras?.forEach((buff) => {
