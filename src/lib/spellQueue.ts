@@ -1,7 +1,7 @@
 import { executeDoT } from "./mechanics";
 import { Eruption } from "./middleware";
 import { createPlayer } from "./player";
-import { Buff, CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
+import { CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
 
 type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: CalculatedBuff[]) => SimState;
 

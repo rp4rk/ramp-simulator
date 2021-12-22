@@ -1,4 +1,4 @@
-import { Buff, SimState, DoT, CalculatedBuff } from "./types";
+import { SimState, DoT, CalculatedBuff } from "./types";
 
 /**
  * Checks if a buff is active
