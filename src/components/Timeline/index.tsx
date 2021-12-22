@@ -11,13 +11,10 @@ type TimelineProps = {
   setSpells: (arg0: UniqueSpell[]) => void;
 };
 
-const SpellMap: { [key: string]: Spell } = Object.values(Spells).reduce(
-  (acc, curr) => {
-    acc[curr.name] = curr;
-    return acc;
-  },
-  {} as { [key: string]: Spell }
-);
+const SpellMap: { [key: string]: Spell } = Object.values(Spells).reduce((acc, curr) => {
+  acc[curr.name] = curr;
+  return acc;
+}, {} as { [key: string]: Spell });
 
 export const Timeline = function ({ spells, setSpells }: TimelineProps) {
   // Drag n' Drop
@@ -39,7 +36,12 @@ export const Timeline = function ({ spells, setSpells }: TimelineProps) {
 
   return (
     <TimelineContainer ref={drop}>
-      <SpellList swappable={true} spells={spells} setSpells={setSpells} />
+      <SpellList
+        className="bg-gray-100 p-2 rounded drop-shadow-sm"
+        swappable={true}
+        spells={spells}
+        setSpells={setSpells}
+      />
     </TimelineContainer>
   );
 };

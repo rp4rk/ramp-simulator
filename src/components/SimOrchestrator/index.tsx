@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { SimOrchestratorContainer } from "./styled";
 import { CharacterStats, Stats, initialState } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
@@ -59,13 +58,7 @@ export const SimOrchestrator = function SimOrchestrator() {
   useEffect(() => {
     if (spells.length === 0) return;
 
-    const player = createPlayer(
-      stats.intellect,
-      stats.haste,
-      stats.mastery,
-      stats.crit,
-      stats.vers
-    );
+    const player = createPlayer(stats.intellect, stats.haste, stats.mastery, stats.crit, stats.vers);
 
     const simResult = QuickSim(defaultParams(player), spells, items);
 
@@ -73,15 +66,14 @@ export const SimOrchestrator = function SimOrchestrator() {
   }, [spells, stats, items]);
 
   return (
-    <SimOrchestratorContainer>
+    <div className="sm:grid sm:grid-cols-3 sm:gap-4">
+      <div className="sm:col-span-full">
+        <h4 className="text-lg text-gray-600 font-semibold">Ramp Timeline</h4>
+        <Timeline setSpells={setSpells} spells={spells} />
+      </div>
       <Stats onChange={setStats} />
       <ItemSelector onChange={setItems} />
-      <Timeline setSpells={setSpells} spells={spells} />
-      <SimResults
-        simState={simResult}
-        setSimConfig={setSimulation}
-        simConfig={createSimConfig(spells)}
-      />
-    </SimOrchestratorContainer>
+      <SimResults simState={simResult} setSimConfig={setSimulation} simConfig={createSimConfig(spells)} />
+    </div>
   );
 };

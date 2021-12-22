@@ -3,23 +3,15 @@ import { Item, ItemType, Spell as SpellType } from "lib/types";
 import { Spell } from "components/Spell";
 import { useCallback, useEffect, useState } from "react";
 
-const LEGENDARIES = Object.values(Items).filter(
-  (item: Item) => item.type === ItemType.Legendary
-);
-const CONDUITS = Object.values(Items).filter(
-  (item: Item) => item.type === ItemType.Conduit
-);
-const TIERS = Object.values(Items).filter(
-  (item: Item) => item.type === ItemType.Tier,
-);
+const LEGENDARIES = Object.values(Items).filter((item: Item) => item.type === ItemType.Legendary);
+const CONDUITS = Object.values(Items).filter((item: Item) => item.type === ItemType.Conduit);
+const TIERS = Object.values(Items).filter((item: Item) => item.type === ItemType.Tier);
 
 type ItemSelectorProps = {
   onChange?: (arg0: Item[]) => void;
 };
 
-export const ItemSelector = function ItemSelector({
-  onChange,
-}: ItemSelectorProps) {
+export const ItemSelector = function ItemSelector({ onChange }: ItemSelectorProps) {
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: Item;
   }>({
@@ -57,9 +49,9 @@ export const ItemSelector = function ItemSelector({
   }, [selectedItems, onChange]);
 
   return (
-    <div>
-      <div>
-        <h4>Legendaries</h4>
+    <div className="flex sm:block sm:flex-wrap sm:space-between">
+      <div className="sm:grow">
+        <h4 className="text-lg text-gray-600 font-semibold">Legendaries</h4>
         {LEGENDARIES.map((legendary) => (
           <Spell
             key={legendary.name}
@@ -69,8 +61,8 @@ export const ItemSelector = function ItemSelector({
           />
         ))}
       </div>
-      <div>
-        <h4>Conduits</h4>
+      <div className="sm:grow">
+        <h4 className="text-lg text-gray-600 font-semibold">Conduits</h4>
         {CONDUITS.map((conduit) => (
           <Spell
             key={conduit.name}
@@ -80,8 +72,8 @@ export const ItemSelector = function ItemSelector({
           />
         ))}
       </div>
-      <div>
-        <h4>Tier Sets</h4>
+      <div className="sm:grow">
+        <h4 className="text-lg text-gray-600 font-semibold">Tier Sets</h4>
         {TIERS.map((tier) => (
           <Spell
             key={tier.name}

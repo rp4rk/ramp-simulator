@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SimOrchestratorContainer = styled.div`
-  display: grid;
+  /* display: grid;
   grid-template-columns: 180px 180px minmax(0, auto) 300px;
   grid-column-gap: 12px;
 
@@ -17,5 +17,5 @@ export const SimOrchestratorContainer = styled.div`
   & > div:last-child {
     border: none;
     box-shadow: none;
-  }
+  } */
 `;

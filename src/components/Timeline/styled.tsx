@@ -9,12 +9,12 @@ export const TimelineContainer = styled.div`
 
   ${SpellListContainer} {
     box-sizing: border-box;
-    border-radius: 3px;
-    background: #bfd7ff;
+    /* border-radius: 3px; */
+    /* background: #bfd7ff; */
     display: flex;
     justify-content: start;
     min-height: 68px;
-    padding: 12px 0;
-    margin: 0 48px;
+    /* padding: 12px 0;
+    margin: 0 48px; */
   }
 `;

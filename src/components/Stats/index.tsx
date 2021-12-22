@@ -1,5 +1,4 @@
 import React, { useReducer } from "react";
-import { StatContainer } from "./styled";
 import { useEffect } from "react";
 
 type StatProps = {
@@ -72,58 +71,75 @@ export const Stats = function ({ onChange }: StatProps) {
   }, [onChange, state]);
 
   return (
-    <StatContainer>
-      <h4>Stats</h4>
-      <label>Intellect</label>
-      <input
-        type="number"
-        name="intellect"
-        value={state.intellect}
-        onChange={(e) => {
-          const value = +e.target.value || 0;
-          dispatch({ type: "intellect", payload: value });
-        }}
-      ></input>
-      <label>Haste</label>
-      <input
-        type="number"
-        name="haste"
-        value={state.haste}
-        onChange={(e) => {
-          const value = +e.target.value || 0;
-          dispatch({ type: "haste", payload: value });
-        }}
-      ></input>
-      <label>Mastery</label>
-      <input
-        type="number"
-        name="mastery"
-        value={state.mastery}
-        onChange={(e) => {
-          const value = +e.target.value || 0;
-          dispatch({ type: "mastery", payload: value });
-        }}
-      ></input>
-      <label>Critical Strike</label>
-      <input
-        type="number"
-        name="crit"
-        value={state.crit}
-        onChange={(e) => {
-          const value = +e.target.value || 0;
-          dispatch({ type: "crit", payload: value });
-        }}
-      ></input>
-      <label>Versatility</label>
-      <input
-        type="number"
-        name="vers"
-        value={state.vers}
-        onChange={(e) => {
-          const value = +e.target.value || 0;
-          dispatch({ type: "vers", payload: value });
-        }}
-      ></input>
-    </StatContainer>
+    <div>
+      <h4 className="text-lg text-gray-600 font-semibold">Statistics</h4>
+      <ul className="list-none text-gray-800">
+        <li className="space-y-2 grid gap-4 grid-cols-2">
+          <label className="font-medium">Intellect</label>
+          <input
+            className="p-1"
+            type="number"
+            name="intellect"
+            value={state.intellect}
+            onChange={(e) => {
+              const value = +e.target.value || 0;
+              dispatch({ type: "intellect", payload: value });
+            }}
+          ></input>
+        </li>
+        <li className="space-y-2 grid gap-4 grid-cols-2">
+          <label className="font-medium">Haste</label>
+          <input
+            className="p-1"
+            type="number"
+            name="haste"
+            value={state.haste}
+            onChange={(e) => {
+              const value = +e.target.value || 0;
+              dispatch({ type: "haste", payload: value });
+            }}
+          ></input>
+        </li>
+        <li className="space-y-2 grid gap-4 grid-cols-2">
+          <label className="font-medium">Mastery</label>
+          <input
+            className="p-1"
+            type="number"
+            name="mastery"
+            value={state.mastery}
+            onChange={(e) => {
+              const value = +e.target.value || 0;
+              dispatch({ type: "mastery", payload: value });
+            }}
+          ></input>
+        </li>
+        <li className="space-y-2 grid gap-4 grid-cols-2">
+          <label className="font-medium">Critical Strike</label>
+          <input
+            className="p-1"
+            type="number"
+            name="crit"
+            value={state.crit}
+            onChange={(e) => {
+              const value = +e.target.value || 0;
+              dispatch({ type: "crit", payload: value });
+            }}
+          ></input>
+        </li>
+        <li className="space-y-2 grid gap-4 grid-cols-2">
+          <label className="font-medium">Versatility</label>
+          <input
+            className="p-1"
+            type="number"
+            name="vers"
+            value={state.vers}
+            onChange={(e) => {
+              const value = +e.target.value || 0;
+              dispatch({ type: "vers", payload: value });
+            }}
+          ></input>
+        </li>
+      </ul>
+    </div>
   );
 };

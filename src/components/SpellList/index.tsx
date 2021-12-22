@@ -14,6 +14,7 @@ type SpellProps = {
   swappable?: boolean;
   setSpells?: (spellList: UniqueSpell[]) => void;
   deleteSpell?: (idx: number) => void;
+  className?: string;
 };
 
 const EXCLUDED_SPELLS = ["Ascended Eruption"];
@@ -53,6 +54,7 @@ export const SpellList = function ({
   spells = SPELL_LIST_DEFAULTS,
   swappable = false,
   setSpells,
+  className = ''
 }: SpellProps) {
   const swapSpells = useCallback(
     (i: number, j: number) => {
@@ -72,7 +74,7 @@ export const SpellList = function ({
   );
 
   return (
-    <SpellListContainer>
+    <SpellListContainer className={"".concat(className)}>
       {spells.map((spell, index) =>
         swappable && "identifier" in spell ? (
           <SwappableSpell

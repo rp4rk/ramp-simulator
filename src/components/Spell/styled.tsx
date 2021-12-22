@@ -5,11 +5,7 @@ export const SpellImage = styled.img`
   transition: ease-in-out 0.15s;
   border-radius: 3px;
   width: 32px;
-  box-shadow: 0px 1px 1px 0px white;
-
   border-radius: 5px;
-  background: #cde0fe;
-  box-shadow: 2px 2px 5px #c1d3ef, -2px -2px 5px #d9edff;
 `;
 
 export const SpellContainer = styled.span<Pick<SpellProps, "toggled">>`

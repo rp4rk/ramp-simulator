@@ -15,11 +15,7 @@ function serializeSimConfig(config?: SimConfigObject): string {
   return JSON.stringify(config);
 }
 
-export const SimResults = function SimResults({
-  simState,
-  setSimConfig,
-  simConfig,
-}: SimResultsProps) {
+export const SimResults = function SimResults({ simState, setSimConfig, simConfig }: SimResultsProps) {
   /**
    * Import config callback
    */
@@ -39,8 +35,8 @@ export const SimResults = function SimResults({
   }, [setSimConfig]);
 
   return (
-    <div>
-      <h4>Results</h4>
+    <div className="text-gray-800">
+      <h4 className="text-lg text-gray-600 font-semibold">Results</h4>
       <div>Healing: {Math.round(simState?.healing || 0)}</div>
       <div>Absorb: {Math.round(simState?.absorb || 0)}</div>
       <div>Damage: {Math.round(simState?.damage || 0)}</div>
