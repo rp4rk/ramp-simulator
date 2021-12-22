@@ -9,10 +9,10 @@ import {
   damage,
   executeDoT,
   healing,
-  EvangelismExtension
+  EvangelismExtension,
 } from "./mechanics";
 import { getHastePerc } from "./player";
-import { Spell, SpellCategory } from "./types";
+import { SimState, Spell, SpellCategory } from "./types";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -76,9 +76,7 @@ export const Shadowfiend: Spell = {
         applied: state.time,
         expires: state.time + 15000,
         interval: (state) =>
-          hasAura(state, "Rabid Shadows")
-            ? 1150 / getHastePerc(state.player)
-            : 1500 / getHastePerc(state.player),
+          hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
         ticks: 10,
         damage: 46.2,
       }),
@@ -103,9 +101,7 @@ export const Mindbender: Spell = {
         applied: state.time,
         expires: state.time + 12000,
         interval: (state) =>
-          hasAura(state, "Rabid Shadows")
-            ? 1150 / getHastePerc(state.player)
-            : 1500 / getHastePerc(state.player),
+          hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
         ticks: 10,
         damage: 33.88,
       }),
@@ -140,9 +136,7 @@ export const Evangelism: Spell = {
   icon: "spell_holy_divineillumination",
   name: "Evangelism",
   offGcd: false,
-  effect: [
-    EvangelismExtension,
-  ],
+  effect: [EvangelismExtension],
 };
 
 export const Penance: Spell = {
@@ -375,21 +369,61 @@ export const PowerWordRadiance: Spell = {
   ],
 };
 
+const ATONEMENT_BASE_DURATION = 15000;
+const applyAtonement = (state: SimState) =>
+  applyAura(state, {
+    name: "Atonement",
+    applied: state.time,
+    duration: (state) => {
+      const hasClarityOfMind = hasAura(state, "Clarity of Mind");
+      const hasRaptureActive = hasAura(state, "Rapture");
+      const bonusDuration = hasClarityOfMind && hasRaptureActive ? 6000 : 0;
+
+      return ATONEMENT_BASE_DURATION + bonusDuration;
+    },
+  });
+
+const RAPTURE_COEFFICIENT = 2;
+const EXALTATION_COEFFICIENT = RAPTURE_COEFFICIENT * (1 + 0.115);
+const calculateShieldAbsorb = (state: SimState) => {
+  const hasRaptureActive = hasAura(state, "Rapture");
+  const hasExaltation = hasAura(state, "Exaltation");
+
+  const raptureBonus = hasExaltation ? 1 + EXALTATION_COEFFICIENT : 1 + RAPTURE_COEFFICIENT;
+
+  const shieldCoefficient = 165.6 * (hasRaptureActive ? raptureBonus : 1);
+
+  return shieldCoefficient;
+};
+
 export const PowerWordShield: Spell = {
   category: SpellCategory.Applicator,
   id: 17,
   icon: "spell_holy_powerwordshield",
   name: "Power Word: Shield",
-  absorb: 0,
+  absorb: calculateShieldAbsorb,
+  effect: [absorb, applyAtonement, advanceTime],
+};
+
+export const Rapture: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 47536,
+  icon: "spell_holy_rapture",
+  name: "Rapture",
+  absorb: calculateShieldAbsorb,
   effect: [
-    absorb,
     (state) =>
       applyAura(state, {
-        name: "Atonement",
+        name: "Rapture",
         applied: state.time,
-        duration: 15000,
-        expires: state.time + 15000,
+        duration: (state) => {
+          const hasExaltation = hasAura(state, "Exaltation");
+
+          return 8000 + (hasExaltation ? 1000 : 0);
+        },
       }),
+    absorb,
+    applyAtonement,
     advanceTime,
   ],
 };
@@ -421,7 +455,5 @@ export const ScrawledWordOfRecall: Spell = {
   name: "Scrawled Word of Recall",
   fixedGcd: true,
   castTime: 500,
-  effect: [
-    advanceTime,
-  ],
+  effect: [advanceTime],
 };

@@ -1,4 +1,4 @@
-import { Buff, SimState, DoT } from "./types";
+import { Buff, SimState, DoT, CalculatedBuff } from "./types";
 
 /**
  * Checks if a buff is active
@@ -40,9 +40,9 @@ export const numBuffsActive = (state: SimState, name: string): number => {
  * @param name
  * @returns
  */
-export const getActiveBuffs = (state: SimState, name: string): Buff[] => {
+export const getActiveBuffs = (state: SimState, name: string): CalculatedBuff[] => {
   return (
-    state.buffs.get(name)?.reduceRight<Buff[]>((acc, curr) => {
+    state.buffs.get(name)?.reduceRight<CalculatedBuff[]>((acc, curr) => {
       if (state.time > curr.expires) {
         return acc;
       }

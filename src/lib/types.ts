@@ -1,8 +1,5 @@
 export type SpellQueue = Spell[];
-export type StateSpellReducer = (
-  state: SimState,
-  spell: Spell | DoT
-) => SimState;
+export type StateSpellReducer = (state: SimState, spell: Spell | DoT) => SimState;
 type Calculated = (state: SimState) => number;
 
 export enum ItemType {
@@ -53,15 +50,25 @@ export interface Player {
 export interface Buff {
   name: string;
   applied: number;
+  expires?: number | Calculated;
+  duration: number | Calculated;
+  consumed?: boolean;
+}
+
+/**
+ * CalculatedBuff will never have expressions to evaluate for temporal info
+ */
+export interface CalculatedBuff extends Buff {
   expires: number;
   duration: number;
-  consumed?: boolean;
 }
 
 export interface DoT extends Buff {
   ticks: number;
   interval: number | Calculated;
   damage: number;
+  expires: number;
+  duration: number;
 }
 
 export interface SimState {
@@ -70,6 +77,6 @@ export interface SimState {
   absorb: number;
   healing: number;
   damage: number;
-  buffs: Map<string, (Buff | DoT)[]>;
+  buffs: Map<string, (CalculatedBuff | DoT)[]>;
   cooldowns: Map<string, number>;
 }

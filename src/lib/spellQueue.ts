@@ -3,11 +3,7 @@ import { Eruption } from "./middleware";
 import { createPlayer } from "./player";
 import { Buff, SimState, Spell, SpellQueue } from "./types";
 
-type SpellQueueIterator = (
-  initialState: SimState,
-  queue: SpellQueue,
-  buffs?: Buff[]
-) => SimState;
+type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: Buff[]) => SimState;
 
 const defaultPlayer = () => createPlayer(1, 33 * 40, 35 * 25, 35 * 10, 202);
 

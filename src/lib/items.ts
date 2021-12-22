@@ -81,4 +81,4 @@ export const Tier4: Item = {
   applied: 0,
   duration: Infinity,
   expires: Infinity,
-}
+};
