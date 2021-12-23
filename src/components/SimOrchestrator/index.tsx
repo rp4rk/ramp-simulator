@@ -4,7 +4,7 @@ import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
 import { ItemSelector } from "components/ItemSelector";
 import { Item, SimState, Spell } from "lib/types";
-import { defaultParams, QuickSim } from "lib/spellQueue";
+import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer, Spells } from "lib";
 
 export interface UniqueSpell extends Spell {
@@ -60,7 +60,7 @@ export const SimOrchestrator = function SimOrchestrator() {
 
     const player = createPlayer(stats.intellect, stats.haste, stats.mastery, stats.crit, stats.vers);
 
-    const simResult = QuickSim(defaultParams(player), spells, items);
+    const simResult = QuickSim(createInitialState(player), spells, items);
 
     setSimResult(simResult);
   }, [spells, stats, items]);

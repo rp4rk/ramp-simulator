@@ -5,9 +5,15 @@ import { CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
 
 type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: CalculatedBuff[]) => SimState;
 
+/**
+ * Creates the default player statistics
+ */
 const defaultPlayer = () => createPlayer(1, 33 * 40, 35 * 25, 35 * 10, 202);
 
-export const defaultParams = (player = defaultPlayer()): SimState => ({
+/**
+ * Creates the initial state for the simulation
+ */
+export const createInitialState = (player = defaultPlayer(), overrides: Partial<SimState> = {}): SimState => ({
   healing: 0,
   damage: 0,
   absorb: 0,
@@ -15,13 +21,11 @@ export const defaultParams = (player = defaultPlayer()): SimState => ({
   time: 0,
   player: player,
   cooldowns: new Map(),
+  ...overrides,
 });
 
 /**
  * Handles the evaluation of top-level effects created by the priority list
- * @param state
- * @param spell
- * @returns
  */
 function reduceState(state: SimState, spell: Spell): SimState {
   const effects = [executeDoT, ...(spell.effect || []), Eruption];
@@ -39,7 +43,6 @@ function reduceState(state: SimState, spell: Spell): SimState {
  * @param state
  * @param queue
  * @param initialAuras
- * @returns
  */
 export const QuickSim: SpellQueueIterator = (
   state: SimState,
