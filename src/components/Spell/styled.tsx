@@ -17,13 +17,12 @@ export const SpellContainer = styled.span<Pick<SpellProps, "toggled">>`
   display: inline-block;
   padding: 4px 6px;
 
-  /* opacity: ${(p) => (p.toggled ? 1 : 0.2)}; */
+  opacity: ${(p) => (p.toggled ? 1 : 0.2)};
 
   &:hover {
     cursor: pointer;
     transform: translateY(-3px);
-
-    /* opacity: ${(p) => (p.toggled ? 1 : 0.6)}; */
+    opacity: ${(p) => (p.toggled ? 1 : 0.6)};
 
     img {
       background: #cde0fe;
