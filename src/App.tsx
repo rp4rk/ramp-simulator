@@ -22,7 +22,7 @@ function App() {
           <SimOrchestrator />
         </Card>
       ))}
-      <Button className="mx-auto block" outline icon="PlusCircleIcon" onClick={() => setSims(sims + 1)}>
+      <Button className="mx-auto block mb-4" outline icon="PlusCircleIcon" onClick={() => setSims(sims + 1)}>
         Add Simulation
       </Button>
     </>
