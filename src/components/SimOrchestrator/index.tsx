@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, FC } from "react";
 import { CharacterStats, Stats, initialState } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
@@ -33,7 +33,12 @@ function serializeSimConfig(config?: SimConfigObject): string {
 
 export type SpellDictionary = { [key: string]: Spell };
 
-export const SimOrchestrator = function SimOrchestrator() {
+interface SimOrchestratorProps {
+  onDelete?: () => void;
+  deletionAllowed?: boolean;
+}
+
+export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
   const [spells, setSpells] = useState<UniqueSpell[]>([]);
   const [items, setItems] = useState<Item[]>([]);
@@ -108,6 +113,11 @@ export const SimOrchestrator = function SimOrchestrator() {
             <Button onClick={() => setShowConfiguration(!showConfiguration)} outline icon="CogIcon">
               Config
             </Button>
+            {props.deletionAllowed && props.onDelete && (
+              <Button className="bg-red-500 hover:bg-red-600" onClick={props.onDelete} outline icon="TrashIcon">
+                Delete
+              </Button>
+            )}
           </div>
         </div>
         <Timeline setSpells={setSpells} spells={spells} />
