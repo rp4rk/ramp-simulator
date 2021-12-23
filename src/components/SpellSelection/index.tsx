@@ -2,6 +2,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { DragSpell } from "components/Spell";
 import { Spells } from "lib";
 import { Spell as SpellType, SpellCategory } from "lib/types";
+import { Button } from "components/Button";
 
 const RAMP_SEQUENCE = JSON.stringify({
   spellNames: [
@@ -44,11 +45,11 @@ export const SpellSelection = function () {
   return (
     <>
       <div className="flex justify-between mb-4">
-        <h4 className="text-lg text-gray-600 font-semibold">Spell Selection</h4>
+        <h4 className="text-lg text-gray-600 font-semibold">Spell2 Selection</h4>
         <CopyToClipboard text={RAMP_SEQUENCE}>
-          <button className="text-sm text-white font-semibold py-2 px-4 bg-sky-600 hover:bg-sky-700 rounded-full">
-            Copy Ramp Sequence
-          </button>
+          <Button icon="ClipboardCopyIcon">Copy Ramp Sequence</Button>
+          {/* <button className="text-sm text-white font-semibold py-2 px-4 bg-sky-600 hover:bg-sky-700 rounded-full">
+          </button> */}
         </CopyToClipboard>
       </div>
       <div className="flex justify-center space-x-2 ">

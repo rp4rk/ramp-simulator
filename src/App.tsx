@@ -4,6 +4,7 @@ import { SimOrchestrator } from "components/SimOrchestrator";
 import { Card } from "components/Card";
 import { SpellSelection } from "components/SpellSelection";
 import Header from "components/Header";
+import { Button } from "components/Button";
 
 function App() {
   const [sims, setSims] = useState(0);
@@ -21,12 +22,9 @@ function App() {
           <SimOrchestrator />
         </Card>
       ))}
-      <button
-        className="block mx-auto text-sm text-white font-semibold py-2 px-4 bg-sky-600 hover:bg-sky-700 rounded-full"
-        onClick={() => setSims(sims + 1)}
-      >
+      <Button className="mx-auto block" outline icon="PlusCircleIcon" onClick={() => setSims(sims + 1)}>
         Add Simulation
-      </button>
+      </Button>
     </>
   );
 }

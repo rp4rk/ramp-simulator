@@ -14,9 +14,6 @@ function logWrap(fn: (state: SimState, spell: Spell) => any) {
 
 /**
  * Advance time in the sim
- * @param state
- * @param spell
- * @returns
  */
 export const advanceTime = logWrap((state: SimState, spell: Spell): SimState => {
   const playerHaste = getHastePerc(state.player);
@@ -63,9 +60,6 @@ function calculateDamage(state: SimState, spell: Spell | DoT): number {
 
 /**
  * Apply damage in the sim
- * @param state
- * @param spell
- * @returns
  */
 export const damage: StateSpellReducer = (state, spell): SimState => {
   return {
@@ -75,10 +69,7 @@ export const damage: StateSpellReducer = (state, spell): SimState => {
 };
 
 /**
- * Apply damage in the sim
- * @param state
- * @param spell
- * @returns
+ * Apply absorbs in the sim
  */
 export const absorb: StateSpellReducer = (state, spell): SimState => {
   if ("interval" in spell) return state;
@@ -93,10 +84,7 @@ export const absorb: StateSpellReducer = (state, spell): SimState => {
 };
 
 /**
- * Apply damage in the sim
- * @param state
- * @param spell
- * @returns
+ * Apply healing in the sim
  */
 export const healing: StateSpellReducer = (state, spell): SimState => {
   if ("interval" in spell) return state;
@@ -120,7 +108,7 @@ export const healing: StateSpellReducer = (state, spell): SimState => {
 };
 
 /**
- * Applies auras lol
+ * Applies auras
  */
 export const applyAura = (state: SimState, uncalculatedAura: Buff | DoT, num: number = 1): SimState => {
   const auraDuration =
@@ -180,9 +168,6 @@ export const applyAura = (state: SimState, uncalculatedAura: Buff | DoT, num: nu
 
 /**
  * Applies atonement healing + Spirit Shell
- * @param state
- * @param spell
- * @returns
  */
 export const atonement: StateSpellReducer = (state, spell): SimState => {
   const spiritShellActive = hasAura(state, "Spirit Shell");
@@ -208,10 +193,6 @@ export const atonement: StateSpellReducer = (state, spell): SimState => {
 
 /**
  * Extends Atonements for Clarity of Mind
- * TODO: Rapture
- * @param state
- * @param spell
- * @returns
  */
 export const ClarityOfMind: StateSpellReducer = (state, spell): SimState => {
   if (!hasAura(state, "Clarity of Mind")) return state;
@@ -225,6 +206,9 @@ export const ClarityOfMind: StateSpellReducer = (state, spell): SimState => {
   return state;
 };
 
+/**
+ * Extends Atonements for Evangelism
+ */
 export const EvangelismExtension: StateSpellReducer = (state, spell): SimState => {
   const atonements = getActiveBuffs(state, "Atonement");
 
@@ -238,9 +222,6 @@ export const EvangelismExtension: StateSpellReducer = (state, spell): SimState =
 
 /**
  * Advances the in game time to match the cooldown of spells
- * @param state
- * @param spell
- * @returns
  */
 export const Cooldown: StateSpellReducer = (state, spell): SimState => {
   if ("interval" in spell) return state;

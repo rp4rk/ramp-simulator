@@ -6,6 +6,8 @@ import { ItemSelector } from "components/ItemSelector";
 import { Item, SimState, Spell } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer, Spells } from "lib";
+import { Button } from "components/Button";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 export interface UniqueSpell extends Spell {
   identifier: number;
@@ -23,9 +25,16 @@ function createSimConfig(spells: UniqueSpell[]): SimConfigObject {
   };
 }
 
+function serializeSimConfig(config?: SimConfigObject): string {
+  if (!config) return "{}";
+
+  return JSON.stringify(config);
+}
+
 export type SpellDictionary = { [key: string]: Spell };
 
 export const SimOrchestrator = function SimOrchestrator() {
+  const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
   const [spells, setSpells] = useState<UniqueSpell[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [stats, setStats] = useState<CharacterStats>(initialState);
@@ -55,9 +64,26 @@ export const SimOrchestrator = function SimOrchestrator() {
     [setSpells]
   );
 
+  /**
+   * Import config callback
+   */
+  const importConfig = useCallback(async () => {
+    const jsonConfigString = window.prompt("Paste a config");
+    if (!jsonConfigString) return;
+
+    try {
+      const config = JSON.parse(jsonConfigString);
+      if (!isSimConfigObject(config)) throw new Error("Bad input");
+
+      setSimulation(config);
+    } catch (e) {
+      console.log(e);
+      console.error("bad paste lol");
+    }
+  }, [setSimulation]);
+
   useEffect(() => {
     if (spells.length === 0) return;
-
     const player = createPlayer(stats.intellect, stats.haste, stats.mastery, stats.crit, stats.vers);
 
     const simResult = QuickSim(createInitialState(player), spells, items);
@@ -66,14 +92,33 @@ export const SimOrchestrator = function SimOrchestrator() {
   }, [spells, stats, items]);
 
   return (
-    <div className="sm:grid sm:grid-cols-3 sm:gap-4">
-      <div className="sm:col-span-full">
-        <h4 className="text-lg text-gray-600 font-semibold">Ramp Timeline</h4>
+    <div>
+      <div className="mb-4">
+        <div className="flex justify-between mb-4">
+          <h4 className="text-lg text-gray-600 font-semibold mb-2">Ramp Timeline</h4>
+          <div className="space-x-2">
+            <Button outline icon="DownloadIcon" onClick={importConfig}>
+              Import
+            </Button>
+            <CopyToClipboard text={serializeSimConfig(createSimConfig(spells))}>
+              <Button outline icon="ShareIcon">
+                Export
+              </Button>
+            </CopyToClipboard>
+            <Button onClick={() => setShowConfiguration(!showConfiguration)} outline icon="CogIcon">
+              Config
+            </Button>
+          </div>
+        </div>
         <Timeline setSpells={setSpells} spells={spells} />
       </div>
-      <Stats onChange={setStats} />
-      <ItemSelector onChange={setItems} />
-      <SimResults simState={simResult} setSimConfig={setSimulation} simConfig={createSimConfig(spells)} />
+      {showConfiguration && (
+        <div className="grid grid-cols-3 gap-4">
+          <Stats onChange={setStats} />
+          <ItemSelector onChange={setItems} />
+          <SimResults simState={simResult} />
+        </div>
+      )}
     </div>
   );
 };
