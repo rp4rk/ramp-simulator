@@ -59,13 +59,7 @@ interface DragItem {
   type: string;
 }
 
-export const SwappableSpell = function ({
-  spell,
-  id,
-  index,
-  swapHandler,
-  deleteHandler,
-}: HoverSpellProps) {
+export const SwappableSpell = function ({ spell, id, index, swapHandler, deleteHandler }: HoverSpellProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   /**
@@ -92,12 +86,10 @@ export const SwappableSpell = function ({
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
       const clientOffset = monitor.getClientOffset();
-      const hoverMiddleX =
-        (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+      const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
       const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left;
 
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {

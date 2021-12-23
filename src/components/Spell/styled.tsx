@@ -6,6 +6,10 @@ export const SpellImage = styled.img`
   border-radius: 3px;
   width: 32px;
   border-radius: 5px;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 `;
 
 export const SpellContainer = styled.span<Pick<SpellProps, "toggled">>`
@@ -13,13 +17,13 @@ export const SpellContainer = styled.span<Pick<SpellProps, "toggled">>`
   display: inline-block;
   padding: 4px 6px;
 
-  opacity: ${(p) => (p.toggled ? 1 : 0.2)};
+  /* opacity: ${(p) => (p.toggled ? 1 : 0.2)}; */
 
   &:hover {
     cursor: pointer;
     transform: translateY(-3px);
 
-    opacity: ${(p) => (p.toggled ? 1 : 0.6)};
+    /* opacity: ${(p) => (p.toggled ? 1 : 0.6)}; */
 
     img {
       background: #cde0fe;
@@ -29,6 +33,7 @@ export const SpellContainer = styled.span<Pick<SpellProps, "toggled">>`
 `;
 
 export const HoverSpellContainer = styled.span`
+  transform: translate(0, 0);
   color: rgb(0, 31, 63);
   display: inline-flex;
   box-sizing: content-box;
