@@ -4,23 +4,21 @@ import { SpellListContainer } from "./styled";
 import { Spells } from "lib";
 import { Spell as SpellType } from "lib/types";
 import { DragSpell, SwappableSpell } from "components/Spell";
-import { UniqueSpell } from "components/SimOrchestrator";
+import { RampSpell } from "context/simulations";
 
 type SpellProps = {
   /**
    * A spell from the quicksim library.
    */
-  spells?: (SpellType | UniqueSpell)[];
+  spells?: (SpellType | RampSpell)[];
   swappable?: boolean;
-  setSpells?: (spellList: UniqueSpell[]) => void;
+  setSpells?: (spellList: RampSpell[]) => void;
   deleteSpell?: (idx: number) => void;
   className?: string;
 };
 
 const EXCLUDED_SPELLS = ["Ascended Eruption"];
-const SPELL_LIST_DEFAULTS = Object.values(Spells).filter(
-  (spell) => !EXCLUDED_SPELLS.includes(spell.name)
-);
+const SPELL_LIST_DEFAULTS = Object.values(Spells).filter((spell) => !EXCLUDED_SPELLS.includes(spell.name));
 
 const swap = (i: number, j: number, a: any[]) => {
   const swappingItem = a[i];
@@ -54,7 +52,7 @@ export const SpellList = function ({
   spells = SPELL_LIST_DEFAULTS,
   swappable = false,
   setSpells,
-  className = ''
+  className = "",
 }: SpellProps) {
   const swapSpells = useCallback(
     (i: number, j: number) => {
@@ -76,12 +74,12 @@ export const SpellList = function ({
   return (
     <SpellListContainer className={"".concat(className)}>
       {spells.map((spell, index) =>
-        swappable && "identifier" in spell ? (
+        swappable && "guid" in spell ? (
           <SwappableSpell
             swapHandler={swapSpells}
             index={index}
-            key={`${spell.id}-${spell.identifier}`}
-            id={`${spell.id}-${spell.identifier}`}
+            key={`${spell.id}-${spell.guid}`}
+            id={`${spell.id}-${spell.guid}`}
             spell={spell}
             deleteHandler={deleteSpell}
           />

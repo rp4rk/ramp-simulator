@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, FC } from "react";
+import { useState, useEffect, useCallback, FC, useContext } from "react";
 import { CharacterStats, Stats, initialState } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
@@ -8,18 +8,18 @@ import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer, Spells } from "lib";
 import { Button } from "components/Button";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { RampSpell, SimulationConfiguration, SimulationsContext } from "context/simulations";
+import { setSimulationSpells } from "context/simulations.actions";
 
-export interface UniqueSpell extends Spell {
-  identifier: number;
-}
 export interface SimConfigObject {
   spellNames: string[];
 }
+
 export const isSimConfigObject = (config: any): config is SimConfigObject => {
   return "spellNames" in config;
 };
 
-function createSimConfig(spells: UniqueSpell[]): SimConfigObject {
+function createSimConfig(spells: RampSpell[]): SimConfigObject {
   return {
     spellNames: spells.map((s) => s.name),
   };
@@ -34,59 +34,20 @@ function serializeSimConfig(config?: SimConfigObject): string {
 export type SpellDictionary = { [key: string]: Spell };
 
 interface SimOrchestratorProps {
-  onDelete?: () => void;
+  simId: string;
+  simulationConfiguration: SimulationConfiguration;
+  onDelete?: (uuid: string) => void;
   deletionAllowed?: boolean;
 }
 
 export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
+  const { dispatch } = useContext(SimulationsContext);
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
-  const [spells, setSpells] = useState<UniqueSpell[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [stats, setStats] = useState<CharacterStats>(initialState);
   const [simResult, setSimResult] = useState<SimState>();
 
-  const setSimulation = useCallback(
-    (config: SimConfigObject) => {
-      const { spellNames } = config;
-
-      /**
-       * Grab spells from our library
-       */
-      const spells = spellNames.map((name) => {
-        const spell = Object.values(Spells).find((s) => s.name === name);
-
-        if (!spell) {
-          throw new Error(`Unknown spell - ${name}`);
-        }
-        return {
-          ...spell,
-          identifier: new Date().getTime() * Math.random(),
-        } as UniqueSpell;
-      });
-
-      setSpells(spells);
-    },
-    [setSpells]
-  );
-
-  /**
-   * Import config callback
-   */
-  const importConfig = useCallback(async () => {
-    const jsonConfigString = window.prompt("Paste a config");
-    if (!jsonConfigString) return;
-
-    try {
-      const config = JSON.parse(jsonConfigString);
-      if (!isSimConfigObject(config)) throw new Error("Bad input");
-
-      setSimulation(config);
-    } catch (e) {
-      console.log(e);
-      console.error("bad paste lol");
-    }
-  }, [setSimulation]);
-
+  const spells = props.simulationConfiguration.rampSpells;
   useEffect(() => {
     if (spells.length === 0) return;
     const player = createPlayer(stats.intellect, stats.haste, stats.mastery, stats.crit, stats.vers);
@@ -94,7 +55,19 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
     const simResult = QuickSim(createInitialState(player), spells, items);
 
     setSimResult(simResult);
-  }, [spells, stats, items]);
+  }, [stats, items, spells]);
+
+  const setSpells = useCallback(
+    (spells: RampSpell[]) => {
+      dispatch(
+        setSimulationSpells({
+          guid: props.simId,
+          spells,
+        })
+      );
+    },
+    [props.simId, dispatch]
+  );
 
   return (
     <div>
@@ -102,10 +75,10 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
         <div className="flex justify-between mb-4">
           <h4 className="text-lg text-gray-600 font-semibold mb-2">Ramp Timeline</h4>
           <div className="space-x-2">
-            <Button outline icon="DownloadIcon" onClick={importConfig}>
+            <Button outline icon="DownloadIcon" onClick={console.log}>
               Import
             </Button>
-            <CopyToClipboard text={serializeSimConfig(createSimConfig(spells))}>
+            <CopyToClipboard text={"nah"}>
               <Button outline icon="ShareIcon">
                 Export
               </Button>
@@ -114,7 +87,12 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
               Config
             </Button>
             {props.deletionAllowed && props.onDelete && (
-              <Button className="bg-red-500 hover:bg-red-600" onClick={props.onDelete} outline icon="TrashIcon">
+              <Button
+                className="bg-red-500 hover:bg-red-600"
+                onClick={() => props.onDelete && props.onDelete(props.simId)}
+                outline
+                icon="TrashIcon"
+              >
                 Delete
               </Button>
             )}

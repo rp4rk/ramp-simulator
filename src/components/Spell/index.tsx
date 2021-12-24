@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Item, Spell as SpellType } from "lib/types";
 import { HoverSpellContainer, SpellImage, SpellContainer } from "./styled";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
-import { ItemTypes } from "ItemTypes";
+import { ItemTypes } from "types";
 
 export type SpellProps = {
   spell: SpellType | Item;

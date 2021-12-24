@@ -1,14 +1,15 @@
 import { useDrop } from "react-dnd";
-import { ItemTypes } from "ItemTypes";
+import { ItemTypes } from "types";
 import { Spell } from "lib/types";
 import { Spells } from "lib";
 import { TimelineContainer } from "./styled";
 import { SpellList } from "components/SpellList";
-import { UniqueSpell } from "components/SimOrchestrator";
+import { RampSpell } from "context/simulations";
+import { v4 } from "uuid";
 
 type TimelineProps = {
-  spells: UniqueSpell[];
-  setSpells: (arg0: UniqueSpell[]) => void;
+  spells: RampSpell[];
+  setSpells: (arg0: RampSpell[]) => void;
 };
 
 const SpellMap: { [key: string]: Spell } = Object.values(Spells).reduce((acc, curr) => {
@@ -23,9 +24,9 @@ export const Timeline = function ({ spells, setSpells }: TimelineProps) {
       accept: ItemTypes.Spell,
       drop: (a: any) => {
         const targetSpell = SpellMap[a.id];
-        const uniqueSpell: UniqueSpell = {
+        const uniqueSpell: RampSpell = {
           ...targetSpell,
-          identifier: new Date().getTime(),
+          guid: v4(),
         };
 
         setSpells([...spells, uniqueSpell]);

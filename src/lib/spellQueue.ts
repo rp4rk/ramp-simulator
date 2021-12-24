@@ -40,9 +40,6 @@ function reduceState(state: SimState, spell: Spell): SimState {
 
 /**
  * Main interface point
- * @param state
- * @param queue
- * @param initialAuras
  */
 export const QuickSim: SpellQueueIterator = (
   state: SimState,

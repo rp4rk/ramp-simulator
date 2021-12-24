@@ -3,6 +3,7 @@ import { DragSpell } from "components/Spell";
 import { Spells } from "lib";
 import { Spell as SpellType, SpellCategory } from "lib/types";
 import { Button } from "components/Button";
+import React from "react";
 
 const RAMP_SEQUENCE = JSON.stringify({
   spellNames: [
@@ -41,7 +42,7 @@ const SPELL_CATEGORIES = Object.values(Spells).reduce((acc, spell) => {
   return set("Uncategorized", acc, spell);
 }, {} as { [index: string]: SpellType[] });
 
-export const SpellSelection = function () {
+export const SpellSelection = React.memo(function () {
   return (
     <>
       <div className="flex justify-between mb-4">
@@ -64,4 +65,4 @@ export const SpellSelection = function () {
       </div>
     </>
   );
-};
+});
