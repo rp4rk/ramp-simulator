@@ -4,7 +4,7 @@ type Calculated = (state: SimState) => number;
 
 export enum ItemType {
   Legendary = "Legendary",
-  Conduit = "Condui",
+  Conduit = "Conduit",
   Tier = "Tier",
 }
 

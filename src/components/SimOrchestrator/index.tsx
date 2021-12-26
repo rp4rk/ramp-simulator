@@ -7,14 +7,18 @@ import { Item, Player, SimState } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer } from "lib";
 import { Button } from "components/Button";
-import CopyToClipboard from "react-copy-to-clipboard";
+// import CopyToClipboard from "react-copy-to-clipboard";
 import { RampSpell, SimulationConfiguration, SimulationsContext } from "context/simulations";
 import {
+  // addSimulation,
   addSimulationItems,
   removeSimulationItems,
   setSimulationSpells,
   updatePlayerStat,
 } from "context/simulations.actions";
+// import { replacer, reviver } from "util/json";
+// import clipboard from "clipboardy";
+// import { v4 } from "uuid";
 
 interface SimOrchestratorProps {
   simId: string;
@@ -89,20 +93,35 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
     [props.simId, dispatch]
   );
 
+  // const importString = useCallback(async () => {
+  //   const clipboardValue = await clipboard.read();
+  //   const parsedValue = JSON.parse(clipboardValue, reviver);
+  //   // TODO: Make it so that this does not try to export functions wops
+  //   const id = v4();
+  //   dispatch(
+  //     addSimulation({
+  //       guid: id,
+  //       sim: parsedValue.state,
+  //       items: parsedValue.items,
+  //       rampSpells: parsedValue.rampSpells,
+  //     })
+  //   );
+  // }, [dispatch]);
+
   return (
     <div>
       <div className="mb-4">
         <div className="flex justify-between mb-4">
           <h4 className="text-lg text-gray-600 font-semibold mb-2">Ramp Timeline</h4>
           <div className="space-x-2">
-            <Button outline icon="DownloadIcon" onClick={console.log}>
+            {/* <Button outline icon="DownloadIcon" onClick={importString}>
               Import
             </Button>
-            <CopyToClipboard text={"nah"}>
+            <CopyToClipboard text={JSON.stringify(props.simulationConfiguration, replacer)}>
               <Button outline icon="ShareIcon">
                 Export
               </Button>
-            </CopyToClipboard>
+            </CopyToClipboard> */}
             <Button onClick={() => setShowConfiguration(!showConfiguration)} outline icon="CogIcon">
               Config
             </Button>

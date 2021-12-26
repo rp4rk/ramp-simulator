@@ -7,6 +7,8 @@ interface AddSimulationAction extends Action {
   payload: {
     guid: string;
     sim: SimState;
+    items: Item[];
+    rampSpells: RampSpell[];
   };
 }
 export const addSimulation = (payload: AddSimulationAction["payload"]): AddSimulationAction => ({

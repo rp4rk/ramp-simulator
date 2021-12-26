@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo } from "react";
+import rfdc from "rfdc";
 
 import { SimOrchestrator } from "components/SimOrchestrator";
 import { Card } from "components/Card";
@@ -12,8 +13,11 @@ import { deleteSimulation, addSimulation } from "context/simulations.actions";
 import { createPlayer } from "lib";
 import { createInitialState } from "lib/spellQueue";
 
+const clone = rfdc();
+
 function App() {
   const { state, dispatch } = useContext(SimulationsContext);
+  const primarySim = Object.values(state.simulations)[0];
 
   const deleteSim = useCallback(
     (uuid: string) => {
@@ -24,16 +28,32 @@ function App() {
 
   const addSim = useCallback(() => {
     const simulationId = v4();
-    const player = createPlayer(2000, 990, 350, 350, 400);
-    const initialSimState = createInitialState(player);
 
-    dispatch(
-      addSimulation({
-        guid: simulationId,
-        sim: initialSimState,
-      })
-    );
-  }, [dispatch]);
+    if (primarySim) {
+      const simClone = clone(primarySim);
+
+      dispatch(
+        addSimulation({
+          guid: simulationId,
+          sim: simClone.state,
+          rampSpells: simClone.rampSpells,
+          items: simClone.items,
+        })
+      );
+    } else {
+      const player = createPlayer(2000, 990, 350, 350, 400);
+      const initialSimState = createInitialState(player);
+
+      dispatch(
+        addSimulation({
+          guid: simulationId,
+          sim: initialSimState,
+          rampSpells: [],
+          items: [],
+        })
+      );
+    }
+  }, [dispatch, primarySim]);
 
   // Memoize the sim entries and the count
   const [sims, simCount] = useMemo(() => {

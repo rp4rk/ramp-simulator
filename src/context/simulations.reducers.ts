@@ -13,8 +13,8 @@ export const simulationsReducer = (state: SimulationStates, action: SimulationSt
           ...projectedState.simulations,
           [payload.guid]: {
             state: payload.sim,
-            rampSpells: [],
-            items: [],
+            rampSpells: payload.rampSpells,
+            items: payload.items,
           },
         };
       });
