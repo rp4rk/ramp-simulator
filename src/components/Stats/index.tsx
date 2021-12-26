@@ -1,75 +1,15 @@
-import React, { useReducer } from "react";
-import { useEffect } from "react";
+import React, { FC } from "react";
+import { Player } from "lib/types";
 
 type StatProps = {
   /**
    * A spell from the quicksim library.
    */
-  onChange?: (arg0: CharacterStats) => any;
+  onChange: (stat: keyof Player, amount: number) => any;
+  stats: Player;
 };
 
-export interface CharacterStats {
-  /**
-   * The character's intellect rating
-   */
-  intellect: number;
-  /**
-   * The character's haste rating
-   */
-  haste: number;
-  /**
-   * The character's mastery rating
-   */
-  mastery: number;
-  /**
-   * The character's crit rating
-   */
-  crit: number;
-  /**
-   * The character's vers rating
-   */
-  vers: number;
-}
-
-interface StatAction {
-  type: keyof CharacterStats;
-  payload: number;
-}
-
-export const initialState: CharacterStats = {
-  intellect: 2000,
-  haste: 33 * 33,
-  mastery: 35 * 25,
-  crit: 35 * 10,
-  vers: 40 * 5,
-};
-
-function statReducer(state: CharacterStats, action: StatAction) {
-  switch (action.type) {
-    case "intellect":
-      return { ...state, intellect: action.payload };
-    case "haste":
-      return { ...state, haste: action.payload };
-    case "mastery":
-      return { ...state, mastery: action.payload };
-    case "crit":
-      return { ...state, crit: action.payload };
-    case "vers":
-      return { ...state, vers: action.payload };
-    default:
-      return state;
-  }
-}
-
-export const Stats = function ({ onChange }: StatProps) {
-  const [state, dispatch] = useReducer(statReducer, initialState);
-
-  useEffect(() => {
-    if (!onChange) return;
-
-    onChange(state);
-  }, [onChange, state]);
-
+export const Stats: FC<StatProps> = ({ onChange, stats }) => {
   return (
     <div>
       <h4 className="text-lg text-gray-600 font-semibold">Statistics</h4>
@@ -80,10 +20,15 @@ export const Stats = function ({ onChange }: StatProps) {
             className="p-1"
             type="number"
             name="intellect"
-            value={state.intellect}
+            value={stats.spellpower || ""}
             onChange={(e) => {
-              const value = +e.target.value || 0;
-              dispatch({ type: "intellect", payload: value });
+              const value = e.target.value;
+
+              if (value === "" || +value < 0) {
+                return onChange("spellpower", 0);
+              }
+
+              onChange("spellpower", +value);
             }}
           ></input>
         </li>
@@ -93,10 +38,15 @@ export const Stats = function ({ onChange }: StatProps) {
             className="p-1"
             type="number"
             name="haste"
-            value={state.haste}
+            value={stats.haste || ""}
             onChange={(e) => {
-              const value = +e.target.value || 0;
-              dispatch({ type: "haste", payload: value });
+              const value = e.target.value;
+
+              if (value === "" || +value < 0) {
+                return onChange("haste", 0);
+              }
+
+              onChange("haste", +value);
             }}
           ></input>
         </li>
@@ -106,10 +56,15 @@ export const Stats = function ({ onChange }: StatProps) {
             className="p-1"
             type="number"
             name="mastery"
-            value={state.mastery}
+            value={stats.mastery || ""}
             onChange={(e) => {
-              const value = +e.target.value || 0;
-              dispatch({ type: "mastery", payload: value });
+              const value = e.target.value;
+
+              if (value === "" || +value < 0) {
+                return onChange("mastery", 0);
+              }
+
+              onChange("mastery", +value);
             }}
           ></input>
         </li>
@@ -119,10 +74,15 @@ export const Stats = function ({ onChange }: StatProps) {
             className="p-1"
             type="number"
             name="crit"
-            value={state.crit}
+            value={stats.crit || ""}
             onChange={(e) => {
-              const value = +e.target.value || 0;
-              dispatch({ type: "crit", payload: value });
+              const value = e.target.value;
+
+              if (value === "" || +value < 0) {
+                return onChange("crit", 0);
+              }
+
+              onChange("crit", +value);
             }}
           ></input>
         </li>
@@ -132,10 +92,15 @@ export const Stats = function ({ onChange }: StatProps) {
             className="p-1"
             type="number"
             name="vers"
-            value={state.vers}
+            value={stats.vers || ""}
             onChange={(e) => {
-              const value = +e.target.value || 0;
-              dispatch({ type: "vers", payload: value });
+              const value = e.target.value;
+
+              if (value === "" || +value < 0) {
+                return onChange("vers", 0);
+              }
+
+              onChange("vers", +value);
             }}
           ></input>
         </li>

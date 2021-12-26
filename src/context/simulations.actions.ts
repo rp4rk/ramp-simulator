@@ -1,4 +1,4 @@
-import { SimState } from "lib/types";
+import { SimState, Item, Player } from "lib/types";
 import { Action } from "../types";
 import { RampSpell } from "./simulations";
 
@@ -37,4 +37,47 @@ export const setSimulationSpells = (payload: SetSimulationSpells["payload"]): Se
   payload,
 });
 
-export type SimulationStatesAction = AddSimulationAction | DeleteSimulationAction | SetSimulationSpells;
+interface AddSimulationItems extends Action {
+  type: "ADD_SIMULATION_ITEMS";
+  payload: {
+    guid: string;
+    items: Item[];
+  };
+}
+export const addSimulationItems = (payload: AddSimulationItems["payload"]): AddSimulationItems => ({
+  type: "ADD_SIMULATION_ITEMS",
+  payload,
+});
+
+interface RemoveSimulationItems extends Action {
+  type: "REMOVE_SIMULATION_ITEMS";
+  payload: {
+    guid: string;
+    items: Item[];
+  };
+}
+export const removeSimulationItems = (payload: RemoveSimulationItems["payload"]): RemoveSimulationItems => ({
+  type: "REMOVE_SIMULATION_ITEMS",
+  payload,
+});
+
+interface UpdatePlayerStat extends Action {
+  type: "UPDATE_PLAYER_STAT";
+  payload: {
+    guid: string;
+    stat: keyof Player;
+    amount: number;
+  };
+}
+export const updatePlayerStat = (payload: UpdatePlayerStat["payload"]): UpdatePlayerStat => ({
+  type: "UPDATE_PLAYER_STAT",
+  payload,
+});
+
+export type SimulationStatesAction =
+  | AddSimulationAction
+  | DeleteSimulationAction
+  | SetSimulationSpells
+  | AddSimulationItems
+  | RemoveSimulationItems
+  | UpdatePlayerStat;

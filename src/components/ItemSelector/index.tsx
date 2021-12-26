@@ -1,52 +1,32 @@
 import { Items } from "lib";
-import { Item, ItemType, Spell as SpellType } from "lib/types";
+import { Item, ItemType } from "lib/types";
 import { Spell } from "components/Spell";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback } from "react";
 
 const LEGENDARIES = Object.values(Items).filter((item: Item) => item.type === ItemType.Legendary);
 const CONDUITS = Object.values(Items).filter((item: Item) => item.type === ItemType.Conduit);
 const TIERS = Object.values(Items).filter((item: Item) => item.type === ItemType.Tier);
 
 type ItemSelectorProps = {
-  onChange?: (arg0: Item[]) => void;
+  items: Item[];
+  onItemAdd: (items: Item[]) => void;
+  onItemRemove: (items: Item[]) => void;
 };
 
-export const ItemSelector = function ItemSelector({ onChange }: ItemSelectorProps) {
-  const [selectedItems, setSelectedItems] = useState<{
-    [key: string]: Item;
-  }>({
-    [Items.ClarityOfMind.name]: Items.ClarityOfMind,
-    [Items.Exaltation.name]: Items.Exaltation,
-    [Items.RabidShadows.name]: Items.RabidShadows,
-    [Items.CourageousAscension.name]: Items.CourageousAscension,
-  });
-
-  /**
-   * Toggle Item Callback
-   */
+export const ItemSelector: FC<ItemSelectorProps> = ({ items, onItemAdd, onItemRemove }) => {
   const toggleItems = useCallback(
-    (item: Item | SpellType) => {
-      if (!("type" in item)) return;
-      if (!selectedItems[item.name]) {
-        setSelectedItems({ ...selectedItems, [item.name]: item });
-        return;
+    (item) => {
+      const itemToggled = items.find((i) => i.id === item.id);
+      if (itemToggled) {
+        onItemRemove([item]);
+      } else {
+        onItemAdd([item]);
       }
-
-      const newSelectedItems = { ...selectedItems };
-      delete newSelectedItems[item.name];
-      setSelectedItems(newSelectedItems);
     },
-    [selectedItems, setSelectedItems]
+    [onItemAdd, onItemRemove, items]
   );
 
-  /**
-   * onChange
-   */
-  useEffect(() => {
-    if (!onChange) return;
-
-    onChange(Object.values(selectedItems));
-  }, [selectedItems, onChange]);
+  const itemExists = (items: Item[], id: number): boolean => !!items.find((i) => i.id === id);
 
   return (
     <div className="flex sm:block sm:flex-wrap sm:space-between">
@@ -54,10 +34,10 @@ export const ItemSelector = function ItemSelector({ onChange }: ItemSelectorProp
         <h4 className="text-lg text-gray-600 font-semibold">Legendaries</h4>
         {LEGENDARIES.map((legendary) => (
           <Spell
-            key={legendary.name}
+            key={legendary.id}
             spell={legendary}
             onClick={(spell) => toggleItems(spell)}
-            toggled={!!selectedItems[legendary.name]}
+            toggled={itemExists(items, legendary.id)}
           />
         ))}
       </div>
@@ -65,10 +45,10 @@ export const ItemSelector = function ItemSelector({ onChange }: ItemSelectorProp
         <h4 className="text-lg text-gray-600 font-semibold">Conduits</h4>
         {CONDUITS.map((conduit) => (
           <Spell
-            key={conduit.name}
+            key={conduit.id}
             spell={conduit}
             onClick={(spell) => toggleItems(spell)}
-            toggled={!!selectedItems[conduit.name]}
+            toggled={itemExists(items, conduit.id)}
           />
         ))}
       </div>
@@ -76,10 +56,10 @@ export const ItemSelector = function ItemSelector({ onChange }: ItemSelectorProp
         <h4 className="text-lg text-gray-600 font-semibold">Tier Sets</h4>
         {TIERS.map((tier) => (
           <Spell
-            key={tier.name}
+            key={tier.id}
             spell={tier}
             onClick={(spell) => toggleItems(spell)}
-            toggled={!!selectedItems[tier.name]}
+            toggled={itemExists(items, tier.id)}
           />
         ))}
       </div>

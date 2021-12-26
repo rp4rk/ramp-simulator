@@ -3,9 +3,9 @@ export type StateSpellReducer = (state: SimState, spell: Spell | DoT) => SimStat
 type Calculated = (state: SimState) => number;
 
 export enum ItemType {
-  Legendary,
-  Conduit,
-  Tier,
+  Legendary = "Legendary",
+  Conduit = "Condui",
+  Tier = "Tier",
 }
 
 export interface Item extends Buff {

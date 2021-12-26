@@ -1,37 +1,20 @@
 import { useState, useEffect, useCallback, FC, useContext } from "react";
-import { CharacterStats, Stats, initialState } from "components/Stats";
+import { Stats } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
 import { ItemSelector } from "components/ItemSelector";
-import { Item, SimState, Spell } from "lib/types";
+import { Item, Player, SimState } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
-import { createPlayer, Spells } from "lib";
+import { createPlayer } from "lib";
 import { Button } from "components/Button";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { RampSpell, SimulationConfiguration, SimulationsContext } from "context/simulations";
-import { setSimulationSpells } from "context/simulations.actions";
-
-export interface SimConfigObject {
-  spellNames: string[];
-}
-
-export const isSimConfigObject = (config: any): config is SimConfigObject => {
-  return "spellNames" in config;
-};
-
-function createSimConfig(spells: RampSpell[]): SimConfigObject {
-  return {
-    spellNames: spells.map((s) => s.name),
-  };
-}
-
-function serializeSimConfig(config?: SimConfigObject): string {
-  if (!config) return "{}";
-
-  return JSON.stringify(config);
-}
-
-export type SpellDictionary = { [key: string]: Spell };
+import {
+  addSimulationItems,
+  removeSimulationItems,
+  setSimulationSpells,
+  updatePlayerStat,
+} from "context/simulations.actions";
 
 interface SimOrchestratorProps {
   simId: string;
@@ -43,20 +26,26 @@ interface SimOrchestratorProps {
 export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
   const { dispatch } = useContext(SimulationsContext);
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
-  const [items, setItems] = useState<Item[]>([]);
-  const [stats, setStats] = useState<CharacterStats>(initialState);
   const [simResult, setSimResult] = useState<SimState>();
 
+  /**
+   * Run the simulation for this orchestrator
+   */
   const spells = props.simulationConfiguration.rampSpells;
+  const items = props.simulationConfiguration.items;
+  const player = props.simulationConfiguration.state.player;
   useEffect(() => {
     if (spells.length === 0) return;
-    const player = createPlayer(stats.intellect, stats.haste, stats.mastery, stats.crit, stats.vers);
+    const player = createPlayer(2000, 990, 350, 350, 400);
 
     const simResult = QuickSim(createInitialState(player), spells, items);
 
     setSimResult(simResult);
-  }, [stats, items, spells]);
+  }, [player, items, spells]);
 
+  /**
+   * Callbacks for state management
+   */
   const setSpells = useCallback(
     (spells: RampSpell[]) => {
       dispatch(
@@ -65,6 +54,37 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
           spells,
         })
       );
+    },
+    [props.simId, dispatch]
+  );
+
+  const addItem = useCallback(
+    (items: Item[]) => {
+      dispatch(
+        addSimulationItems({
+          guid: props.simId,
+          items,
+        })
+      );
+    },
+    [props.simId, dispatch]
+  );
+
+  const removeItem = useCallback(
+    (items: Item[]) => {
+      dispatch(
+        removeSimulationItems({
+          guid: props.simId,
+          items,
+        })
+      );
+    },
+    [props.simId, dispatch]
+  );
+
+  const changeStat = useCallback(
+    (stat: keyof Player, amount: number) => {
+      dispatch(updatePlayerStat({ guid: props.simId, stat, amount }));
     },
     [props.simId, dispatch]
   );
@@ -102,8 +122,8 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
       </div>
       {showConfiguration && (
         <div className="grid grid-cols-3 gap-4">
-          <Stats onChange={setStats} />
-          <ItemSelector onChange={setItems} />
+          <Stats stats={props.simulationConfiguration.state.player} onChange={changeStat} />
+          <ItemSelector items={props.simulationConfiguration.items} onItemAdd={addItem} onItemRemove={removeItem} />
           <SimResults simState={simResult} />
         </div>
       )}

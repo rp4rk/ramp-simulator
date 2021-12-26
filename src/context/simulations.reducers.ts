@@ -1,4 +1,5 @@
-import { createPlayer } from "lib";
+import produce from "immer";
+import { Item } from "lib/types";
 import { SimulationStates } from "./simulations";
 import { SimulationStatesAction } from "./simulations.actions";
 
@@ -6,40 +7,53 @@ export const simulationsReducer = (state: SimulationStates, action: SimulationSt
   switch (action.type) {
     case "ADD_SIMULATION": {
       const { payload } = action;
-      return {
-        ...state,
-        simulations: {
-          ...state.simulations,
+
+      return produce(state, (projectedState) => {
+        projectedState.simulations = {
+          ...projectedState.simulations,
           [payload.guid]: {
             state: payload.sim,
             rampSpells: [],
             items: [],
           },
-        },
-      };
+        };
+      });
     }
     case "DELETE_SIMULATION": {
       const { simulations } = state;
       const { [action.payload]: _, ...rest } = simulations;
-      return {
-        ...state,
-        simulations: rest,
-      };
+
+      return produce(state, (projectedState) => {
+        projectedState.simulations = rest;
+      });
     }
     case "SET_SIMULATION_SPELLS": {
-      const { simulations } = state;
-      const { rampSpells, ...rest } = simulations[action.payload.guid];
+      return produce(state, (projectedState) => {
+        projectedState.simulations[action.payload.guid].rampSpells = action.payload.spells;
+      });
+    }
+    case "ADD_SIMULATION_ITEMS": {
+      const targetSimulation = state.simulations[action.payload.guid];
+      const newItems: Item[] = [...targetSimulation.items, ...action.payload.items];
 
-      return {
-        ...state,
-        simulations: {
-          ...simulations,
-          [action.payload.guid]: {
-            ...rest,
-            rampSpells: action.payload.spells,
-          },
-        },
-      };
+      return produce(state, (projectedState) => {
+        projectedState.simulations[action.payload.guid].items = newItems;
+      });
+    }
+    case "REMOVE_SIMULATION_ITEMS": {
+      const targetSimulation = state.simulations[action.payload.guid];
+      const newItems: Item[] = targetSimulation.items.filter((item) =>
+        action.payload.items.find((i) => i.id !== item.id)
+      );
+
+      return produce(state, (projectedState) => {
+        projectedState.simulations[action.payload.guid].items = newItems;
+      });
+    }
+    case "UPDATE_PLAYER_STAT": {
+      return produce(state, (projectedState) => {
+        projectedState.simulations[action.payload.guid].state.player[action.payload.stat] = action.payload.amount;
+      });
     }
     default:
       return state;
