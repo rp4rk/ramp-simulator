@@ -1,7 +1,14 @@
 import produce from "immer";
 import { Item } from "lib/types";
-import { SimulationStates } from "./simulations";
+import { RampSpell, SimulationStates } from "./simulations";
 import { SimulationStatesAction } from "./simulations.actions";
+
+import * as spellMap from "lib/spells";
+import * as itemMap from "lib/items";
+import { v4 } from "uuid";
+
+const spells = Object.values(spellMap);
+const items = Object.values(itemMap);
 
 export const simulationsReducer = (state: SimulationStates, action: SimulationStatesAction): SimulationStates => {
   switch (action.type) {
@@ -53,6 +60,31 @@ export const simulationsReducer = (state: SimulationStates, action: SimulationSt
     case "UPDATE_PLAYER_STAT": {
       return produce(state, (projectedState) => {
         projectedState.simulations[action.payload.guid].state.player[action.payload.stat] = action.payload.amount;
+      });
+    }
+    case "IMPORT_SIMULATION": {
+      const { simulation } = action.payload;
+      const simulationItems = simulation.items.map((item) => items.find((i) => i.id === item)) as Item[];
+      const simulationSpells = simulation.rampSpells.map((spell) => {
+        const foundSpell = spells.find((s) => s.id === spell);
+        if (!foundSpell) return undefined;
+
+        return {
+          ...foundSpell,
+          guid: `${foundSpell.id}-${v4()}`,
+        };
+      }) as RampSpell[];
+
+      return produce(state, (projectedState) => {
+        projectedState.simulations[v4()] = {
+          state: {
+            ...simulation.simState,
+            buffs: new Map(simulation.simState.buffs),
+            cooldowns: new Map(simulation.simState.cooldowns),
+          },
+          rampSpells: simulationSpells,
+          items: simulationItems,
+        };
       });
     }
     default:

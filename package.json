@@ -16,6 +16,7 @@
     "@types/uuid": "^8.3.3",
     "clipboardy": "^3.0.0",
     "immer": "^9.0.7",
+    "lzbase62": "^2.0.0",
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dnd": "^14.0.2",
@@ -64,6 +65,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lzbase62": "^2.0.0",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.7"

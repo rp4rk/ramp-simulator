@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, FC, useContext } from "react";
+import { useState, useEffect, useCallback, FC, useContext, useMemo } from "react";
 import { Stats } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
@@ -7,18 +7,17 @@ import { Item, Player, SimState } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer } from "lib";
 import { Button } from "components/Button";
-// import CopyToClipboard from "react-copy-to-clipboard";
+
 import { RampSpell, SimulationConfiguration, SimulationsContext } from "context/simulations";
 import {
-  // addSimulation,
   addSimulationItems,
   removeSimulationItems,
   setSimulationSpells,
   updatePlayerStat,
 } from "context/simulations.actions";
-// import { replacer, reviver } from "util/json";
-// import clipboard from "clipboardy";
-// import { v4 } from "uuid";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { getSerializableConfiguration } from "context/simulations.selectors";
+import lzbase62 from "lzbase62";
 
 interface SimOrchestratorProps {
   simId: string;
@@ -28,7 +27,8 @@ interface SimOrchestratorProps {
 }
 
 export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
-  const { dispatch } = useContext(SimulationsContext);
+  const { simId } = props;
+  const { state, dispatch } = useContext(SimulationsContext);
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
   const [simResult, setSimResult] = useState<SimState>();
 
@@ -40,12 +40,17 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
   const player = props.simulationConfiguration.state.player;
   useEffect(() => {
     if (spells.length === 0) return;
-    const player = createPlayer(2000, 990, 350, 350, 400);
 
-    const simResult = QuickSim(createInitialState(player), spells, items);
-
-    setSimResult(simResult);
-  }, [player, items, spells]);
+    // Run simulation with existing player template
+    if (state.simulations[simId]) {
+      const simResult = QuickSim(createInitialState(player), spells, items);
+      setSimResult(simResult);
+    } else {
+      const player = createPlayer(2000, 990, 350, 350, 400);
+      const simResult = QuickSim(createInitialState(player), spells, items);
+      setSimResult(simResult);
+    }
+  }, [player, items, spells, simId, state.simulations]);
 
   /**
    * Callbacks for state management
@@ -93,20 +98,12 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
     [props.simId, dispatch]
   );
 
-  // const importString = useCallback(async () => {
-  //   const clipboardValue = await clipboard.read();
-  //   const parsedValue = JSON.parse(clipboardValue, reviver);
-  //   // TODO: Make it so that this does not try to export functions wops
-  //   const id = v4();
-  //   dispatch(
-  //     addSimulation({
-  //       guid: id,
-  //       sim: parsedValue.state,
-  //       items: parsedValue.items,
-  //       rampSpells: parsedValue.rampSpells,
-  //     })
-  //   );
-  // }, [dispatch]);
+  const compressedSimState = useMemo(() => {
+    const serializableConfig = getSerializableConfiguration(state.simulations[props.simId]);
+    const compressed = lzbase62.compress(JSON.stringify(serializableConfig));
+
+    return `ramp-${compressed}`;
+  }, [props.simId, state.simulations]);
 
   return (
     <div>
@@ -114,14 +111,11 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
         <div className="flex justify-between mb-4">
           <h4 className="text-lg text-gray-600 font-semibold mb-2">Ramp Timeline</h4>
           <div className="space-x-2">
-            {/* <Button outline icon="DownloadIcon" onClick={importString}>
-              Import
-            </Button>
-            <CopyToClipboard text={JSON.stringify(props.simulationConfiguration, replacer)}>
+            <CopyToClipboard text={compressedSimState}>
               <Button outline icon="ShareIcon">
                 Export
               </Button>
-            </CopyToClipboard> */}
+            </CopyToClipboard>
             <Button onClick={() => setShowConfiguration(!showConfiguration)} outline icon="CogIcon">
               Config
             </Button>

@@ -144,6 +144,7 @@ export const Penance: Spell = {
   id: 47540,
   icon: "spell_holy_penance",
   name: "Penance",
+  cooldown: 9000,
   damage: (state) => {
     const hasThePenitentOne = hasAura(state, "The Penitent One");
     const hasTilDawn = hasAura(state, "Til' Dawn");
@@ -153,7 +154,7 @@ export const Penance: Spell = {
   },
   healing: 375,
   castTime: 2000,
-  effect: [advanceTime, damage, atonement],
+  effect: [Cooldown, advanceTime, damage, atonement],
 };
 
 export const BoonOfTheAscended: Spell = {
@@ -455,5 +456,16 @@ export const ScrawledWordOfRecall: Spell = {
   name: "Scrawled Word of Recall",
   fixedGcd: true,
   castTime: 500,
-  effect: [advanceTime],
+  effect: [
+    advanceTime,
+    (state) => {
+      const penanceCooldownTimestamp = state.cooldowns.get("Penance");
+
+      if (penanceCooldownTimestamp) {
+        state.cooldowns.set("Penance", penanceCooldownTimestamp - 7200);
+      }
+
+      return state;
+    },
+  ],
 };

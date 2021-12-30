@@ -1,6 +1,7 @@
 import { SimState, Item, Player } from "lib/types";
 import { Action } from "../types";
 import { RampSpell } from "./simulations";
+import { SerializedSimulationState } from "./simulations.selectors";
 
 interface AddSimulationAction extends Action {
   type: "ADD_SIMULATION";
@@ -76,10 +77,22 @@ export const updatePlayerStat = (payload: UpdatePlayerStat["payload"]): UpdatePl
   payload,
 });
 
+interface ImportSimulation extends Action {
+  type: "IMPORT_SIMULATION";
+  payload: {
+    simulation: SerializedSimulationState;
+  };
+}
+export const importSimulation = (payload: ImportSimulation["payload"]): ImportSimulation => ({
+  type: "IMPORT_SIMULATION",
+  payload,
+});
+
 export type SimulationStatesAction =
   | AddSimulationAction
   | DeleteSimulationAction
   | SetSimulationSpells
   | AddSimulationItems
   | RemoveSimulationItems
-  | UpdatePlayerStat;
+  | UpdatePlayerStat
+  | ImportSimulation;
