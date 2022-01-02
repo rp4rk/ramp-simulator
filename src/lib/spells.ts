@@ -10,9 +10,10 @@ import {
   executeDoT,
   healing,
   EvangelismExtension,
+  channel,
 } from "./mechanics";
 import { getHastePerc } from "./player";
-import { SimState, Spell, SpellCategory } from "./types";
+import { Channel, SimState, Spell, SpellCategory } from "./types";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -139,22 +140,26 @@ export const Evangelism: Spell = {
   effect: [EvangelismExtension, advanceTime],
 };
 
-export const Penance: Spell = {
+export const Penance: Channel = {
   category: SpellCategory.Damage,
+  channel: true,
   id: 47540,
   icon: "spell_holy_penance",
   name: "Penance",
   cooldown: 9000,
-  damage: (state) => {
+  ticks: (state) => {
     const hasThePenitentOne = hasAura(state, "The Penitent One");
+    return 3 + (hasThePenitentOne ? 3 : 0);
+  },
+  damage: (state) => {
     const hasTilDawn = hasAura(state, "Til' Dawn");
 
-    const multiplier = (hasThePenitentOne ? 2 : 1) * (hasTilDawn ? 1.95 : 1);
-    return 112.8 * multiplier;
+    const multiplier = hasTilDawn ? 1.95 : 1;
+    return 37.6 * multiplier;
   },
   healing: 375,
   castTime: 2000,
-  effect: [Cooldown, advanceTime, damage, atonement],
+  effect: [Cooldown, channel([damage, atonement])],
 };
 
 export const BoonOfTheAscended: Spell = {

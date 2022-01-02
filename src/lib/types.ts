@@ -1,5 +1,5 @@
 export type SpellQueue = Spell[];
-export type StateSpellReducer = (state: SimState, spell: Spell | DoT) => SimState;
+export type StateSpellReducer = (state: SimState, spell: Spell | DoT | Channel) => SimState;
 type Calculated = (state: SimState) => number;
 
 export enum ItemType {
@@ -41,6 +41,11 @@ export interface Spell {
   cooldown?: number | Calculated;
 }
 
+export interface Channel extends Spell {
+  ticks: number | Calculated;
+  channel: true;
+}
+
 export interface Player {
   spellpower: number;
   haste: number;
@@ -66,6 +71,7 @@ export interface CalculatedBuff extends Buff {
 }
 
 export interface DoT extends Buff {
+  dot: true;
   ticks: number;
   interval: number | Calculated;
   damage: number;

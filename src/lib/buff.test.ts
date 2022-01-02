@@ -24,6 +24,7 @@ const createMockBuff = (overrides: Partial<CalculatedBuff> = {}): CalculatedBuff
 });
 
 const createMockDoT = (overrides: Partial<DoT> = {}): DoT => ({
+  dot: true,
   applied: 0,
   damage: 0,
   duration: 0,

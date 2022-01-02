@@ -2,7 +2,7 @@ import { hasAura, getActiveBuffs, getActiveDoTs, numBuffsActive } from "./buff";
 import { getCritPerc, getHastePerc, getMasteryPerc, getVersPerc } from "./player";
 import { Spell, SimState, Buff, DoT, StateSpellReducer, CalculatedBuff } from "./types";
 
-function logWrap(fn: (state: SimState, spell: Spell) => any) {
+function logWrap(fn: StateSpellReducer): StateSpellReducer {
   return function (innerState: SimState, spell: Spell) {
     const projectedState = fn(innerState, spell);
 
@@ -15,21 +15,34 @@ function logWrap(fn: (state: SimState, spell: Spell) => any) {
 /**
  * Advance time in the sim
  */
-export const advanceTime = logWrap((state: SimState, spell: Spell): SimState => {
+export const advanceTime = logWrap((state: SimState, spell): SimState => {
+  if ("dot" in spell) return state;
   const playerHaste = getHastePerc(state.player);
 
+  // Handle channel ticks
+  if ("channel" in spell && spell.castTime) {
+    return { ...state, time: Math.round(state.time + spell.castTime / playerHaste) };
+  }
+
+  // Handle spells with a fixed GCD, i.e. Word of Recall
   if (spell.fixedGcd && spell.castTime) {
     return { ...state, time: state.time + spell.castTime };
   }
+
+  // Handle regular cast time spells
   if (!spell.fixedGcd && spell.castTime) {
     return {
       ...state,
       time: Math.round(state.time + spell.castTime / playerHaste),
     };
   }
+
+  // Handle short GCD spells such as Ascended Nova
   if (spell.shortGcd) {
     return { ...state, time: state.time + Math.max(1000 / playerHaste, 750) };
   }
+
+  // Handle spells that are off GCD
   if (spell.offGcd) {
     return state;
   }
@@ -165,6 +178,37 @@ export const applyAura = (state: SimState, uncalculatedAura: Buff | DoT, num: nu
 
   return state;
 };
+
+/**
+ * Channel wraps the provided reducers, advanceTime does not need to be explicitly stated
+ */
+export const channel =
+  (effects: StateSpellReducer[]): StateSpellReducer =>
+  (state, spell): SimState => {
+    if (!("channel" in spell)) throw new Error(`Skill Issue: Channel effect on non-channel spell: ${spell.name}`);
+    if (spell.castTime === undefined)
+      throw new Error(`Skill Issue: Channel without a castTime encountered: ${spell.name}`);
+
+    const ticks = typeof spell.ticks === "function" ? spell.ticks(state) : spell.ticks;
+    const { castTime } = spell;
+    const channelInterval = castTime / (ticks - 1);
+
+    const effectsToRepeat: StateSpellReducer[] = [...effects, advanceTime];
+    const computedEffects = Array<StateSpellReducer[]>(ticks - 1)
+      .fill(effectsToRepeat)
+      .flat();
+
+    const channelWithDuration = {
+      ...spell,
+      castTime: channelInterval,
+    };
+
+    const projectedState = computedEffects.reduce((currState, currEffect) => {
+      return currEffect(currState, channelWithDuration);
+    }, state);
+
+    return projectedState;
+  };
 
 /**
  * Applies atonement healing + Spirit Shell
