@@ -1,6 +1,6 @@
-import { hasAura, getActiveBuffs, getActiveDoTs, numBuffsActive } from "./buff";
+import { hasAura, getActiveBuffs, getActiveDoTs, numBuffsActive, getActiveHoTs } from "./buff";
 import { getCritPerc, getHastePerc, getMasteryPerc, getVersPerc } from "./player";
-import { Spell, SimState, Buff, DoT, StateSpellReducer, CalculatedBuff } from "./types";
+import { Spell, SimState, Buff, OverTime, StateSpellReducer, CalculatedBuff, HoT } from "./types";
 
 function logWrap(fn: StateSpellReducer): StateSpellReducer {
   return function (innerState: SimState, spell: Spell) {
@@ -51,10 +51,11 @@ export const advanceTime = logWrap((state: SimState, spell): SimState => {
 });
 
 const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender"];
-function calculateDamage(state: SimState, spell: Spell | DoT): number {
-  if (!spell.damage) return 0;
+function calculateDamage(state: SimState, spell: Spell | OverTime): number {
+  const damage = "dot" in spell ? spell.coefficient : spell.damage;
+  if (!damage) return 0;
 
-  const initialDamage = typeof spell.damage === "function" ? spell.damage(state) : spell.damage;
+  const initialDamage = typeof damage === "function" ? damage(state) : damage;
 
   const isSchismActive = hasAura(state, "Schism");
   const schismMultiplier = isSchismActive ? 1.25 : 1;
@@ -100,7 +101,7 @@ export const absorb: StateSpellReducer = (state, spell): SimState => {
  * Apply healing in the sim
  */
 export const healing: StateSpellReducer = (state, spell): SimState => {
-  if ("interval" in spell) return state;
+  if ("dot" in spell) return state;
   if (!spell.healing) return state;
   const initialHealing = typeof spell.healing === "function" ? spell.healing(state) : spell.healing;
   const spiritShellActive = hasAura(state, "Spirit Shell");
@@ -123,7 +124,7 @@ export const healing: StateSpellReducer = (state, spell): SimState => {
 /**
  * Applies auras
  */
-export const applyAura = (state: SimState, uncalculatedAura: Buff | DoT, num: number = 1): SimState => {
+export const applyAura = (state: SimState, uncalculatedAura: Buff | OverTime | HoT, num: number = 1): SimState => {
   const auraDuration =
     typeof uncalculatedAura.duration === "function" ? uncalculatedAura.duration(state) : uncalculatedAura.duration;
 
@@ -140,7 +141,7 @@ export const applyAura = (state: SimState, uncalculatedAura: Buff | DoT, num: nu
 
   const existingAuras = state.buffs.get(aura.name) || [];
   const newAuras = Array.from({ length: num }, () => {
-    return { ...aura } as CalculatedBuff | DoT;
+    return { ...aura } as CalculatedBuff | OverTime | HoT;
   });
   const newAuraArr = [...existingAuras, ...newAuras];
 
@@ -310,8 +311,8 @@ export const executeDoT: StateSpellReducer = (state, spell): SimState => {
   // return state;
   return tickTimes.reduce((prevState, tick) => {
     const { time } = prevState;
-    const [dot, calcaulatedDamage, projectedTime] = tick;
-    const partialDot = { ...dot, damage: calcaulatedDamage };
+    const [dot, calculatedDamage, projectedTime] = tick;
+    const partialDot = { ...dot, damage: calculatedDamage };
     const nextState = atonement(damage({ ...prevState, time: projectedTime }, partialDot), partialDot);
 
     return {
@@ -321,12 +322,47 @@ export const executeDoT: StateSpellReducer = (state, spell): SimState => {
   }, state);
 };
 
-type tick = [DoT, number, number];
-const getTickTimes = function getTickTimes(dot: DoT, haste: number, state: SimState): tick[] {
-  const exampleDoTDuration = dot.expires - dot.applied;
-  const baseInterval = typeof dot.interval === "function" ? dot.interval(state) : dot.interval;
+export const executeHoT: StateSpellReducer = (state, spell): SimState => {
+  const { time } = state;
+
+  // Get the projected time for this event
+  const { time: projectedTime } = advanceTime(state, spell);
+  const haste = getHastePerc(state.player);
+
+  // Get currently active DoTs
+  const activeHoTs = getActiveHoTs(state);
+  if (activeHoTs.length === 0) return state;
+
+  const tickTimes = activeHoTs
+    .map((dot) => getTickTimes(dot, haste, state))
+    .flatMap((i) => pickBetween(time, projectedTime, i));
+
+  // Log stuff out
+  tickTimes.forEach((tick) => {
+    console.log(`[HOT][${tick[2]}] ${tick[0].name} hitting for ${tick[1]}`);
+  });
+
+  // return state;
+  return tickTimes.reduce((prevState, tick) => {
+    const { time } = prevState;
+    const [dot, calculatedHealing, projectedTime] = tick;
+
+    const partialHoT = { ...dot, healing: calculatedHealing };
+    const nextState = healing({ ...prevState, time: projectedTime }, partialHoT);
+
+    return {
+      ...nextState,
+      time,
+    };
+  }, state);
+};
+
+type Tick = [OverTime, number, number];
+const getTickTimes = function getTickTimes(xot: OverTime, haste: number, state: SimState): Tick[] {
+  const exampleDoTDuration = xot.expires - xot.applied;
+  const baseInterval = typeof xot.interval === "function" ? xot.interval(state) : xot.interval;
   const hastedInterval = baseInterval / haste;
-  const isPet = dot.name === "Shadowfiend" || dot.name === "Mindbender";
+  const isPet = xot.name === "Shadowfiend" || xot.name === "Mindbender";
   const totalTickCount = isPet
     ? Math.floor(exampleDoTDuration / hastedInterval)
     : Math.ceil(exampleDoTDuration / hastedInterval);
@@ -335,14 +371,18 @@ const getTickTimes = function getTickTimes(dot: DoT, haste: number, state: SimSt
     const isFinalTick = Math.ceil(totalTickCount) === i + 1;
 
     if (!isFinalTick || isPet) {
-      return [dot, dot.damage, dot.applied + (i + 1) * hastedInterval];
+      return [xot, xot.coefficient, xot.applied + (i + 1) * hastedInterval];
     }
 
     const partialTickRatio = totalTickCount - Math.floor(totalTickCount);
-    return [dot, dot.damage * partialTickRatio, dot.applied + (i * hastedInterval + hastedInterval * partialTickRatio)];
+    return [
+      xot,
+      xot.coefficient * partialTickRatio,
+      xot.applied + (i * hastedInterval + hastedInterval * partialTickRatio),
+    ];
   });
 };
 
-function pickBetween(n: number, o: number, numbers: tick[]): tick[] {
+function pickBetween(n: number, o: number, numbers: Tick[]): Tick[] {
   return numbers.filter(([_, , i]) => i >= n && i < o);
 }

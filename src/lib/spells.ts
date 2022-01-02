@@ -11,6 +11,7 @@ import {
   healing,
   EvangelismExtension,
   channel,
+  executeHoT,
 } from "./mechanics";
 import { getHastePerc } from "./player";
 import { Channel, SimState, Spell, SpellCategory } from "./types";
@@ -24,13 +25,14 @@ export const PurgeTheWicked: Spell = {
   effect: [
     (state) =>
       applyAura(state, {
+        dot: true,
         name: "Purge the Wicked",
         duration: 20000,
         applied: state.time,
         expires: state.time + 20000,
         interval: 2000,
         ticks: 10,
-        damage: 11.656,
+        coefficient: 11.656,
       }),
     damage,
     atonement,
@@ -48,13 +50,14 @@ export const ShadowWordPain: Spell = {
   effect: [
     (state) =>
       applyAura(state, {
+        dot: true,
         name: "Shadow Word: Pain",
         duration: 16000,
         applied: state.time,
         expires: state.time + 16000,
         interval: 2000,
         ticks: 8,
-        damage: 9.588,
+        coefficient: 9.588,
       }),
     damage,
     atonement,
@@ -79,7 +82,7 @@ export const Shadowfiend: Spell = {
         interval: (state) =>
           hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
         ticks: 10,
-        damage: 46.2,
+        coefficient: 46.2,
       }),
     damage,
     atonement,
@@ -104,7 +107,7 @@ export const Mindbender: Spell = {
         interval: (state) =>
           hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
         ticks: 10,
-        damage: 33.88,
+        coefficient: 33.88,
       }),
     damage,
     atonement,
@@ -120,13 +123,17 @@ export const SpiritShell: Spell = {
   name: "Spirit Shell",
   offGcd: true,
   effect: [
-    (state, spell) =>
-      applyAura(state, {
+    (state) => {
+      const hasExaltation = hasAura(state, "Exaltation");
+      const duration = 10_000 + (hasExaltation ? 1000 : 0);
+
+      return applyAura(state, {
         name: "Spirit Shell",
-        duration: 11000,
+        duration,
         applied: state.time,
-        expires: state.time + 11000,
-      }),
+        expires: state.time + duration,
+      });
+    },
     ClarityOfMind,
   ],
 };
@@ -324,7 +331,7 @@ export const MindBlast: Spell = {
   damage: 74.42,
   absorb: 300,
   castTime: 1500,
-  effect: [advanceTime, damage, atonement],
+  effect: [advanceTime, damage, absorb, atonement],
 };
 
 export const Mindgames: Spell = {
@@ -355,7 +362,11 @@ export const PowerWordRadiance: Spell = {
   id: 194509,
   icon: "spell_priest_powerword",
   name: "Power Word: Radiance",
-  healing: 525,
+  healing: (state) => {
+    const hasShiningRadiance = hasAura(state, "Shining Radiance");
+
+    return 525 * (hasShiningRadiance ? 1.72 : 1);
+  },
   castTime: 2000,
   effect: [
     advanceTime,
@@ -402,13 +413,28 @@ const calculateShieldAbsorb = (state: SimState) => {
   return shieldCoefficient;
 };
 
+const calculateCrystallineReflection = (state: SimState) => {
+  const hasCrystallineReflection = hasAura(state, "Crystalline Reflection");
+
+  return hasCrystallineReflection ? 42 : 0;
+};
+
+const calculateCrystallineReflectionDamage = (state: SimState) => {
+  const hasCrystallineReflection = hasAura(state, "Crystalline Reflection");
+  const shieldAbsorbValue = calculateShieldAbsorb(state);
+
+  return shieldAbsorbValue * (hasCrystallineReflection ? 0.2 : 0);
+};
+
 export const PowerWordShield: Spell = {
   category: SpellCategory.Applicator,
   id: 17,
   icon: "spell_holy_powerwordshield",
   name: "Power Word: Shield",
   absorb: calculateShieldAbsorb,
-  effect: [absorb, applyAtonement, advanceTime],
+  healing: calculateCrystallineReflection,
+  damage: calculateCrystallineReflectionDamage,
+  effect: [absorb, healing, damage, applyAtonement, advanceTime],
 };
 
 export const Rapture: Spell = {
@@ -417,6 +443,8 @@ export const Rapture: Spell = {
   icon: "spell_holy_rapture",
   name: "Rapture",
   absorb: calculateShieldAbsorb,
+  healing: calculateCrystallineReflection,
+  damage: calculateCrystallineReflectionDamage,
   effect: [
     (state) =>
       applyAura(state, {
@@ -428,6 +456,8 @@ export const Rapture: Spell = {
           return 8000 + (hasExaltation ? 1000 : 0);
         },
       }),
+    healing,
+    damage,
     absorb,
     applyAtonement,
     advanceTime,
@@ -472,5 +502,57 @@ export const ScrawledWordOfRecall: Spell = {
 
       return state;
     },
+  ],
+};
+
+export const UnholyNova: Spell = {
+  name: "Unholy Nova",
+  category: SpellCategory.Necrolord,
+  id: 324724,
+  icon: "ability_maldraxxus_priest",
+  healing: (state) => {
+    const hasFesteringTransfusion = hasAura(state, "Festering Transfusion");
+
+    return 150 * 6 * (hasFesteringTransfusion ? 1.216 : 1);
+  },
+  effect: [
+    // Damage over time
+    (state) => {
+      const hasFesteringTransfusion = hasAura(state, "Festering Transfusion");
+
+      return applyAura(state, {
+        dot: true,
+        name: "Unholy Transfusion",
+        duration: () => (hasFesteringTransfusion ? 17_000 : 15_000),
+        applied: state.time,
+        expires: (state) => state.time + (hasFesteringTransfusion ? 17_000 : 15_000),
+        interval: 3000,
+        ticks: hasFesteringTransfusion ? 6 : 5,
+        coefficient: 56 * (hasFesteringTransfusion ? 1.216 : 1),
+      });
+    },
+    // Spawning pet
+    (state) => {
+      const hasPallidCommand = hasAura(state, "Pallid Command");
+
+      return hasPallidCommand
+        ? applyAura(state, {
+            hot: true,
+            name: "Brooding Cleric",
+            duration: 20_000,
+            applied: state.time,
+            expires: (state) => state.time + 20_000,
+            ticks: 14,
+            interval: 1500,
+            coefficient: 80, // 40 listed but effect stacks to max instantly
+          })
+        : state;
+    },
+    damage,
+    healing,
+    atonement,
+    executeDoT,
+    executeHoT,
+    advanceTime,
   ],
 };

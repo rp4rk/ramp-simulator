@@ -1,6 +1,6 @@
 import * as buffs from "./buff";
 import { createPlayer } from "./player";
-import { CalculatedBuff, DoT, SimState } from "./types";
+import { CalculatedBuff, OverTime, SimState } from "./types";
 
 const createMockSimState = (overrides: Partial<SimState> = {}): SimState => {
   return {
@@ -23,10 +23,10 @@ const createMockBuff = (overrides: Partial<CalculatedBuff> = {}): CalculatedBuff
   ...overrides,
 });
 
-const createMockDoT = (overrides: Partial<DoT> = {}): DoT => ({
+const createMockDoT = (overrides: Partial<OverTime> = {}): OverTime => ({
   dot: true,
   applied: 0,
-  damage: 0,
+  coefficient: 0,
   duration: 0,
   expires: 0,
   interval: 0,

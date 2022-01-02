@@ -1,5 +1,5 @@
 export type SpellQueue = Spell[];
-export type StateSpellReducer = (state: SimState, spell: Spell | DoT | Channel) => SimState;
+export type StateSpellReducer = (state: SimState, spell: Spell | OverTime | Channel) => SimState;
 type Calculated = (state: SimState) => number;
 
 export enum ItemType {
@@ -22,6 +22,7 @@ export enum SpellCategory {
   Cooldown = "Cooldown",
   Kyrian = "Kyrian",
   Venthyr = "Venthyr",
+  Necrolord = "Necrolord",
   Ignored = "Ignored",
 }
 
@@ -70,13 +71,17 @@ export interface CalculatedBuff extends Buff {
   duration: number;
 }
 
-export interface DoT extends Buff {
+export interface OverTime extends Buff {
   dot: true;
   ticks: number;
   interval: number | Calculated;
-  damage: number;
+  coefficient: number;
   expires: number;
   duration: number;
+}
+
+export interface HoT extends OverTime {
+  hot: true;
 }
 
 export interface SimState {
@@ -85,6 +90,6 @@ export interface SimState {
   absorb: number;
   healing: number;
   damage: number;
-  buffs: Map<string, (CalculatedBuff | DoT)[]>;
+  buffs: Map<string, (CalculatedBuff | OverTime | HoT)[]>;
   cooldowns: Map<string, number>;
 }

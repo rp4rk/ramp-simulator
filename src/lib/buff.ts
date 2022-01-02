@@ -1,4 +1,4 @@
-import { SimState, DoT, CalculatedBuff } from "./types";
+import { SimState, OverTime, CalculatedBuff, HoT } from "./types";
 
 /**
  * Checks if a buff is active
@@ -38,11 +38,29 @@ export const getActiveBuffs = (state: SimState, name: string): CalculatedBuff[] 
 /**
  * Returns all active DoT effects
  */
-export const getActiveDoTs = (state: SimState): DoT[] => {
+export const getActiveDoTs = (state: SimState): OverTime[] => {
   return Array.from(state.buffs.values())
     .flatMap((i) => i)
-    .reduceRight<DoT[]>((acc, aura) => {
-      if (!("interval" in aura)) {
+    .reduceRight<OverTime[]>((acc, aura) => {
+      if (!("dot" in aura)) {
+        return acc;
+      }
+      if (state.time > aura.expires) {
+        return acc;
+      }
+
+      return [...acc, aura];
+    }, []);
+};
+
+/**
+ * Returns all active HoT effects
+ */
+export const getActiveHoTs = (state: SimState): HoT[] => {
+  return Array.from(state.buffs.values())
+    .flatMap((i) => i)
+    .reduceRight<HoT[]>((acc, aura) => {
+      if (!("hot" in aura)) {
         return acc;
       }
       if (state.time > aura.expires) {

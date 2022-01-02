@@ -1,4 +1,4 @@
-import { executeDoT } from "./mechanics";
+import { executeDoT, executeHoT } from "./mechanics";
 import { Eruption } from "./middleware";
 import { createPlayer } from "./player";
 import { CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
@@ -28,7 +28,7 @@ export const createInitialState = (player = defaultPlayer(), overrides: Partial<
  * Handles the evaluation of top-level effects created by the priority list
  */
 function reduceState(state: SimState, spell: Spell): SimState {
-  const effects = [executeDoT, ...(spell.effect || []), Eruption];
+  const effects = [executeDoT, executeHoT, ...(spell.effect || []), Eruption];
 
   const projectedState =
     effects.reduce((acc, curr) => {

@@ -82,3 +82,33 @@ export const Tier4: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const CrystallineReflection: Item = {
+  id: 336507,
+  icon: "ability_priest_reflectiveshield",
+  type: ItemType.Legendary,
+  name: "Crystalline Reflection",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const PallidCommand: Item = {
+  id: 356390,
+  icon: "ability_maldraxxus_priest",
+  type: ItemType.Legendary,
+  name: "Pallid Command",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const FesteringTransfusion: Item = {
+  id: 337979,
+  icon: "spell_animamaldraxxus_debuff",
+  type: ItemType.Conduit,
+  name: "Festering Transfusion",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
