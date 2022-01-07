@@ -75,6 +75,7 @@ export const Shadowfiend: Spell = {
   effect: [
     (state) =>
       applyAura(state, {
+        dot: true,
         name: "Shadowfiend",
         duration: 15000,
         applied: state.time,
@@ -100,6 +101,7 @@ export const Mindbender: Spell = {
   effect: [
     (state) =>
       applyAura(state, {
+        dot: true,
         name: "Mindbender",
         duration: 1200,
         applied: state.time,
@@ -318,7 +320,7 @@ export const Halo: Spell = {
   icon: "ability_priest_halo",
   name: "Halo",
   damage: 96.82,
-  healing: 864,
+  healing: 115 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
   castTime: 1500,
   effect: [advanceTime, healing, damage, atonement],
 };
