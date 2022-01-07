@@ -77,9 +77,9 @@ export const Shadowfiend: Spell = {
       applyAura(state, {
         dot: true,
         name: "Shadowfiend",
-        duration: 15000,
+        duration: 15_000,
         applied: state.time,
-        expires: state.time + 15000,
+        expires: state.time + 15_000,
         interval: (state) =>
           hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
         ticks: 10,
@@ -103,9 +103,9 @@ export const Mindbender: Spell = {
       applyAura(state, {
         dot: true,
         name: "Mindbender",
-        duration: 1200,
+        duration: 12_000,
         applied: state.time,
-        expires: state.time + 12000,
+        expires: state.time + 12_000,
         interval: (state) =>
           hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
         ticks: 10,
