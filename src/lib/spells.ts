@@ -4,12 +4,12 @@ import {
   advanceTime,
   applyAura,
   atonement,
-  ClarityOfMind,
-  Cooldown,
+  clarityOfMind,
+  cooldown,
   damage,
   executeDoT,
   healing,
-  EvangelismExtension,
+  evangelismExtension,
   channel,
   executeHoT,
 } from "./mechanics";
@@ -136,7 +136,7 @@ export const SpiritShell: Spell = {
         expires: state.time + duration,
       });
     },
-    ClarityOfMind,
+    clarityOfMind,
   ],
 };
 
@@ -146,7 +146,7 @@ export const Evangelism: Spell = {
   icon: "spell_holy_divineillumination",
   name: "Evangelism",
   offGcd: false,
-  effect: [EvangelismExtension, advanceTime],
+  effect: [evangelismExtension, advanceTime],
 };
 
 export const Penance: Channel = {
@@ -168,7 +168,7 @@ export const Penance: Channel = {
   },
   healing: 375,
   castTime: 2000,
-  effect: [Cooldown, channel([damage, atonement])],
+  effect: [cooldown, channel([damage, atonement])],
 };
 
 export const BoonOfTheAscended: Spell = {
@@ -218,7 +218,7 @@ export const AscendedBlast: Spell = {
   },
   shortGcd: true,
   effect: [
-    Cooldown,
+    cooldown,
     healing,
     damage,
     atonement,
@@ -289,7 +289,7 @@ export const Schism: Spell = {
   castTime: 1500,
   cooldown: 24000,
   effect: [
-    Cooldown,
+    cooldown,
     advanceTime,
     damage,
     atonement,
