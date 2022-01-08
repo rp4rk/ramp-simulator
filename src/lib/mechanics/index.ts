@@ -9,6 +9,7 @@ import { clarityOfMind } from "./clarityOfMind";
 import { advanceTime } from "./time";
 import { healing } from "./healing";
 import { executeDoT, executeHoT } from "./overtime";
+import { ascendedEruption } from "./ascendedEruption";
 
 export {
   absorb,
@@ -23,4 +24,5 @@ export {
   healing,
   executeDoT,
   executeHoT,
+  ascendedEruption,
 };

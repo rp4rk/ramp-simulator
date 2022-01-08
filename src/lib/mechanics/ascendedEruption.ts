@@ -1,14 +1,12 @@
-import { atonement, damage } from "./mechanics";
-import { AscendedEruption } from "./spells";
-import { StateSpellReducer, SimState } from "./types";
+import { StateSpellReducer, SimState } from "../types";
+import { atonement } from "./atonement";
+import { damage } from "./damage";
+import { AscendedEruption } from "../spells";
 
 /**
  * Casts Ascended Eruption
- * @param state
- * @param spell
- * @returns
  */
-export const Eruption: StateSpellReducer = (state, spell): SimState => {
+export const ascendedEruption: StateSpellReducer = (state, spell): SimState => {
   const { time } = state;
   const boonBuffs = state.buffs.get("Boon of the Ascended");
 

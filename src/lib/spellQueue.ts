@@ -1,7 +1,7 @@
 import { executeDoT, executeHoT } from "./mechanics";
-import { Eruption } from "./middleware";
 import { createPlayer } from "./player";
 import { CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
+import { ascendedEruption } from "./mechanics/ascendedEruption";
 
 type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: CalculatedBuff[]) => SimState;
 
@@ -28,7 +28,7 @@ export const createInitialState = (player = defaultPlayer(), overrides: Partial<
  * Handles the evaluation of top-level effects created by the priority list
  */
 function reduceState(state: SimState, spell: Spell): SimState {
-  const effects = [executeDoT, executeHoT, ...(spell.effect || []), Eruption];
+  const effects = [executeDoT, executeHoT, ...(spell.effect || []), ascendedEruption];
 
   const projectedState =
     effects.reduce((acc, curr) => {
