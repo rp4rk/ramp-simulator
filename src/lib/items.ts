@@ -112,3 +112,13 @@ export const FesteringTransfusion: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const ShadowWordManipulation: Item = {
+  id: 357028,
+  icon: "ability_revendreth_priest",
+  type: ItemType.Legendary,
+  name: "Shadow Word: Manipulation Equipped",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};

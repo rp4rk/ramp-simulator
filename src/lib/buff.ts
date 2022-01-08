@@ -36,6 +36,15 @@ export const getActiveBuffs = (state: SimState, name: string): CalculatedBuff[] 
 };
 
 /**
+ * Gets buffs with stat effects
+ */
+export const getStatBuffs = (state: SimState): CalculatedBuff[] => {
+  return Array.from(state.buffs.values())
+    .flatMap((i) => i)
+    .filter((buff) => "statBuff" in buff);
+};
+
+/**
  * Returns all active DoT effects
  */
 export const getActiveDoTs = (state: SimState): OverTime[] => {

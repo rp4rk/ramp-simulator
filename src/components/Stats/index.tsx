@@ -1,11 +1,11 @@
 import React, { FC } from "react";
-import { Player } from "lib/types";
+import { Player, Stats as StatsType } from "lib/types";
 
 type StatProps = {
   /**
    * A spell from the quicksim library.
    */
-  onChange: (stat: keyof Player, amount: number) => any;
+  onChange: (stat: keyof StatsType, amount: number) => any;
   stats: Player;
 };
 

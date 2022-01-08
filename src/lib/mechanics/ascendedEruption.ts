@@ -13,6 +13,7 @@ export const ascendedEruption: StateSpellReducer = (state, spell): SimState => {
   if (!boonBuffs) return state;
   const lastBoon = boonBuffs[boonBuffs.length - 1];
   if (!lastBoon) return state;
+  if (lastBoon.expires === undefined) return state;
 
   // Boon hasn't expired yet
   if (time <= lastBoon.expires || lastBoon.consumed) {

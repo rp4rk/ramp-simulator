@@ -1,4 +1,4 @@
-import { SimState, Item, Player } from "lib/types";
+import { SimState, Item, Stats } from "lib/types";
 import { Action } from "../types";
 import { RampSpell } from "./simulations";
 import { SerializedSimulationState } from "./simulations.selectors";
@@ -68,7 +68,7 @@ interface UpdatePlayerStat extends Action {
   type: "UPDATE_PLAYER_STAT";
   payload: {
     guid: string;
-    stat: keyof Player;
+    stat: keyof Stats;
     amount: number;
   };
 }

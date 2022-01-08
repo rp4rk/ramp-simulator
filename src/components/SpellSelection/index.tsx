@@ -10,7 +10,7 @@ import clipboard from "clipboardy";
 import lzbase62 from "lzbase62";
 import { importSimulation } from "context/simulations.actions";
 
-const RAMP_SEQUENCE = `ramp-uDritjZdDkRkVrisS2MtYVRcZeX2LsIEritURdRXxWDxLDtRSjfiSxLFtSlWWj2KtLN2Ltk25xfGtgcRuBtViyDEtjgVccgfnxOEsKI2B2ctYRjyeEsRRxMD3TxMDtiuB2OsLNxODtTiZkxLHtm2WyXDsM2wuFxXDtffcU3FteyoFxQD2ltVdy0Hti4YtgDylExQEsNPRExEEsMPNLOEJPxDY3H`;
+const RAMP_SEQUENCE = `ramp-uDritjZdDkRkVrisS2MtYVRcZeX2LsIEritURdRXxWDxLDtRSjfiSxLFtSlWWj2KtLN2Ltk25xfGtgcRuBtViyDEtjgVccgfnxOEsKI2B2ctYRjyeEsRRxMD3TxMDtiuB2OsLNxODtTiZkxLHtm2WyXDsMxwE2i4RsaynGySOy1EyQHxLEyPJxNEyOGxKEyNG2KuFFxWDtffcU3AtexRG2Q2ktVd0EHti5ltgDygExQEsMPNLOEJPxDY28`;
 
 function set<T>(s: string, o: { [index: string]: T[] }, i: T) {
   if (o[s]) {

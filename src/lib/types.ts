@@ -12,6 +12,7 @@ export interface Item extends Buff {
   id: number;
   icon: string;
   type: ItemType;
+  applied: number;
   expires: number;
   duration: number;
 }
@@ -47,7 +48,7 @@ export interface Channel extends Spell {
   channel: true;
 }
 
-export interface Player {
+export interface Stats {
   spellpower: number;
   haste: number;
   mastery: number;
@@ -55,18 +56,45 @@ export interface Player {
   vers: number;
 }
 
+export interface Player extends Stats {
+  statBuffs: { [k in keyof Stats]: StatBuff[] };
+}
+
+export interface StatBuff {
+  // The stat to incremement
+  stat: keyof Stats;
+  // The amount to increment by, if using multiplicative 1 = 100%
+  amount: number;
+  // The type of increment to perform
+  type: StatBuffType;
+}
+
+/**
+ * The type of stat buff we want to apply
+ */
+export enum StatBuffType {
+  // Additive will increase the state by the provided amount, e.g. +5% crit resulting in 5% -> 10%
+  ADDITIVE = "ADDITIVE",
+  // Rating will add the rating amount, for example 35 will bring 300 haste to 335
+  RATING = "RATING",
+  // Multiplicative will multiply the final stat % by the amount provided, e.g. 20% results in going from 5% crit to 6%
+  MULTIPLICATIVE = "MULTIPLICATIVE",
+}
+
 export interface Buff {
   name: string;
-  applied: number;
+  applied?: number | Calculated;
   expires?: number | Calculated;
   duration: number | Calculated;
   consumed?: boolean;
+  statBuff?: StatBuff;
 }
 
 /**
  * CalculatedBuff will never have expressions to evaluate for temporal info
  */
 export interface CalculatedBuff extends Buff {
+  applied: number;
   expires: number;
   duration: number;
 }
@@ -76,6 +104,7 @@ export interface OverTime extends Buff {
   ticks: number;
   interval: number | Calculated;
   coefficient: number;
+  applied: number;
   expires: number;
   duration: number;
 }

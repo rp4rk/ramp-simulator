@@ -3,7 +3,7 @@ import { Stats } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
 import { ItemSelector } from "components/ItemSelector";
-import { Item, Player, SimState } from "lib/types";
+import { Item, SimState, Stats as StatsType } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer } from "lib";
 import { Button } from "components/Button";
@@ -92,7 +92,7 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
   );
 
   const changeStat = useCallback(
-    (stat: keyof Player, amount: number) => {
+    (stat: keyof StatsType, amount: number) => {
       dispatch(updatePlayerStat({ guid: props.simId, stat, amount }));
     },
     [props.simId, dispatch]

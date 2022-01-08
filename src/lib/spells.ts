@@ -14,7 +14,7 @@ import {
   executeHoT,
 } from "./mechanics";
 import { getHastePerc } from "./player";
-import { Channel, SimState, Spell, SpellCategory } from "./types";
+import { Channel, SimState, Spell, SpellCategory, StatBuffType } from "./types";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -296,9 +296,7 @@ export const Schism: Spell = {
     (state) => {
       return applyAura(state, {
         name: "Schism",
-        applied: state.time,
         duration: 9000,
-        expires: state.time + 9000,
       });
     },
   ],
@@ -341,13 +339,44 @@ export const Mindgames: Spell = {
   id: 323673,
   icon: "ability_revendreth_priest",
   name: "Mindgames",
+  absorb: (state) => {
+    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
+
+    return 450 * mgAmp;
+  },
+  healing: (state) => {
+    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
+
+    return 450 * mgAmp;
+  },
   damage: (state) => {
     const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
 
     return 253.8 * mgAmp;
   },
   castTime: 1500,
-  effect: [advanceTime, damage, atonement],
+  effect: [
+    advanceTime,
+    damage,
+    absorb,
+    healing,
+    atonement,
+    (state) => {
+      const hasShadowWordManipulationEquipped = hasAura(state, "Shadow Word: Manipulation Equipped");
+      if (!hasShadowWordManipulationEquipped) return state;
+
+      return applyAura(state, {
+        name: "Shadow Word: Manipulation",
+        duration: 10_000,
+        applied: (state) => state.time + 2000,
+        statBuff: {
+          amount: 0.05 * 8,
+          type: StatBuffType.ADDITIVE,
+          stat: "crit",
+        },
+      });
+    },
+  ],
 };
 
 export const PowerWordSolace: Spell = {
@@ -488,7 +517,7 @@ export const Shadowmend: Spell = {
 
 export const ScrawledWordOfRecall: Spell = {
   category: SpellCategory.Cooldown,
-  id: 136202,
+  id: 186425,
   icon: "inv_inscription_80_scroll",
   name: "Scrawled Word of Recall",
   fixedGcd: true,
@@ -504,6 +533,46 @@ export const ScrawledWordOfRecall: Spell = {
 
       return state;
     },
+  ],
+};
+
+export const PowerInfusion: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 10060,
+  icon: "spell_holy_powerinfusion",
+  name: "Power Infusion",
+  offGcd: true,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Power Infusion",
+        duration: 25_000,
+        statBuff: {
+          amount: 0.25,
+          stat: "haste",
+          type: StatBuffType.MULTIPLICATIVE,
+        },
+      }),
+  ],
+};
+
+export const Bloodlust: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 2825,
+  icon: "spell_nature_bloodlust",
+  name: "Bloodlust",
+  offGcd: true,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Power Infusion",
+        duration: 40_000,
+        statBuff: {
+          amount: 0.3,
+          stat: "haste",
+          type: StatBuffType.MULTIPLICATIVE,
+        },
+      }),
   ],
 };
 

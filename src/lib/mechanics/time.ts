@@ -23,7 +23,7 @@ export const advanceTime = log((state: SimState, spell): SimState => {
   if (!spell.fixedGcd && spell.castTime) {
     return {
       ...state,
-      time: Math.round(state.time + spell.castTime / playerHaste),
+      time: Math.max(Math.round(state.time + spell.castTime / playerHaste), 750),
     };
   }
 

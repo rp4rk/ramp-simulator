@@ -6,16 +6,22 @@ import { SimState, Buff, OverTime, HoT, CalculatedBuff } from "../types";
  * TODO: Remove the third argument here and incorporate it into a data structure
  */
 export const applyAura = (state: SimState, uncalculatedAura: Buff | OverTime | HoT, num: number = 1): SimState => {
+  const auraApplication =
+    typeof uncalculatedAura.applied === "function"
+      ? uncalculatedAura.applied(state)
+      : uncalculatedAura.applied || state.time;
+
   const auraDuration =
     typeof uncalculatedAura.duration === "function" ? uncalculatedAura.duration(state) : uncalculatedAura.duration;
 
   const auraExpiry =
     typeof uncalculatedAura.expires === "function"
       ? uncalculatedAura.expires(state)
-      : uncalculatedAura.expires || state.time + auraDuration;
+      : uncalculatedAura.expires || auraApplication + auraDuration;
 
   const aura = {
     ...uncalculatedAura,
+    applied: auraApplication,
     expires: auraExpiry,
     duration: auraDuration,
   };
