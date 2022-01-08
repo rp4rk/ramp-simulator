@@ -576,6 +576,26 @@ export const Bloodlust: Spell = {
   ],
 };
 
+export const InstructorsDivineBell: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 348139,
+  icon: "inv_misc_bell_01",
+  name: "Instructor's Divine Bell",
+  offGcd: true,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Instructor's Divine Bell",
+        duration: 9000,
+        statBuff: {
+          amount: 745,
+          stat: "mastery",
+          type: StatBuffType.RATING,
+        },
+      }),
+  ],
+};
+
 export const UnholyNova: Spell = {
   name: "Unholy Nova",
   category: SpellCategory.Necrolord,
