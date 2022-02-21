@@ -1,11 +1,12 @@
 export type SpellQueue = Spell[];
 export type StateSpellReducer = (state: SimState, spell: Spell | OverTime | Channel) => SimState;
-type Calculated = (state: SimState) => number;
+export type Calculated = (state: SimState) => number;
 
 export enum ItemType {
   Legendary = "Legendary",
   Conduit = "Conduit",
-  Tier = "Tier",
+  Item = "Item",
+  Talent = "Talent",
 }
 
 export interface Item extends Buff {
@@ -35,6 +36,7 @@ export interface Spell {
   damage?: number | Calculated;
   healing?: number | Calculated;
   absorb?: number | Calculated;
+  cost?: number | Calculated;
   castTime?: number;
   fixedGcd?: boolean;
   shortGcd?: boolean;
@@ -117,6 +119,7 @@ export interface SimState {
   time: number;
   player: Player;
   absorb: number;
+  mana: number;
   healing: number;
   damage: number;
   buffs: Map<string, (CalculatedBuff | OverTime | HoT)[]>;

@@ -21,9 +21,18 @@ export const SimResults = function SimResults({ simState }: SimResultsProps) {
         {Math.round(simState.healing || 0)}
       </div>
       <div>
+        <span className="text-md font-semibold text-gray-600">HPM: </span>
+        {simState.mana > 0 ? Math.round(((simState.healing + simState.absorb) / simState.mana) * 100) / 100 : "N/A"}
+      </div>
+      <div>
+        <span className="text-md font-semibold text-gray-600">Mana Cost: </span>
+        {Math.round(simState.mana || 0)}
+      </div>
+      <div>
         <span className="text-md font-semibold text-gray-600">Absorbs: </span>
         {Math.round(simState.absorb || 0)}
       </div>
+
       <div>
         <span className="text-md font-semibold text-gray-600">Damage: </span>
         {Math.round(simState.damage || 0)}

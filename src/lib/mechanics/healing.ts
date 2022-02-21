@@ -2,6 +2,12 @@ import { StateSpellReducer, SimState, Spell } from "../types";
 import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
 
+const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
+  Shadowmend: true,
+  "Unholy Transfusion": true,
+  "Unholy Nova": true,
+};
+
 /**
  * Returns a simulation state with the healing from the provided spell included
  *
@@ -13,9 +19,16 @@ export const healing: StateSpellReducer = (state: SimState, spell: Spell): SimSt
   if (!spell.healing) return state;
   const initialHealing = typeof spell.healing === "function" ? spell.healing(state) : spell.healing;
   const spiritShellActive = hasAura(state, "Spirit Shell");
+  const isScovActive = hasAura(state, "Shadow Covenant");
+  const scovBonus = isScovActive ? 1.25 : 1;
   const { player } = state;
 
-  const calculatedHealing = (initialHealing / 100) * getCritPerc(player) * getVersPerc(player) * player.spellpower;
+  const calculatedHealing =
+    (initialHealing / 100) *
+    getCritPerc(player) *
+    getVersPerc(player) *
+    player.spellpower *
+    (CONSIDERED_FOR_SCOV[spell.name] ? scovBonus : 1);
 
   // TODO: Move this out of the healing reducer lol
   if (spell.name === "Power Word: Radiance" && spiritShellActive) {

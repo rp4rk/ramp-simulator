@@ -15,6 +15,7 @@ import {
 } from "./mechanics";
 import { getHastePerc } from "./player";
 import { Channel, SimState, Spell, SpellCategory, StatBuffType } from "./types";
+import { createManaCost, MANA_COST_TYPE } from "./mechanics/mana";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -22,6 +23,7 @@ export const PurgeTheWicked: Spell = {
   icon: "ability_mage_firestarter",
   name: "Purge the Wicked",
   damage: 22.3,
+  cost: createManaCost(1.8),
   effect: [
     (state) =>
       applyAura(state, {
@@ -47,6 +49,7 @@ export const ShadowWordPain: Spell = {
   icon: "spell_shadow_shadowwordpain",
   name: "Shadow Word: Pain",
   damage: 12.92,
+  cost: createManaCost(1.8),
   effect: [
     (state) =>
       applyAura(state, {
@@ -124,6 +127,7 @@ export const SpiritShell: Spell = {
   icon: "ability_shaman_astralshift",
   name: "Spirit Shell",
   offGcd: true,
+  cost: createManaCost(2),
   effect: [
     (state) => {
       const hasExaltation = hasAura(state, "Exaltation");
@@ -155,10 +159,17 @@ export const Penance: Channel = {
   id: 47540,
   icon: "spell_holy_penance",
   name: "Penance",
+  cost: (state) => {
+    if (hasAura(state, "The Penitent One")) return 0;
+
+    return createManaCost(1.6)(state);
+  },
   cooldown: 9000,
   ticks: (state) => {
     const hasThePenitentOne = hasAura(state, "The Penitent One");
-    return 3 + (hasThePenitentOne ? 3 : 0);
+    const hasCastigation = hasAura(state, "Castigation");
+
+    return 3 + (hasThePenitentOne ? 3 : 0) + (hasCastigation ? 1 : 0);
   },
   damage: (state) => {
     const hasTilDawn = hasAura(state, "Til' Dawn");
@@ -168,6 +179,19 @@ export const Penance: Channel = {
   },
   healing: 375,
   castTime: 2000,
+  effect: [cooldown, channel([damage, atonement])],
+};
+
+export const MindSear: Channel = {
+  category: SpellCategory.Damage,
+  channel: true,
+  id: 48045,
+  icon: "spell_shadow_mindshear",
+  name: "Mind Sear",
+  cost: createManaCost(2.7),
+  ticks: 6,
+  damage: 17.39,
+  castTime: 4500,
   effect: [cooldown, channel([damage, atonement])],
 };
 
@@ -285,6 +309,7 @@ export const Schism: Spell = {
   id: 214621,
   icon: "spell_warlock_focusshadow",
   name: "Schism",
+  cost: createManaCost(0.5),
   damage: 141,
   castTime: 1500,
   cooldown: 24000,
@@ -302,10 +327,32 @@ export const Schism: Spell = {
   ],
 };
 
+export const ShadowCovenant: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 314867,
+  icon: "spell_shadow_summonvoidwalker",
+  name: "Shadow Covenant",
+  cost: createManaCost(4.5),
+  healing: 825,
+  cooldown: 30000,
+  effect: [
+    cooldown,
+    (state) => {
+      return applyAura(state, {
+        name: "Shadow Covenant",
+        duration: 7000,
+      });
+    },
+    advanceTime,
+    healing,
+  ],
+};
+
 export const Smite: Spell = {
   category: SpellCategory.Damage,
   id: 585,
   icon: "spell_holy_holysmite",
+  cost: createManaCost(0.4),
   name: "Smite",
   damage: 49.7,
   castTime: 1500,
@@ -317,9 +364,21 @@ export const Halo: Spell = {
   id: 120517,
   icon: "ability_priest_halo",
   name: "Halo",
+  cost: createManaCost(2.7),
   damage: 96.82,
   healing: 115 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
   castTime: 1500,
+  effect: [advanceTime, healing, damage, atonement],
+};
+
+export const DivineStar: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 110744,
+  icon: "spell_priest_divinestar",
+  name: "Divine Star",
+  cost: createManaCost(2),
+  damage: 56,
+  healing: 140 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
   effect: [advanceTime, healing, damage, atonement],
 };
 
@@ -328,6 +387,7 @@ export const MindBlast: Spell = {
   id: 8092,
   icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
+  cost: createManaCost(3),
   damage: 74.42,
   absorb: 300,
   castTime: 1500,
@@ -362,7 +422,7 @@ export const Mindgames: Spell = {
     healing,
     atonement,
     (state) => {
-      const hasShadowWordManipulationEquipped = hasAura(state, "Shadow Word: Manipulation Equipped");
+      const hasShadowWordManipulationEquipped = hasAura(state, "Shadow Word: Manipulation");
       if (!hasShadowWordManipulationEquipped) return state;
 
       return applyAura(state, {
@@ -382,6 +442,7 @@ export const Mindgames: Spell = {
 export const PowerWordSolace: Spell = {
   category: SpellCategory.Cooldown,
   id: 129250,
+  cost: createManaCost(-0.5),
   icon: "ability_priest_flashoflight",
   name: "Power Word: Solace",
   damage: 75.2,
@@ -393,6 +454,7 @@ export const PowerWordRadiance: Spell = {
   id: 194509,
   icon: "spell_priest_powerword",
   name: "Power Word: Radiance",
+  cost: createManaCost(6.5),
   healing: (state) => {
     const hasShiningRadiance = hasAura(state, "Shining Radiance");
 
@@ -461,6 +523,15 @@ export const PowerWordShield: Spell = {
   category: SpellCategory.Applicator,
   id: 17,
   icon: "spell_holy_powerwordshield",
+  cost: (state) => {
+    const hasShieldDiscipline = hasAura(state, "Shield Discipline");
+    const hasAmalgams = hasAura(state, "Amalgam's Seventh Spine");
+    const sdDiscount = hasShieldDiscipline ? 0.5 : 0;
+    const amDiscount = hasAmalgams ? 263 : 0; // https://ptr.wowhead.com/spell=215266/fragile-echoes @ 272
+    const initialCost = createManaCost(3.1 - sdDiscount)(state) - amDiscount;
+
+    return createManaCost(initialCost, MANA_COST_TYPE.ABSOLUTE)(state);
+  },
   name: "Power Word: Shield",
   absorb: calculateShieldAbsorb,
   healing: calculateCrystallineReflection,
@@ -473,6 +544,7 @@ export const Rapture: Spell = {
   id: 47536,
   icon: "spell_holy_rapture",
   name: "Rapture",
+  cost: createManaCost(3.1),
   absorb: calculateShieldAbsorb,
   healing: calculateCrystallineReflection,
   damage: calculateCrystallineReflectionDamage,
@@ -500,6 +572,13 @@ export const Shadowmend: Spell = {
   id: 136202,
   icon: "spell_shadow_shadowmend",
   name: "Shadow Mend",
+  cost: (state) => {
+    const hasAmalgams = hasAura(state, "Amalgam's Seventh Spine");
+    const amDiscount = hasAmalgams ? 263 : 0; // https://ptr.wowhead.com/spell=215266/fragile-echoes @ 272
+    const initialCost = createManaCost(3.5)(state) - amDiscount;
+
+    return createManaCost(initialCost, MANA_COST_TYPE.ABSOLUTE)(state);
+  },
   healing: 320,
   castTime: 1500,
   effect: [
@@ -565,13 +644,28 @@ export const Bloodlust: Spell = {
   effect: [
     (state) =>
       applyAura(state, {
-        name: "Power Infusion",
+        name: "Bloodlust",
         duration: 40_000,
         statBuff: {
           amount: 0.3,
           stat: "haste",
           type: StatBuffType.MULTIPLICATIVE,
         },
+      }),
+  ],
+};
+
+export const Innervate: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 29166,
+  icon: "spell_nature_lightning",
+  name: "Innervate",
+  offGcd: true,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Innervate",
+        duration: 10_000,
       }),
   ],
 };
@@ -600,6 +694,7 @@ export const UnholyNova: Spell = {
   name: "Unholy Nova",
   category: SpellCategory.Necrolord,
   id: 324724,
+  cost: createManaCost(5),
   icon: "ability_maldraxxus_priest",
   healing: (state) => {
     const hasFesteringTransfusion = hasAura(state, "Festering Transfusion");

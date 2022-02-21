@@ -3,6 +3,7 @@ import { Item, Spell as SpellType } from "lib/types";
 import { HoverSpellContainer, SpellImage, SpellContainer } from "./styled";
 import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
 import { ItemTypes } from "types";
+import Tippy from "@tippyjs/react";
 
 export type SpellProps = {
   spell: SpellType | Item;
@@ -13,11 +14,13 @@ export type SpellProps = {
 export const Spell = function ({ spell, onClick, toggled }: SpellProps) {
   return (
     <SpellContainer toggled={toggled} onClick={() => onClick(spell)}>
-      <SpellImage
-        draggable="false"
-        alt={`${spell.name} Icon`}
-        src={`https://render.worldofwarcraft.com/us/icons/56/${spell.icon}.jpg`}
-      />
+      <Tippy placement="bottom" content={spell.name}>
+        <SpellImage
+          draggable="false"
+          alt={`${spell.name} Icon`}
+          src={`https://render.worldofwarcraft.com/us/icons/56/${spell.icon}.jpg`}
+        />
+      </Tippy>
     </SpellContainer>
   );
 };
@@ -44,11 +47,13 @@ export const DragSpell = function ({ spell }: HoverSpellProps) {
   const opacity = isDragging ? 0.6 : 1;
   return (
     <HoverSpellContainer style={{ opacity }} ref={drag}>
-      <SpellImage
-        draggable="false"
-        alt={`${spell.name} Icon`}
-        src={`https://render.worldofwarcraft.com/us/icons/56/${spell.icon}.jpg`}
-      />
+      <Tippy placement="bottom" disabled={isDragging} content={spell.name}>
+        <SpellImage
+          draggable="false"
+          alt={`${spell.name} Icon`}
+          src={`https://render.worldofwarcraft.com/us/icons/56/${spell.icon}.jpg`}
+        />
+      </Tippy>
     </HoverSpellContainer>
   );
 };
@@ -73,7 +78,7 @@ export const SwappableSpell = function ({ spell, id, index, swapHandler, deleteH
       };
     },
     hover(item: DragItem, monitor: DropTargetMonitor) {
-      if (!index) return;
+      if (index === undefined) return;
       if (!ref.current) return;
       if (typeof swapHandler !== "function") return;
 
@@ -89,19 +94,10 @@ export const SwappableSpell = function ({ spell, id, index, swapHandler, deleteH
       const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
       const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left;
 
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-
       if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
         return;
       }
       if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
-        return;
-      }
-      if (dragIndex < hoverIndex && hoverMiddleY < hoverClientY) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverMiddleY > hoverClientY) {
         return;
       }
 
@@ -139,12 +135,14 @@ export const SwappableSpell = function ({ spell, id, index, swapHandler, deleteH
 
   return (
     <HoverSpellContainer ref={ref} data-handler-id={handlerId}>
-      <SpellImage
-        style={{ opacity }}
-        draggable="false"
-        alt={`${spell.name} Icon`}
-        src={`https://render.worldofwarcraft.com/us/icons/56/${spell.icon}.jpg`}
-      />
+      <Tippy placement="bottom" disabled={isDragging} content={spell.name}>
+        <SpellImage
+          style={{ opacity }}
+          draggable="false"
+          alt={`${spell.name} Icon`}
+          src={`https://render.worldofwarcraft.com/us/icons/56/${spell.icon}.jpg`}
+        />
+      </Tippy>
     </HoverSpellContainer>
   );
 };

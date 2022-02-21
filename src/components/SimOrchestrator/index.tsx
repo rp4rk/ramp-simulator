@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, FC, useContext, useMemo } from "react";
+import { useState, useEffect, useCallback, FC, useContext, useMemo, memo } from "react";
 import { Stats } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
@@ -26,7 +26,7 @@ interface SimOrchestratorProps {
   deletionAllowed?: boolean;
 }
 
-export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
+export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
   const { simId } = props;
   const { state, dispatch } = useContext(SimulationsContext);
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
@@ -142,4 +142,4 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = (props) => {
       )}
     </div>
   );
-};
+});

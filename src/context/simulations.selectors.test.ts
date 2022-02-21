@@ -13,6 +13,7 @@ const createSimulationConfiguration = (overrides: Partial<SimulationConfiguratio
   state: {
     damage: 0,
     absorb: 0,
+    mana: 0,
     healing: 0,
     player: createPlayer(0, 0, 0, 0, 0),
     time: 0,
@@ -54,6 +55,7 @@ describe("getSerializableSimulationState", () => {
     const testSimState: SimState = {
       absorb: 0,
       damage: 0,
+      mana: 0,
       healing: 0,
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
@@ -80,6 +82,7 @@ describe("getSerializableSimulationState", () => {
       absorb: 0,
       damage: 0,
       healing: 0,
+      mana: 0,
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,

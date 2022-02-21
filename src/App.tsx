@@ -72,7 +72,7 @@ function App() {
   return (
     <>
       <Header></Header>
-      <Card>
+      <Card className=" z-50">
         <SpellSelection />
       </Card>
       {sims.map(([id, config]) => (

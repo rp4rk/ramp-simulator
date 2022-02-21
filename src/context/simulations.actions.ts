@@ -12,6 +12,7 @@ interface AddSimulationAction extends Action {
     rampSpells: RampSpell[];
   };
 }
+
 export const addSimulation = (payload: AddSimulationAction["payload"]): AddSimulationAction => ({
   type: "ADD_SIMULATION",
   payload,

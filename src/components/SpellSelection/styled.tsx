@@ -1,9 +1,11 @@
 import styled from "styled-components";
 
 export const SelectionContainer = styled.div`
+  z-index: 100;
   display: flex;
   justify-content: center;
 `;
+
 export const SelectionCategory = styled.div`
   display: inline-flex;
   background-color: #bfd7ff;

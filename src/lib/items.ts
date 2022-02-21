@@ -76,7 +76,7 @@ export const ShatteredPerceptions: Item = {
 export const Tier4: Item = {
   id: 363494,
   icon: "ability_priest_innerlightandshadow",
-  type: ItemType.Tier,
+  type: ItemType.Item,
   name: "Til' Dawn",
   applied: 0,
   duration: Infinity,
@@ -117,7 +117,37 @@ export const ShadowWordManipulation: Item = {
   id: 357028,
   icon: "ability_revendreth_priest",
   type: ItemType.Legendary,
-  name: "Shadow Word: Manipulation Equipped",
+  name: "Shadow Word: Manipulation",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const Castigation: Item = {
+  id: 193134,
+  icon: "spell_holy_searinglightpriest",
+  type: ItemType.Talent,
+  name: "Castigation",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const ShieldDiscipline: Item = {
+  id: 47755,
+  icon: "spell_holy_divineprotection",
+  type: ItemType.Talent,
+  name: "Shield Discipline",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const AmalgamsSeventhSpine: Item = {
+  id: 215266,
+  icon: "spell_priest_mindspike",
+  type: ItemType.Item,
+  name: "Amalgam's Seventh Spine",
   applied: 0,
   duration: Infinity,
   expires: Infinity,
