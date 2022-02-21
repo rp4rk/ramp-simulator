@@ -76,6 +76,24 @@ export const simulationsReducer = (state: SimulationStates, action: SimulationSt
       }) as RampSpell[];
 
       return produce(state, (projectedState) => {
+        const existingSimulations = Object.values(state.simulations);
+
+        if (existingSimulations.length === 1 && existingSimulations[0].rampSpells.length === 0) {
+          projectedState.simulations = {
+            [v4()]: {
+              state: {
+                ...simulation.simState,
+                buffs: new Map(simulation.simState.buffs),
+                cooldowns: new Map(simulation.simState.cooldowns),
+              },
+              rampSpells: simulationSpells,
+              items: simulationItems,
+            },
+          };
+
+          return;
+        }
+
         projectedState.simulations[v4()] = {
           state: {
             ...simulation.simState,

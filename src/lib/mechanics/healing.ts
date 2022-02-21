@@ -3,7 +3,7 @@ import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
 
 const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
-  Shadowmend: true,
+  "Shadow Mend": true,
   "Unholy Transfusion": true,
   "Unholy Nova": true,
 };
