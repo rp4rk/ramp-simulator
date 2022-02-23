@@ -22,10 +22,12 @@ export interface SimulationStates {
   simulations: {
     [key: string]: SimulationConfiguration;
   };
+  focusedSimulation?: string;
 }
 
 const initialState: SimulationStates = {
   simulations: {},
+  focusedSimulation: undefined,
 };
 
 const SimulationsContext = createContext<{
@@ -42,7 +44,9 @@ const SimulationsProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(simulationsReducer, initialState);
   const memoizedValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
-  return <SimulationsContext.Provider value={memoizedValue}>{children}</SimulationsContext.Provider>;
+  return (
+    <SimulationsContext.Provider value={memoizedValue}>{children}</SimulationsContext.Provider>
+  );
 };
 
 export { SimulationsContext, SimulationsProvider };

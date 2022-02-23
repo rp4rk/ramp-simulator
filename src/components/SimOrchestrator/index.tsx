@@ -7,6 +7,7 @@ import { Item, SimState, Stats as StatsType } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer } from "lib";
 import { Button } from "components/Button";
+import UnfocusedWill from "./unfocused-will.webp";
 
 import { RampSpell, SimulationConfiguration, SimulationsContext } from "context/simulations";
 import {
@@ -18,6 +19,7 @@ import {
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { getSerializableConfiguration } from "context/simulations.selectors";
 import lzbase62 from "lzbase62";
+import { setFocusedSimulation } from "../../context/simulations.actions";
 
 interface SimOrchestratorProps {
   simId: string;
@@ -31,6 +33,7 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
   const { state, dispatch } = useContext(SimulationsContext);
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
   const [simResult, setSimResult] = useState<SimState>();
+  const isFocused = state.focusedSimulation === simId;
 
   /**
    * Run the simulation for this orchestrator
@@ -98,6 +101,15 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
     [props.simId, dispatch]
   );
 
+  const focusSim = useCallback(
+    () => dispatch(setFocusedSimulation({ simulation: simId })),
+    [dispatch, simId]
+  );
+  const unfocusSim = useCallback(
+    () => dispatch(setFocusedSimulation({ simulation: undefined })),
+    [dispatch]
+  );
+
   const compressedSimState = useMemo(() => {
     const serializableConfig = getSerializableConfiguration(state.simulations[props.simId]);
     const compressed = lzbase62.compress(JSON.stringify(serializableConfig));
@@ -111,6 +123,16 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
         <div className="flex justify-between mb-4">
           <h4 className="text-lg text-gray-600 font-semibold mb-2">Ramp Timeline</h4>
           <div className="space-x-2">
+            {(isFocused && (
+              <Button onClick={unfocusSim}>
+                <img alt="unfocus icon" className="w-5 mr-1 inline-block" src={UnfocusedWill} />{" "}
+                Unfocus
+              </Button>
+            )) || (
+              <Button onClick={focusSim} icon="EyeIcon">
+                Focus
+              </Button>
+            )}
             <CopyToClipboard text={compressedSimState}>
               <Button outline icon="ShareIcon">
                 Export
@@ -122,7 +144,12 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
             {props.deletionAllowed && props.onDelete && (
               <Button
                 className="bg-red-500 hover:bg-red-600"
-                onClick={() => props.onDelete && props.onDelete(props.simId)}
+                onClick={() => {
+                  if (isFocused) {
+                    unfocusSim();
+                  }
+                  props.onDelete && props.onDelete(props.simId);
+                }}
                 outline
                 icon="TrashIcon"
               >
@@ -136,7 +163,11 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
       {showConfiguration && (
         <div className="grid grid-cols-3 gap-4">
           <Stats stats={props.simulationConfiguration.state.player} onChange={changeStat} />
-          <ItemSelector items={props.simulationConfiguration.items} onItemAdd={addItem} onItemRemove={removeItem} />
+          <ItemSelector
+            items={props.simulationConfiguration.items}
+            onItemAdd={addItem}
+            onItemRemove={removeItem}
+          />
           <SimResults simState={simResult} />
         </div>
       )}

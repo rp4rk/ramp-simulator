@@ -23,7 +23,9 @@ interface DeleteSimulationAction extends Action {
   payload: string;
 }
 
-export const deleteSimulation = (payload: DeleteSimulationAction["payload"]): DeleteSimulationAction => ({
+export const deleteSimulation = (
+  payload: DeleteSimulationAction["payload"]
+): DeleteSimulationAction => ({
   type: "DELETE_SIMULATION",
   payload,
 });
@@ -36,8 +38,24 @@ interface SetSimulationSpells extends Action {
   };
 }
 
-export const setSimulationSpells = (payload: SetSimulationSpells["payload"]): SetSimulationSpells => ({
+export const setSimulationSpells = (
+  payload: SetSimulationSpells["payload"]
+): SetSimulationSpells => ({
   type: "SET_SIMULATION_SPELLS",
+  payload,
+});
+
+interface AddSimulationSpells extends Action {
+  type: "ADD_SIMULATION_SPELLS";
+  payload: {
+    spells: RampSpell[];
+  };
+}
+
+export const addSimulationSpells = (
+  payload: AddSimulationSpells["payload"]
+): AddSimulationSpells => ({
+  type: "ADD_SIMULATION_SPELLS",
   payload,
 });
 
@@ -60,7 +78,9 @@ interface RemoveSimulationItems extends Action {
     items: Item[];
   };
 }
-export const removeSimulationItems = (payload: RemoveSimulationItems["payload"]): RemoveSimulationItems => ({
+export const removeSimulationItems = (
+  payload: RemoveSimulationItems["payload"]
+): RemoveSimulationItems => ({
   type: "REMOVE_SIMULATION_ITEMS",
   payload,
 });
@@ -89,11 +109,27 @@ export const importSimulation = (payload: ImportSimulation["payload"]): ImportSi
   payload,
 });
 
+interface SetFocusedSimulation extends Action {
+  type: "SET_FOCUSED_SIMULATION";
+  payload: {
+    simulation?: string;
+  };
+}
+
+export const setFocusedSimulation = (
+  payload: SetFocusedSimulation["payload"]
+): SetFocusedSimulation => ({
+  type: "SET_FOCUSED_SIMULATION",
+  payload,
+});
+
 export type SimulationStatesAction =
   | AddSimulationAction
   | DeleteSimulationAction
   | SetSimulationSpells
+  | AddSimulationSpells
   | AddSimulationItems
   | RemoveSimulationItems
   | UpdatePlayerStat
-  | ImportSimulation;
+  | ImportSimulation
+  | SetFocusedSimulation;

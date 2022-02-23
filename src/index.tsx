@@ -7,11 +7,13 @@ import reportWebVitals from "./reportWebVitals";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { SimulationsProvider } from "context/simulations";
+import { QuickFill } from "features/QuickFill";
 
 ReactDOM.render(
   <React.StrictMode>
     <SimulationsProvider>
       <DndProvider backend={HTML5Backend}>
+        <QuickFill />
         <App />
       </DndProvider>
     </SimulationsProvider>

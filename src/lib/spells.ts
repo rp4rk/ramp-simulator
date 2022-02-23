@@ -288,6 +288,7 @@ export const AscendedNova: Spell = {
 
 export const AscendedEruption: Spell = {
   category: SpellCategory.Ignored,
+  uncastable: true,
   id: 3565449,
   icon: "ability_bastion_priest",
   name: "Ascended Eruption",

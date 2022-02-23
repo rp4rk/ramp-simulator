@@ -30,6 +30,7 @@ export enum SpellCategory {
 
 export interface Spell {
   category?: SpellCategory;
+  uncastable?: boolean;
   id?: number;
   icon?: string;
   name: string;
