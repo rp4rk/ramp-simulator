@@ -1,6 +1,7 @@
 import { SpellIcon } from "components/SpellIcon";
 import { ComponentPropsWithoutRef, FC } from "react";
 import { Channel, Spell } from "lib/types";
+import { Tag } from "components/Tag";
 
 interface QuickFillListProps extends ComponentPropsWithoutRef<"ol"> {
   spells: (Spell | Channel)[];
@@ -15,16 +16,26 @@ export const QuickFillList: FC<QuickFillListProps> = ({ spells, selected, ...res
           key={spell.id}
           className={
             idx === selected
-              ? `rounded-sm text-sky-700 space-x-4 p-3 border-solid border border-sky-300 bg-gradient-to-b from-sky-100 to-sky-200`
-              : "rounded-sm bg-gray-300 border border-gray-300 space-x-4 p-3"
+              ? `flex items-center rounded-sm text-sky-700 space-x-4 p-3 border-solid border border-sky-300 bg-gradient-to-b from-sky-100 to-sky-200`
+              : "flex items-center rounded-sm bg-gray-300 border border-gray-300 space-x-4 p-3"
           }
         >
           <SpellIcon
-            className="inline-block rounded-sm w-8"
+            className="inline-block rounded-sm w-8 grow-0"
             name={spell.name}
             icon={spell.icon || "trade_engineering"}
           />
-          <span>{spell.name}</span>
+
+          <div>
+            <span>{spell.name}</span>
+            {spell.metadata && (
+              <ul className="space-x-1">
+                {spell.metadata.map((metadata) => (
+                  <Tag>{metadata}</Tag>
+                ))}
+              </ul>
+            )}
+          </div>
         </li>
       ))}
     </ol>

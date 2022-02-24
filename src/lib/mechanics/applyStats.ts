@@ -7,13 +7,13 @@ export const applyStats: StateSpellReducer = (state, spell): SimState => {
   const { time: projectedTime } = advanceTime(state, spell);
 
   const activeBuffs = getStatBuffs(state);
-
   const playerWithBuffs = activeBuffs.reduce((currPlayer, currBuff) => {
     if (!currBuff.statBuff) return currPlayer;
 
     // If the application time is between the two times, apply the buff
     if (time <= currBuff.applied && projectedTime > currBuff.applied) {
-      if (currPlayer.statBuffs[currBuff.statBuff.stat].includes(currBuff.statBuff)) return currPlayer;
+      if (currPlayer.statBuffs[currBuff.statBuff.stat].includes(currBuff.statBuff))
+        return currPlayer;
       return applyStat(currPlayer, currBuff.statBuff);
     }
 

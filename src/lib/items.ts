@@ -143,6 +143,16 @@ export const ShieldDiscipline: Item = {
   expires: Infinity,
 };
 
+export const CombatMeditation: Item = {
+  id: 328266,
+  icon: "spell_animabastion_buff",
+  type: ItemType.Talent,
+  name: "Combat Meditation",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
 export const AmalgamsSeventhSpine: Item = {
   id: 215266,
   icon: "spell_priest_mindspike",

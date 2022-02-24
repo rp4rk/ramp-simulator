@@ -84,7 +84,9 @@ export const Shadowfiend: Spell = {
         applied: state.time,
         expires: state.time + 15_000,
         interval: (state) =>
-          hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
+          hasAura(state, "Rabid Shadows")
+            ? 1150 / getHastePerc(state.player)
+            : 1500 / getHastePerc(state.player),
         ticks: 10,
         coefficient: 46.2,
       }),
@@ -110,7 +112,9 @@ export const Mindbender: Spell = {
         applied: state.time,
         expires: state.time + 12_000,
         interval: (state) =>
-          hasAura(state, "Rabid Shadows") ? 1150 / getHastePerc(state.player) : 1500 / getHastePerc(state.player),
+          hasAura(state, "Rabid Shadows")
+            ? 1150 / getHastePerc(state.player)
+            : 1500 / getHastePerc(state.player),
         ticks: 10,
         coefficient: 33.88,
       }),
@@ -203,6 +207,20 @@ export const BoonOfTheAscended: Spell = {
   castTime: 1500,
   effect: [
     advanceTime,
+    (state) => {
+      if (!hasAura(state, "Combat Meditation")) return state;
+
+      return applyAura(state, {
+        name: "Combat Meditation Buff",
+        duration: 30_000,
+        applied: state.time,
+        statBuff: {
+          amount: 315,
+          stat: "mastery",
+          type: StatBuffType.RATING,
+        },
+      });
+    },
     (state) =>
       applyAura(state, {
         name: "Boon of the Ascended",
@@ -455,6 +473,7 @@ export const PowerWordRadiance: Spell = {
   id: 194509,
   icon: "spell_priest_powerword",
   name: "Power Word: Radiance",
+  metadata: ["Applicator"],
   cost: createManaCost(6.5),
   healing: (state) => {
     const hasShiningRadiance = hasAura(state, "Shining Radiance");
@@ -524,6 +543,7 @@ export const PowerWordShield: Spell = {
   category: SpellCategory.Applicator,
   id: 17,
   icon: "spell_holy_powerwordshield",
+  metadata: ["Applicator"],
   cost: (state) => {
     const hasShieldDiscipline = hasAura(state, "Shield Discipline");
     const hasAmalgams = hasAura(state, "Amalgam's Seventh Spine");
@@ -573,6 +593,7 @@ export const Shadowmend: Spell = {
   id: 136202,
   icon: "spell_shadow_shadowmend",
   name: "Shadow Mend",
+  metadata: ["Applicator"],
   cost: (state) => {
     const hasAmalgams = hasAura(state, "Amalgam's Seventh Spine");
     const amDiscount = hasAmalgams ? 263 : 0; // https://ptr.wowhead.com/spell=215266/fragile-echoes @ 272
@@ -671,11 +692,12 @@ export const Innervate: Spell = {
   ],
 };
 
-export const InstructorsDivineBell: Spell = {
+export const InstructorsDivineBellPrepatch: Spell = {
   category: SpellCategory.Cooldown,
   id: 348139,
   icon: "inv_misc_bell_01",
   name: "Instructor's Divine Bell",
+  metadata: ["Trinket", "9.1.5", "9.1", "213", "743 Mastery"],
   offGcd: true,
   effect: [
     (state) =>
@@ -685,6 +707,71 @@ export const InstructorsDivineBell: Spell = {
         statBuff: {
           amount: 745,
           stat: "mastery",
+          type: StatBuffType.RATING,
+        },
+      }),
+  ],
+};
+
+export const InstructorsDivineBellPostpatch: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 367896,
+  icon: "inv_misc_bell_01",
+  name: "Instructor's Divine Bell (9.2)",
+  metadata: ["Trinket", "9.2", "213", "448 Mastery"],
+  offGcd: true,
+  effect: [
+    (state) =>
+      applyAura(state, {
+        name: "Instructor's Divine Bell (9.2)",
+        duration: 15000,
+        statBuff: {
+          amount: 432,
+          stat: "mastery",
+          type: StatBuffType.RATING,
+        },
+      }),
+  ],
+};
+
+export const ShadowedOrbOfTorment: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 355321,
+  icon: "spell_animamaw_orb",
+  name: "Shadowed Orb Of Torment",
+  metadata: ["Trinket", "252", "489 Mastery"],
+  castTime: 2000,
+  effect: [
+    advanceTime,
+    (state) =>
+      applyAura(state, {
+        name: "Instructor's Divine Bell",
+        duration: 40_000,
+        statBuff: {
+          amount: 489,
+          stat: "mastery",
+          type: StatBuffType.RATING,
+        },
+      }),
+  ],
+};
+
+export const FlameOfBattle: Spell = {
+  category: SpellCategory.Cooldown,
+  id: 336841,
+  icon: "inv_trinket_maldraxxus_01_blue",
+  name: "Flame of Battle",
+  metadata: ["Trinket", "213", "559 Versatility"],
+  offGcd: true,
+  effect: [
+    advanceTime,
+    (state) =>
+      applyAura(state, {
+        name: "Flame of Battle",
+        duration: 12_000,
+        statBuff: {
+          amount: 559,
+          stat: "vers",
           type: StatBuffType.RATING,
         },
       }),

@@ -32,6 +32,7 @@ export interface Spell {
   category?: SpellCategory;
   uncastable?: boolean;
   id?: number;
+  metadata?: string[];
   icon?: string;
   name: string;
   damage?: number | Calculated;

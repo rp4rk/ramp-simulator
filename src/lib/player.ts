@@ -26,8 +26,12 @@ export const getHastePerc: getStat = (p) => {
     .filter((buff) => buff.type === StatBuffType.RATING)
     .reduce((acc, curr) => acc + curr.amount, 0);
 
-  const hasteMultiplicativeBuffs = p.statBuffs.haste.filter((buff) => buff.type === StatBuffType.MULTIPLICATIVE);
-  const hasteAdditiveBuffs = p.statBuffs.haste.filter((buff) => buff.type === StatBuffType.ADDITIVE);
+  const hasteMultiplicativeBuffs = p.statBuffs.haste.filter(
+    (buff) => buff.type === StatBuffType.MULTIPLICATIVE
+  );
+  const hasteAdditiveBuffs = p.statBuffs.haste.filter(
+    (buff) => buff.type === StatBuffType.ADDITIVE
+  );
 
   const [, hasteValue] = DIMINISHING_RETURNS.reduce(
     ([remainingRating, value], [threshold, penalty]) => {
@@ -66,8 +70,12 @@ export const getMasteryPerc: getStat = (p) => {
     .filter((buff) => buff.type === StatBuffType.RATING)
     .reduce((acc, curr) => acc + curr.amount, 0);
 
-  const masteryMultiplicativeBuffs = p.statBuffs.mastery.filter((buff) => buff.type === StatBuffType.MULTIPLICATIVE);
-  const masteryAdditiveBuffs = p.statBuffs.mastery.filter((buff) => buff.type === StatBuffType.ADDITIVE);
+  const masteryMultiplicativeBuffs = p.statBuffs.mastery.filter(
+    (buff) => buff.type === StatBuffType.MULTIPLICATIVE
+  );
+  const masteryAdditiveBuffs = p.statBuffs.mastery.filter(
+    (buff) => buff.type === StatBuffType.ADDITIVE
+  );
 
   const [, masteryValue] = DIMINISHING_RETURNS.reduce(
     ([remainingRating, value], [threshold, penalty]) => {
@@ -106,7 +114,9 @@ export const getCritPerc: getStat = (p) => {
     .filter((buff) => buff.type === StatBuffType.RATING)
     .reduce((acc, curr) => acc + curr.amount, 0);
 
-  const critMultiplicativeBuffs = p.statBuffs.crit.filter((buff) => buff.type === StatBuffType.MULTIPLICATIVE);
+  const critMultiplicativeBuffs = p.statBuffs.crit.filter(
+    (buff) => buff.type === StatBuffType.MULTIPLICATIVE
+  );
   const critAdditiveBuffs = p.statBuffs.crit.filter((buff) => buff.type === StatBuffType.ADDITIVE);
 
   const [, critValue] = DIMINISHING_RETURNS.reduce(
@@ -142,11 +152,13 @@ export const getCritPerc: getStat = (p) => {
 
 // export const getVersPerc: getStat = (p) => 1 + p.vers / VERS_COEFFICIENT / 100;
 export const getVersPerc: getStat = (p) => {
-  const buffVersRating = p.statBuffs.crit
+  const buffVersRating = p.statBuffs.vers
     .filter((buff) => buff.type === StatBuffType.RATING)
     .reduce((acc, curr) => acc + curr.amount, 0);
 
-  const versMultiplicativeBuffs = p.statBuffs.vers.filter((buff) => buff.type === StatBuffType.MULTIPLICATIVE);
+  const versMultiplicativeBuffs = p.statBuffs.vers.filter(
+    (buff) => buff.type === StatBuffType.MULTIPLICATIVE
+  );
   const versAdditiveBuffs = p.statBuffs.vers.filter((buff) => buff.type === StatBuffType.ADDITIVE);
 
   const [, versValue] = DIMINISHING_RETURNS.reduce(
@@ -180,7 +192,13 @@ export const getVersPerc: getStat = (p) => {
   );
 };
 
-export function createPlayer(spellpower: number, haste: number, mastery: number, crit: number, vers: number): Player {
+export function createPlayer(
+  spellpower: number,
+  haste: number,
+  mastery: number,
+  crit: number,
+  vers: number
+): Player {
   return {
     spellpower,
     haste,

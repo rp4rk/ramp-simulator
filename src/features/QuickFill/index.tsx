@@ -13,7 +13,7 @@ import { v4 } from "uuid";
 const SPELL_LIST = new Fuse(
   Object.values(Spells).filter((spell) => !spell.uncastable),
   {
-    keys: ["name"],
+    keys: ["name", "metadata"],
     threshold: 0.2,
   }
 );
