@@ -33,6 +33,16 @@ export const ShiningRadiance: Item = {
   expires: Infinity,
 };
 
+export const SwiftPenitence: Item = {
+  id: 337891,
+  icon: "spell_holy_purify",
+  type: ItemType.Conduit,
+  name: "Swift Penitence",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
 export const RabidShadows: Item = {
   id: 237524,
   icon: "spell_deathknight_gnaw_ghoul",

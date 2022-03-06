@@ -1,4 +1,4 @@
-import { SimState, Spell, OverTime, StateSpellReducer } from "../types";
+import { SimState, Spell, OverTime, StateSpellReducer, Channel } from "../types";
 import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
 
@@ -17,11 +17,15 @@ const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
 /**
  * Calculates the damage for the provided spell or OverTime effect with the provided simulation state.
  */
-export function calculateDamage(state: SimState, spell: Spell | OverTime): number {
+export function calculateDamage(
+  state: SimState,
+  spell: Spell | OverTime | Channel,
+  tick?: number
+): number {
   const damage = "dot" in spell ? spell.coefficient : spell.damage;
   if (!damage) return 0;
 
-  const initialDamage = typeof damage === "function" ? damage(state) : damage;
+  const initialDamage = typeof damage === "function" ? damage(state, tick) : damage;
 
   const isSchismActive = hasAura(state, "Schism");
   const isScovActive = hasAura(state, "Shadow Covenant");
@@ -44,9 +48,9 @@ export function calculateDamage(state: SimState, spell: Spell | OverTime): numbe
 /**
  * Returns simulation state with the damage of the provided spell applied
  */
-export const damage: StateSpellReducer = (state, spell): SimState => {
+export const damage: StateSpellReducer = (state, spell, tick?: number): SimState => {
   return {
     ...state,
-    damage: state.damage + calculateDamage(state, spell),
+    damage: state.damage + calculateDamage(state, spell, tick),
   };
 };

@@ -7,7 +7,8 @@ import { advanceTime } from "./time";
 export const channel =
   (effects: StateSpellReducer[]): StateSpellReducer =>
   (state, spell): SimState => {
-    if (!("channel" in spell)) throw new Error(`Skill Issue: Channel effect on non-channel spell: ${spell.name}`);
+    if (!("channel" in spell))
+      throw new Error(`Skill Issue: Channel effect on non-channel spell: ${spell.name}`);
     if (spell.castTime === undefined)
       throw new Error(`Skill Issue: Channel without a castTime encountered: ${spell.name}`);
 
@@ -16,17 +17,18 @@ export const channel =
     const channelInterval = castTime / (ticks - 1);
 
     const effectsToRepeat: StateSpellReducer[] = [...effects, advanceTime];
-    const computedEffects = Array<StateSpellReducer[]>(ticks - 1)
-      .fill(effectsToRepeat)
-      .flat();
+    const computedEffects = Array<StateSpellReducer[]>(ticks).fill(effectsToRepeat).flat();
 
     const channelWithDuration = {
       ...spell,
       castTime: channelInterval,
     };
 
-    const projectedState = computedEffects.reduce((currState, currEffect) => {
-      return currEffect(currState, channelWithDuration);
+    const chunkSize = computedEffects.length / ticks;
+    const projectedState = computedEffects.reduce((currState, currEffect, idx) => {
+      const currTick = Math.ceil((idx + 1) / chunkSize);
+
+      return currEffect(currState, channelWithDuration, currTick);
     }, state);
 
     return projectedState;

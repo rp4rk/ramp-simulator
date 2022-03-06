@@ -1,6 +1,11 @@
 export type SpellQueue = Spell[];
-export type StateSpellReducer = (state: SimState, spell: Spell | OverTime | Channel) => SimState;
+export type StateSpellReducer = (
+  state: SimState,
+  spell: Spell | OverTime | Channel,
+  tick?: number
+) => SimState;
 export type Calculated = (state: SimState) => number;
+export type ChannelCalculated = (state: SimState, tick?: number) => number;
 
 export enum ItemType {
   Legendary = "Legendary",
@@ -50,6 +55,7 @@ export interface Spell {
 export interface Channel extends Spell {
   ticks: number | Calculated;
   channel: true;
+  damage: number | ChannelCalculated | undefined;
 }
 
 export interface Stats {
