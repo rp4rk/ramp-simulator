@@ -6,9 +6,9 @@ import { getMasteryPerc } from "../player";
 /**
  * Returns the simulation state with healing and absorbs from Atonement applied
  */
-export const atonement: StateSpellReducer = (state, spell): SimState => {
+export const atonement: StateSpellReducer = (state, spell, tick): SimState => {
   const spiritShellActive = hasAura(state, "Spirit Shell");
-  const calculatedDamage = calculateDamage(state, spell);
+  const calculatedDamage = calculateDamage(state, spell, tick);
   const activeAtonementCount = numBuffsActive(state, "Atonement");
   const { player } = state;
   const mastery = getMasteryPerc(player);
