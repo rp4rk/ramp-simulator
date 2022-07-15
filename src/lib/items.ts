@@ -84,10 +84,20 @@ export const MaliciousScission: Item = {
 };
 
 export const LessonsInHumility: Item = {
-  id: 0, // not on Wowhead yet?
+  id: 373052,
   icon: "ability_paladin_blessedhands",
   type: ItemType.Talent,
   name: "Lessons in Humility",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const ImprovedMindBlast: Item = {
+  id: 319899,
+  icon: "spell_shadow_unholyfrenzy",
+  type: ItemType.Talent,
+  name: "Improved Mind Blast",
   applied: 0,
   duration: Infinity,
   expires: Infinity,

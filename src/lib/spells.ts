@@ -282,10 +282,17 @@ export const MindBlast: Spell = {
   icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
   cost: createManaCost(3),
+  cooldown: (state) => {
+    const hastePerc = getHastePerc(state.player);
+    const hasImprovedMindBlast = hasAura(state, "Improved Mind Blast");
+    const baseCast = 15_000 - (hasImprovedMindBlast ? 6000 : 0);
+
+    return baseCast / hastePerc;
+  },
   damage: 74.42,
   absorb: 300,
   castTime: 1500,
-  effect: [advanceTime, damage, absorb, atonement],
+  effect: [cooldown, advanceTime, damage, absorb, atonement],
 };
 
 export const Mindgames: Spell = {
