@@ -242,8 +242,7 @@ export const Smite: Spell = {
   cost: createManaCost(0.4),
   name: "Smite",
   damage: (state) => {
-    const hasLessonsInHumility = hasAura(state, "LessonsInHumility");
-
+    const hasLessonsInHumility = hasAura(state, "Lessons in Humility");
     if (!hasLessonsInHumility) return 49.7;
 
     const smiteAmp = numBuffsActive(state, "Atonement") >= 3 ? 1.2 : 1;
