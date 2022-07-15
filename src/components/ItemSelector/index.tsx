@@ -3,9 +3,7 @@ import { Item, ItemType } from "lib/types";
 import { Spell } from "components/Spell";
 import { FC, useCallback } from "react";
 
-const LEGENDARIES = Object.values(Items).filter((item: Item) => item.type === ItemType.Legendary);
-const CONDUITS = Object.values(Items).filter((item: Item) => item.type === ItemType.Conduit);
-const TIERS = Object.values(Items).filter((item: Item) => item.type === ItemType.Item);
+const ITEMS = Object.values(Items).filter((item: Item) => item.type === ItemType.Item);
 const TALENTS = Object.values(Items).filter((item: Item) => item.type === ItemType.Talent);
 
 type ItemSelectorProps = {
@@ -31,39 +29,19 @@ export const ItemSelector: FC<ItemSelectorProps> = ({ items, onItemAdd, onItemRe
 
   return (
     <div className="flex sm:block sm:flex-wrap sm:space-between">
-      <div className="sm:grow">
-        <h4 className="text-lg text-gray-600 font-semibold">Legendaries</h4>
-        {LEGENDARIES.map((legendary) => (
-          <Spell
-            key={legendary.id}
-            spell={legendary}
-            onClick={(spell) => toggleItems(spell)}
-            toggled={itemExists(items, legendary.id)}
-          />
-        ))}
-      </div>
-      <div className="sm:grow">
-        <h4 className="text-lg text-gray-600 font-semibold">Conduits</h4>
-        {CONDUITS.map((conduit) => (
-          <Spell
-            key={conduit.id}
-            spell={conduit}
-            onClick={(spell) => toggleItems(spell)}
-            toggled={itemExists(items, conduit.id)}
-          />
-        ))}
-      </div>
-      <div className="sm:grow">
-        <h4 className="text-lg text-gray-600 font-semibold">Items</h4>
-        {TIERS.map((tier) => (
-          <Spell
-            key={tier.id}
-            spell={tier}
-            onClick={(spell) => toggleItems(spell)}
-            toggled={itemExists(items, tier.id)}
-          />
-        ))}
-      </div>
+      {ITEMS.length !== 0 && (
+        <div className="sm:grow">
+          <h4 className="text-lg text-gray-600 font-semibold">Items</h4>
+          {ITEMS.map((tier) => (
+            <Spell
+              key={tier.id}
+              spell={tier}
+              onClick={(spell) => toggleItems(spell)}
+              toggled={itemExists(items, tier.id)}
+            />
+          ))}
+        </div>
+      )}
       <div className="sm:grow">
         <h4 className="text-lg text-gray-600 font-semibold">Talents</h4>
         {TALENTS.map((tier) => (

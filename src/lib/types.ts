@@ -8,8 +8,6 @@ export type Calculated = (state: SimState) => number;
 export type ChannelCalculated = (state: SimState, tick?: number) => number;
 
 export enum ItemType {
-  Legendary = "Legendary",
-  Conduit = "Conduit",
   Item = "Item",
   Talent = "Talent",
 }

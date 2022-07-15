@@ -202,7 +202,13 @@ export const Schism: Spell = {
     (state) => {
       return applyAura(state, {
         name: "Schism",
-        duration: 9000,
+        duration: (state) => {
+          const SCHISM_DURATION = 9000;
+          const MS_BONUS = 1.5;
+          const hasMaliciousScission = hasAura(state, "Malicious Scission");
+
+          return hasMaliciousScission ? SCHISM_DURATION * MS_BONUS : SCHISM_DURATION;
+        },
       });
     },
   ],

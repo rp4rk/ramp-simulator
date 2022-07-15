@@ -1,5 +1,5 @@
 import { createPlayer } from "lib";
-import { ClarityOfMind } from "lib/items";
+import { SwiftPenitence } from "lib/items";
 import { applyAura } from "lib/mechanics";
 import { PowerWordShield } from "lib/spells";
 import { SimState } from "lib/types";
@@ -7,7 +7,9 @@ import { SimulationConfiguration } from "./simulations";
 import { getSerializableConfiguration } from "./simulations.selectors";
 
 // Create a simulation configuration for testing
-const createSimulationConfiguration = (overrides: Partial<SimulationConfiguration> = {}): SimulationConfiguration => ({
+const createSimulationConfiguration = (
+  overrides: Partial<SimulationConfiguration> = {}
+): SimulationConfiguration => ({
   rampSpells: [],
   items: [],
   state: {
@@ -40,14 +42,14 @@ describe("getSerializableSimulationState", () => {
   test("correctly serializes items", () => {
     // given
     const simulationConfiguration = createSimulationConfiguration({
-      items: [ClarityOfMind],
+      items: [SwiftPenitence],
     });
 
     // when
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.items).toEqual([336067]);
+    expect(serializableState.items).toEqual([337891]);
   });
 
   test("correctly serializes buffs", () => {
@@ -63,7 +65,7 @@ describe("getSerializableSimulationState", () => {
       buffs: new Map(),
     };
 
-    applyAura(testSimState, ClarityOfMind);
+    applyAura(testSimState, SwiftPenitence);
 
     const simulationConfiguration = createSimulationConfiguration({
       state: testSimState,
@@ -73,7 +75,7 @@ describe("getSerializableSimulationState", () => {
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.simState.buffs).toEqual([["Clarity of Mind", [ClarityOfMind]]]);
+    expect(serializableState.simState.buffs).toEqual([["Swift Penitence", [SwiftPenitence]]]);
   });
 
   it("correctly serializes multiple buffs", () => {
@@ -106,6 +108,8 @@ describe("getSerializableSimulationState", () => {
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.simState.buffs).toEqual([["Atonement", [atonementTestBuff, atonementTestBuff]]]);
+    expect(serializableState.simState.buffs).toEqual([
+      ["Atonement", [atonementTestBuff, atonementTestBuff]],
+    ]);
   });
 });
