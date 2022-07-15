@@ -11,7 +11,6 @@ import {
   healing,
   evangelismExtension,
   channel,
-  executeHoT,
 } from "./mechanics";
 import { getHastePerc } from "./player";
 import { Channel, SimState, Spell, SpellCategory, StatBuffType } from "./types";
@@ -134,8 +133,7 @@ export const SpiritShell: Spell = {
   cost: createManaCost(2),
   effect: [
     (state) => {
-      const hasExaltation = hasAura(state, "Exaltation");
-      const duration = 10_000 + (hasExaltation ? 1000 : 0);
+      const duration = 10_000;
 
       return applyAura(state, {
         name: "Spirit Shell",
@@ -170,10 +168,9 @@ export const Penance: Channel = {
   },
   cooldown: 9000,
   ticks: (state) => {
-    const hasThePenitentOne = hasAura(state, "The Penitent One");
     const hasCastigation = hasAura(state, "Castigation");
 
-    return 3 + (hasThePenitentOne ? 3 : 0) + (hasCastigation ? 1 : 0);
+    return 3 + (hasCastigation ? 1 : 0);
   },
   damage: (state, tick) => {
     const hasSwiftPenitence = hasAura(state, "Swift Penitence");
@@ -186,143 +183,6 @@ export const Penance: Channel = {
   healing: 375,
   castTime: 2000,
   effect: [cooldown, channel([damage, atonement])],
-};
-
-export const MindSear: Channel = {
-  category: SpellCategory.Damage,
-  channel: true,
-  id: 48045,
-  icon: "spell_shadow_mindshear",
-  name: "Mind Sear",
-  cost: createManaCost(2.7),
-  ticks: 6,
-  damage: 17.39,
-  castTime: 4500,
-  effect: [cooldown, channel([damage, atonement])],
-};
-
-export const BoonOfTheAscended: Spell = {
-  category: SpellCategory.Kyrian,
-  id: 325013,
-  icon: "ability_bastion_priest",
-  name: "Boon of the Ascended",
-  castTime: 1500,
-  effect: [
-    advanceTime,
-    (state) => {
-      if (!hasAura(state, "Combat Meditation")) return state;
-
-      return applyAura(state, {
-        name: "Combat Meditation Buff",
-        duration: 30_000,
-        applied: state.time,
-        statBuff: {
-          amount: 315,
-          stat: "mastery",
-          type: StatBuffType.RATING,
-        },
-      });
-    },
-    (state) =>
-      applyAura(state, {
-        name: "Boon of the Ascended",
-        duration: 10000,
-        applied: state.time,
-        expires: state.time + 10000,
-        consumed: false,
-      }),
-    (state) =>
-      applyAura(state, {
-        name: "Eruption Stacks",
-        duration: 11000,
-        applied: state.time,
-        expires: state.time + 11000,
-      }),
-  ],
-};
-
-export const AscendedBlast: Spell = {
-  category: SpellCategory.Kyrian,
-  id: 325315,
-  icon: "spell_animabastion_missile",
-  name: "Ascended Blast",
-  damage: (state) => {
-    const hasCourageousAscension = hasAura(state, "Courageous Ascension");
-    const caMultiplier = 1 + (hasCourageousAscension ? 0.4 : 0);
-    const hasBoon = hasAura(state, "Boon of the Ascended");
-
-    return hasBoon ? 168.26 * caMultiplier : 0;
-  },
-  healing: (state) => (hasAura(state, "Boon of the Ascended") ? 201.91 : 0),
-  cooldown: (state) => {
-    const { player } = state;
-    const haste = getHastePerc(player);
-
-    return 3000 / haste;
-  },
-  shortGcd: true,
-  effect: [
-    cooldown,
-    healing,
-    damage,
-    atonement,
-    (state) =>
-      applyAura(
-        state,
-        {
-          name: "Eruption Stacks",
-          duration: 11000,
-          applied: state.time,
-          expires: state.time + 11000,
-        },
-        5
-      ),
-    advanceTime,
-  ],
-};
-
-export const AscendedNova: Spell = {
-  category: SpellCategory.Kyrian,
-  id: 325020,
-  icon: "spell_animabastion_nova",
-  name: "Ascended Nova",
-  damage: (state) => (hasAura(state, "Boon of the Ascended") ? 69.56 : 0),
-  healing: (state) => (hasAura(state, "Boon of the Ascended") ? 135.36 : 0),
-  shortGcd: true,
-  effect: [
-    healing,
-    damage,
-    (state) =>
-      (hasAura(state, "Boon of the Ascended") &&
-        applyAura(state, {
-          name: "Eruption Stacks",
-          duration: 11000,
-          applied: state.time,
-          expires: state.time + 11000,
-        })) ||
-      state,
-    atonement,
-    advanceTime,
-  ],
-};
-
-export const AscendedEruption: Spell = {
-  category: SpellCategory.Ignored,
-  uncastable: true,
-  id: 3565449,
-  icon: "ability_bastion_priest",
-  name: "Ascended Eruption",
-  offGcd: true,
-  damage: (state) => {
-    const hasCourageousAscension = hasAura(state, "Courageous Ascension");
-    const activeBoonStacks = numBuffsActive(state, "Eruption Stacks");
-    const caMultiplier = hasCourageousAscension ? 0.04 : 0.03;
-    const boonMultiplier = 1 + activeBoonStacks * caMultiplier;
-
-    return 197.4 * boonMultiplier;
-  },
-  healing: 896.76,
-  effect: [damage, healing, atonement],
 };
 
 export const Schism: Spell = {
@@ -420,44 +280,11 @@ export const Mindgames: Spell = {
   id: 323673,
   icon: "ability_revendreth_priest",
   name: "Mindgames",
-  absorb: (state) => {
-    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
-
-    return 450 * mgAmp;
-  },
-  healing: (state) => {
-    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
-
-    return 450 * mgAmp;
-  },
-  damage: (state) => {
-    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
-
-    return 253.8 * mgAmp;
-  },
+  absorb: 450,
+  healing: 450,
+  damage: 253.8,
   castTime: 1500,
-  effect: [
-    advanceTime,
-    damage,
-    absorb,
-    healing,
-    atonement,
-    (state) => {
-      const hasShadowWordManipulationEquipped = hasAura(state, "Shadow Word: Manipulation");
-      if (!hasShadowWordManipulationEquipped) return state;
-
-      return applyAura(state, {
-        name: "Shadow Word: Manipulation",
-        duration: 10_000,
-        applied: (state) => state.time + 500,
-        statBuff: {
-          amount: 0.05 * 8,
-          type: StatBuffType.ADDITIVE,
-          stat: "crit",
-        },
-      });
-    },
-  ],
+  effect: [advanceTime, damage, absorb, healing, atonement],
 };
 
 export const PowerWordSolace: Spell = {
@@ -694,141 +521,17 @@ export const Innervate: Spell = {
   ],
 };
 
-export const InstructorsDivineBellPrepatch: Spell = {
+export const LightsWrath: Spell = {
   category: SpellCategory.Cooldown,
-  id: 348139,
-  icon: "inv_misc_bell_01",
-  name: "Instructor's Divine Bell",
-  metadata: ["Trinket", "9.1.5", "9.1", "213", "743 Mastery"],
-  offGcd: true,
-  effect: [
-    (state) =>
-      applyAura(state, {
-        name: "Instructor's Divine Bell",
-        duration: 9000,
-        statBuff: {
-          amount: 745,
-          stat: "mastery",
-          type: StatBuffType.RATING,
-        },
-      }),
-  ],
-};
+  id: 373178,
+  icon: "inv_staff_2h_artifacttome_d_01",
+  name: "Light's Wrath",
+  damage: (state) => {
+    const atonementCount = numBuffsActive(state, "Atonement");
+    const lwMultiplier = 0.1;
 
-export const InstructorsDivineBellPostpatch: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 367896,
-  icon: "inv_misc_bell_01",
-  name: "Instructor's Divine Bell (9.2)",
-  metadata: ["Trinket", "9.2", "213", "448 Mastery"],
-  offGcd: true,
-  effect: [
-    (state) =>
-      applyAura(state, {
-        name: "Instructor's Divine Bell (9.2)",
-        duration: 15000,
-        statBuff: {
-          amount: 432,
-          stat: "mastery",
-          type: StatBuffType.RATING,
-        },
-      }),
-  ],
-};
-
-export const ShadowedOrbOfTorment: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 355321,
-  icon: "spell_animamaw_orb",
-  name: "Shadowed Orb Of Torment",
-  metadata: ["Trinket", "252", "489 Mastery"],
-  castTime: 2000,
-  effect: [
-    advanceTime,
-    (state) =>
-      applyAura(state, {
-        name: "Instructor's Divine Bell",
-        duration: 40_000,
-        statBuff: {
-          amount: 489,
-          stat: "mastery",
-          type: StatBuffType.RATING,
-        },
-      }),
-  ],
-};
-
-export const FlameOfBattle: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 336841,
-  icon: "inv_trinket_maldraxxus_01_blue",
-  name: "Flame of Battle",
-  metadata: ["Trinket", "213", "559 Versatility"],
-  offGcd: true,
-  effect: [
-    advanceTime,
-    (state) =>
-      applyAura(state, {
-        name: "Flame of Battle",
-        duration: 12_000,
-        statBuff: {
-          amount: 559,
-          stat: "vers",
-          type: StatBuffType.RATING,
-        },
-      }),
-  ],
-};
-
-export const UnholyNova: Spell = {
-  name: "Unholy Nova",
-  category: SpellCategory.Necrolord,
-  id: 324724,
-  cost: createManaCost(5),
-  icon: "ability_maldraxxus_priest",
-  healing: (state) => {
-    const hasFesteringTransfusion = hasAura(state, "Festering Transfusion");
-
-    return 150 * 6 * (hasFesteringTransfusion ? 1.216 : 1);
+    return 175 * (1 + lwMultiplier * atonementCount);
   },
-  effect: [
-    // Damage over time
-    (state) => {
-      const hasFesteringTransfusion = hasAura(state, "Festering Transfusion");
-
-      return applyAura(state, {
-        dot: true,
-        name: "Unholy Transfusion",
-        duration: () => (hasFesteringTransfusion ? 17_000 : 15_000),
-        applied: state.time,
-        expires: (state) => state.time + (hasFesteringTransfusion ? 17_000 : 15_000),
-        interval: 3000,
-        ticks: hasFesteringTransfusion ? 6 : 5,
-        coefficient: 56 * (hasFesteringTransfusion ? 1.216 : 1),
-      });
-    },
-    // Spawning pet
-    (state) => {
-      const hasPallidCommand = hasAura(state, "Pallid Command");
-
-      return hasPallidCommand
-        ? applyAura(state, {
-            hot: true,
-            name: "Brooding Cleric",
-            duration: 20_000,
-            applied: state.time,
-            expires: (state) => state.time + 20_000,
-            ticks: 14,
-            interval: 1500,
-            coefficient: 80, // 40 listed but effect stacks to max instantly
-          })
-        : state;
-    },
-    damage,
-    healing,
-    atonement,
-    executeDoT,
-    executeHoT,
-    advanceTime,
-  ],
+  castTime: 2500,
+  effect: [advanceTime, damage, atonement],
 };

@@ -2,16 +2,13 @@ import { SimState, Spell, OverTime, StateSpellReducer, Channel } from "../types"
 import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
 
-const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender"];
+const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender", "Light's Wrath"];
 const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
   Schism: true,
   Mindgames: true,
   "Shadow Word: Pain": true,
   "Mind Blast": true,
-  "Mind Sear": true,
   "Shadow Mend": true,
-  "Unholy Transfusion": true,
-  "Unholy Nova": true,
 };
 
 /**
@@ -40,8 +37,7 @@ export function calculateDamage(
     (CONSIDERED_FOR_SCOV[spell.name] ? scovMultiplier : 1) *
     player.spellpower *
     getCritPerc(player) *
-    getVersPerc(player) *
-    1.03
+    getVersPerc(player)
   );
 }
 
