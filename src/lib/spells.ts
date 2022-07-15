@@ -449,7 +449,7 @@ export const Mindgames: Spell = {
       return applyAura(state, {
         name: "Shadow Word: Manipulation",
         duration: 10_000,
-        applied: (state) => state.time + 2000,
+        applied: (state) => state.time + 500,
         statBuff: {
           amount: 0.05 * 8,
           type: StatBuffType.ADDITIVE,
