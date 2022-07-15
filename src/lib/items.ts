@@ -83,6 +83,16 @@ export const MaliciousScission: Item = {
   expires: Infinity,
 };
 
+export const LessonsInHumility: Item = {
+  id: 373052,
+  icon: "ability_paladin_blessedhands",
+  type: ItemType.Talent,
+  name: "Lessons in Humility",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
 export const ImprovedMindBlast: Item = {
   id: 319899,
   icon: "spell_shadow_unholyfrenzy",
