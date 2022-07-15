@@ -242,11 +242,12 @@ export const Smite: Spell = {
   cost: createManaCost(0.4),
   name: "Smite",
   damage: (state) => {
+    const COEFFICIENT = 49.7;
     const hasLessonsInHumility = hasAura(state, "Lessons in Humility");
-    if (!hasLessonsInHumility) return 49.7;
+    if (!hasLessonsInHumility) return COEFFICIENT;
 
     const smiteAmp = numBuffsActive(state, "Atonement") >= 3 ? 1.2 : 1;
-    return smiteAmp * 49.7;
+    return smiteAmp * COEFFICIENT;
   },
   castTime: 1500,
   effect: [advanceTime, damage, atonement],
