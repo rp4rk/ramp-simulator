@@ -25,9 +25,6 @@ export enum SpellCategory {
   Applicator = "Applicator",
   Damage = "Damage",
   Cooldown = "Cooldown",
-  Kyrian = "Kyrian",
-  Venthyr = "Venthyr",
-  Necrolord = "Necrolord",
   Ignored = "Ignored",
 }
 

@@ -296,7 +296,7 @@ export const MindBlast: Spell = {
 };
 
 export const Mindgames: Spell = {
-  category: SpellCategory.Venthyr,
+  category: SpellCategory.Cooldown,
   id: 323673,
   icon: "ability_revendreth_priest",
   name: "Mindgames",
