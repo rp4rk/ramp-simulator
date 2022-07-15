@@ -241,9 +241,13 @@ export const Smite: Spell = {
   icon: "spell_holy_holysmite",
   cost: createManaCost(0.4),
   name: "Smite",
-  damage: (state)=>{
-    const smiteAmp = (numBuffsActive(state, "Atonement") >= 3) ? 1.2 : 1
-    return smiteAmp * 49.7
+  damage: (state) => {
+    const hasLessonsInHumility = hasAura(state, "LessonsInHumility");
+
+    if (!hasLessonsInHumility) return 49.7;
+
+    const smiteAmp = numBuffsActive(state, "Atonement") >= 3 ? 1.2 : 1;
+    return smiteAmp * 49.7;
   },
   castTime: 1500,
   effect: [advanceTime, damage, atonement],
