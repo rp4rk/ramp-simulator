@@ -225,9 +225,11 @@ export const ShadowCovenant: Spell = {
   effect: [
     cooldown,
     (state) => {
+      const hasEmbraceShadow = hasAura(state, "Embrace Shadow");
+      const EMBRACE_SHADOW_INCREASE = 4000;
       return applyAura(state, {
         name: "Shadow Covenant",
-        duration: 7000,
+        duration: hasEmbraceShadow ? 7000 + EMBRACE_SHADOW_INCREASE : 7000,
       });
     },
     advanceTime,

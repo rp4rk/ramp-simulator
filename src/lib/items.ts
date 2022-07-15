@@ -102,3 +102,13 @@ export const ImprovedMindBlast: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const EmbraceShadow: Item = {
+  id: 372985,
+  icon: "spell_warlock_demonsoul",
+  type: ItemType.Talent,
+  name: "Embrace Shadow",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
