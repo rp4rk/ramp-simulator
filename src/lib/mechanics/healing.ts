@@ -4,8 +4,6 @@ import { getCritPerc, getVersPerc } from "../player";
 
 const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
   "Shadow Mend": true,
-  "Unholy Transfusion": true,
-  "Unholy Nova": true,
 };
 
 /**
