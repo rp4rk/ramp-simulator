@@ -241,7 +241,10 @@ export const Smite: Spell = {
   icon: "spell_holy_holysmite",
   cost: createManaCost(0.4),
   name: "Smite",
-  damage: 49.7,
+  damage: (state)=>{
+    const smiteAmp = (numBuffsActive(state, "Atonement") >= 3) ? 1.2 : 1
+    return smiteAmp * 49.7
+  },
   castTime: 1500,
   effect: [advanceTime, damage, atonement],
 };
