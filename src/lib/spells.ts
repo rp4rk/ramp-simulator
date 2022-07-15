@@ -241,9 +241,9 @@ export const Smite: Spell = {
   icon: "spell_holy_holysmite",
   cost: createManaCost(0.4),
   name: "Smite",
-  damage: (state)=>{
-    const smiteAmp = (numBuffsActive(state, "Atonement") >= 3) ? 1.2 : 1
-    return smiteAmp * 49.7
+  damage: (state) => {
+    const smiteAmp = numBuffsActive(state, "Atonement") >= 3 ? 1.2 : 1;
+    return smiteAmp * 49.7;
   },
   castTime: 1500,
   effect: [advanceTime, damage, atonement],
@@ -278,10 +278,17 @@ export const MindBlast: Spell = {
   icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
   cost: createManaCost(3),
+  cooldown: (state) => {
+    const hastePerc = getHastePerc(state.player);
+    const hasImprovedMindBlast = hasAura(state, "Improved Mind Blast");
+    const baseCast = 15_000 - (hasImprovedMindBlast ? 6000 : 0);
+
+    return baseCast / hastePerc;
+  },
   damage: 74.42,
   absorb: 300,
   castTime: 1500,
-  effect: [advanceTime, damage, absorb, atonement],
+  effect: [cooldown, advanceTime, damage, absorb, atonement],
 };
 
 export const Mindgames: Spell = {

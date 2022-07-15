@@ -82,3 +82,13 @@ export const MaliciousScission: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const ImprovedMindBlast: Item = {
+  id: 319899,
+  icon: "spell_shadow_unholyfrenzy",
+  type: ItemType.Talent,
+  name: "Improved Mind Blast",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};

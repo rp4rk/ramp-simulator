@@ -9,11 +9,13 @@ export const cooldown: StateSpellReducer = (state, spell): SimState => {
 
   // Advance time if needed
   const lastCastRefreshTime = state.cooldowns.get(spell.name) || 0;
-  const shouldTimeTravel = lastCastRefreshTime > state.time;
-  const newTime = shouldTimeTravel ? lastCastRefreshTime : state.time;
+  const shouldTimeTravel = lastCastRefreshTime >= state.time;
+  const castTime = "channel" in spell ? 0 : spell.castTime || 0;
+  const newTime = shouldTimeTravel ? lastCastRefreshTime + castTime : state.time;
 
   // Calculate cooldown
-  const initialCooldown = typeof spell.cooldown === "function" ? spell.cooldown(state) : spell.cooldown;
+  const initialCooldown =
+    typeof spell.cooldown === "function" ? spell.cooldown(state) : spell.cooldown;
 
   state.cooldowns.set(spell.name, state.time + initialCooldown);
 
