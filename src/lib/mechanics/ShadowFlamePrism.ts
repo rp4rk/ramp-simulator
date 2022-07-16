@@ -16,6 +16,11 @@ export const shadowFlamePrism: StateSpellReducer = (state): SimState => {
   }
 
   const extendedBuffState = extendAura(state, "Mindbender", SHADOWFLAME_PRISM_EXTENSION_MS);
+  const extendedPupperMaster = extendAura(
+    extendedBuffState,
+    "Puppet Master",
+    SHADOWFLAME_PRISM_EXTENSION_MS
+  );
 
-  return atonement(damage(extendedBuffState, ShadowFlamePrism), ShadowFlamePrism);
+  return atonement(damage(extendedPupperMaster, ShadowFlamePrism), ShadowFlamePrism);
 };

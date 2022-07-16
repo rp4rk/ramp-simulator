@@ -1,6 +1,7 @@
 import { hasAura } from "../buff";
 import { advanceTime, applyAura, atonement, damage, executeDoT } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
+import { PuppetMaster } from "../mechanics/PuppetMaster";
 
 export const Shadowfiend: Spell = {
   category: SpellCategory.Cooldown,
@@ -24,5 +25,6 @@ export const Shadowfiend: Spell = {
     atonement,
     executeDoT,
     advanceTime,
+    PuppetMaster,
   ],
 };

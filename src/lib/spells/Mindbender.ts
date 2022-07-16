@@ -1,3 +1,4 @@
+import { PuppetMaster } from "lib/mechanics/PuppetMaster";
 import { hasAura } from "../buff";
 import { advanceTime, applyAura, atonement, damage, executeDoT } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
@@ -24,5 +25,6 @@ export const Mindbender: Spell = {
     atonement,
     executeDoT,
     advanceTime,
+    PuppetMaster,
   ],
 };

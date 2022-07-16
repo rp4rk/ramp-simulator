@@ -152,3 +152,13 @@ export const Wickedness: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const PuppetMaster: Item = {
+  id: 377387,
+  icon: "ability_rogue_masterofsubtlety",
+  type: ItemType.Talent,
+  name: "Puppet Master Talent",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
