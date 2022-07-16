@@ -112,3 +112,13 @@ export const EmbraceShadow: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const ShadowFlamePrism: Item = {
+  id: 373427,
+  icon: "inv_jewelcrafting_shadowsongamethyst_02",
+  type: ItemType.Talent,
+  name: "Shadowflame Prism",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};

@@ -15,6 +15,7 @@ import {
 import { getHastePerc } from "./player";
 import { Channel, SimState, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost, MANA_COST_TYPE } from "./mechanics/mana";
+import { shadowFlamePrism } from "./mechanics/ShadowFlamePrism";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -82,10 +83,7 @@ export const Shadowfiend: Spell = {
         duration: 15_000,
         applied: state.time,
         expires: state.time + 15_000,
-        interval: (state) =>
-          hasAura(state, "Rabid Shadows")
-            ? 1150 / getHastePerc(state.player)
-            : 1500 / getHastePerc(state.player),
+        interval: (state) => (hasAura(state, "Rabid Shadows") ? 1150 : 1500),
         ticks: 10,
         coefficient: 46.2,
       }),
@@ -110,10 +108,7 @@ export const Mindbender: Spell = {
         duration: 12_000,
         applied: state.time,
         expires: state.time + 12_000,
-        interval: (state) =>
-          hasAura(state, "Rabid Shadows")
-            ? 1150 / getHastePerc(state.player)
-            : 1500 / getHastePerc(state.player),
+        interval: (state) => (hasAura(state, "Rabid Shadows") ? 1500 / 1.1 : 1500),
         ticks: 10,
         coefficient: 33.88,
       }),
@@ -227,6 +222,7 @@ export const ShadowCovenant: Spell = {
     (state) => {
       const hasEmbraceShadow = hasAura(state, "Embrace Shadow");
       const EMBRACE_SHADOW_INCREASE = 4000;
+
       return applyAura(state, {
         name: "Shadow Covenant",
         duration: hasEmbraceShadow ? 7000 + EMBRACE_SHADOW_INCREASE : 7000,
@@ -294,7 +290,7 @@ export const MindBlast: Spell = {
   damage: 74.42,
   absorb: 300,
   castTime: 1500,
-  effect: [cooldown, advanceTime, damage, absorb, atonement],
+  effect: [cooldown, advanceTime, damage, absorb, shadowFlamePrism, atonement],
 };
 
 export const Mindgames: Spell = {
@@ -556,4 +552,25 @@ export const LightsWrath: Spell = {
   },
   castTime: 2500,
   effect: [advanceTime, damage, atonement],
+};
+
+export const ShadowFlamePrism: Spell = {
+  category: SpellCategory.Ignored,
+  id: 373427,
+  uncastable: true,
+  icon: "inv_jewelcrafting_shadowsongamethyst_02",
+  name: "Shadowflame Prism",
+  damage: 0.442 * 190,
+  offGcd: true,
+  effect: [damage, atonement],
+};
+
+export const ShadowWordDeath: Spell = {
+  category: SpellCategory.Damage,
+  id: 32379,
+  icon: "spell_shadow_demonicfortitude",
+  name: "Shadow Word: Death",
+  cost: createManaCost(0.5),
+  damage: 85,
+  effect: [cooldown, damage, shadowFlamePrism, advanceTime],
 };
