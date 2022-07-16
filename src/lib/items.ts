@@ -122,3 +122,23 @@ export const ShadowFlamePrism: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const Indemity: Item = {
+  id: 373049,
+  icon: "spell_holy_divineprotection",
+  type: ItemType.Talent,
+  name: "Indemnity",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const Solatium: Item = {
+  id: 373050,
+  icon: "spell_shadow_twistedfaith",
+  type: ItemType.Talent,
+  name: "Solatium",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};

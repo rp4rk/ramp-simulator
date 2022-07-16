@@ -31,7 +31,7 @@ export const QuickFillList: FC<QuickFillListProps> = ({ spells, selected, ...res
             {spell.metadata && (
               <ul className="space-x-1">
                 {spell.metadata.map((metadata) => (
-                  <Tag>{metadata}</Tag>
+                  <Tag key={`${metadata}+${spell.id}`}>{metadata}</Tag>
                 ))}
               </ul>
             )}

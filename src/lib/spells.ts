@@ -13,7 +13,7 @@ import {
   channel,
 } from "./mechanics";
 import { getHastePerc } from "./player";
-import { Channel, SimState, Spell, SpellCategory, StatBuffType } from "./types";
+import { Channel, SimState, Spell, SpellCategory, StatBuffType, StateSpellReducer } from "./types";
 import { createManaCost, MANA_COST_TYPE } from "./mechanics/mana";
 import { shadowFlamePrism } from "./mechanics/ShadowFlamePrism";
 
@@ -347,16 +347,18 @@ export const PowerWordRadiance: Spell = {
 };
 
 const ATONEMENT_BASE_DURATION = 15000;
-const applyAtonement = (state: SimState) =>
+const applyAtonement: StateSpellReducer = (state, spell) =>
   applyAura(state, {
     name: "Atonement",
     applied: state.time,
     duration: (state) => {
-      const hasClarityOfMind = hasAura(state, "Clarity of Mind");
-      const hasRaptureActive = hasAura(state, "Rapture");
-      const bonusDuration = hasClarityOfMind && hasRaptureActive ? 6000 : 0;
+      const hasSolatium = hasAura(state, "Solatium");
+      const hasIndemnity = hasAura(state, "Indemnity");
 
-      return ATONEMENT_BASE_DURATION + bonusDuration;
+      const pwsBonus = spell.name === "Power Word: Shield" && hasIndemnity ? 2000 : 0;
+      const smBonus = spell.name === "Shadow Mend" && hasSolatium ? 2000 : 0;
+
+      return ATONEMENT_BASE_DURATION + pwsBonus + smBonus;
     },
   });
 
@@ -450,17 +452,7 @@ export const Shadowmend: Spell = {
   },
   healing: 320,
   castTime: 1500,
-  effect: [
-    advanceTime,
-    healing,
-    (state) =>
-      applyAura(state, {
-        name: "Atonement",
-        applied: state.time,
-        duration: 15000,
-        expires: state.time + 15000,
-      }),
-  ],
+  effect: [advanceTime, healing, applyAtonement],
 };
 
 export const ScrawledWordOfRecall: Spell = {
