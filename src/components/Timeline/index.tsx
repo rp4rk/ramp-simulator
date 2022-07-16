@@ -1,7 +1,7 @@
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "types";
 import { Spell } from "lib/types";
-import { Spells } from "lib";
+import Spells from "lib/spells";
 import { TimelineContainer } from "./styled";
 import { SpellList } from "components/SpellList";
 import { RampSpell } from "context/simulations";

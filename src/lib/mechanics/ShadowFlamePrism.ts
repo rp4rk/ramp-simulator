@@ -1,7 +1,7 @@
 import { StateSpellReducer, SimState } from "../types";
 import { damage } from "./damage";
 import { atonement } from "./atonement";
-import { ShadowFlamePrism } from "lib/spells";
+import { ShadowFlamePrism } from "lib/spells/ShadowFlamePrism";
 import { hasAura } from "../buff";
 import { extendAura } from "./aura";
 

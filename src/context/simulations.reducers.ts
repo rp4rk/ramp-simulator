@@ -3,7 +3,7 @@ import { Item } from "lib/types";
 import { RampSpell, SimulationStates } from "./simulations";
 import { SimulationStatesAction } from "./simulations.actions";
 
-import * as spellMap from "lib/spells";
+import spellMap from "lib/spells";
 import * as itemMap from "lib/items";
 import { v4 } from "uuid";
 

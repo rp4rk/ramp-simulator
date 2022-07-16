@@ -1,7 +1,7 @@
 import { createPlayer } from "lib";
 import { SwiftPenitence } from "lib/items";
 import { applyAura } from "lib/mechanics";
-import { PowerWordShield } from "lib/spells";
+import { PowerWordShield } from "lib/spells/PowerWordShield";
 import { SimState } from "lib/types";
 import { SimulationConfiguration } from "./simulations";
 import { getSerializableConfiguration } from "./simulations.selectors";
