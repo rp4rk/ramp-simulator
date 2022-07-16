@@ -1,6 +1,7 @@
 import { advanceTime, atonement, damage, healing } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
+import { Wickedness } from "../mechanics/Wickedness";
 
 export const Halo: Spell = {
   category: SpellCategory.Cooldown,
@@ -11,5 +12,5 @@ export const Halo: Spell = {
   damage: 96.82,
   healing: 115 * (6 + 5.414),
   castTime: 1500,
-  effect: [advanceTime, healing, damage, atonement],
+  effect: [advanceTime, healing, damage, atonement, Wickedness],
 };

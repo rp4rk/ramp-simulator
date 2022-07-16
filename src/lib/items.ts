@@ -142,3 +142,13 @@ export const Solatium: Item = {
   duration: Infinity,
   expires: Infinity,
 };
+
+export const Wickedness: Item = {
+  id: 374358,
+  icon: "spell_priest_divinestar_shadow",
+  type: ItemType.Talent,
+  name: "Wickedness",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
