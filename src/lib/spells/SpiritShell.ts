@@ -1,4 +1,4 @@
-import { applyAura, clarityOfMind } from "../mechanics";
+import { applyAura } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 
@@ -20,6 +20,5 @@ export const SpiritShell: Spell = {
         expires: state.time + duration,
       });
     },
-    clarityOfMind,
   ],
 };

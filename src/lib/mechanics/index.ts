@@ -5,7 +5,6 @@ import { cooldown } from "./cooldown";
 import { damage } from "./damage";
 import { evangelismExtension } from "./evangelism";
 import { channel } from "./channel";
-import { clarityOfMind } from "./clarityOfMind";
 import { advanceTime } from "./time";
 import { healing } from "./healing";
 import { executeDoT, executeHoT } from "./overtime";
@@ -18,7 +17,6 @@ export {
   damage,
   evangelismExtension,
   channel,
-  clarityOfMind,
   advanceTime,
   healing,
   executeDoT,
