@@ -1,11 +1,14 @@
 import { executeDoT, executeHoT } from "./mechanics";
 import { createPlayer } from "./player";
 import { CalculatedBuff, SimState, Spell, SpellQueue } from "./types";
-import { ascendedEruption } from "./mechanics/ascendedEruption";
 import { applyStats } from "./mechanics/applyStats";
 import { mana } from "./mechanics/mana";
 
-type SpellQueueIterator = (initialState: SimState, queue: SpellQueue, buffs?: CalculatedBuff[]) => SimState;
+type SpellQueueIterator = (
+  initialState: SimState,
+  queue: SpellQueue,
+  buffs?: CalculatedBuff[]
+) => SimState;
 
 /**
  * Creates the default player statistics
@@ -15,7 +18,10 @@ const defaultPlayer = () => createPlayer(1, 33 * 40, 35 * 25, 35 * 10, 202);
 /**
  * Creates the initial state for the simulation
  */
-export const createInitialState = (player = defaultPlayer(), overrides: Partial<SimState> = {}): SimState => ({
+export const createInitialState = (
+  player = defaultPlayer(),
+  overrides: Partial<SimState> = {}
+): SimState => ({
   healing: 0,
   damage: 0,
   absorb: 0,
@@ -31,7 +37,7 @@ export const createInitialState = (player = defaultPlayer(), overrides: Partial<
  * Handles the evaluation of top-level effects created by the priority list
  */
 function reduceState(state: SimState, spell: Spell): SimState {
-  const effects = [applyStats, executeDoT, executeHoT, ...(spell.effect || []), mana, ascendedEruption];
+  const effects = [applyStats, executeDoT, executeHoT, ...(spell.effect || []), mana];
 
   const projectedState =
     effects.reduce((acc, curr) => {

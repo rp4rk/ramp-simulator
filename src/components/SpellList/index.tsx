@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { SpellListContainer } from "./styled";
 
-import { Spells } from "lib";
+import Spells from "lib/spells";
 import { Spell as SpellType } from "lib/types";
 import { DragSpell, SwappableSpell } from "components/Spell";
 import { RampSpell } from "context/simulations";
@@ -18,7 +18,9 @@ type SpellProps = {
 };
 
 const EXCLUDED_SPELLS = ["Ascended Eruption"];
-const SPELL_LIST_DEFAULTS = Object.values(Spells).filter((spell) => !EXCLUDED_SPELLS.includes(spell.name));
+const SPELL_LIST_DEFAULTS = Object.values(Spells).filter(
+  (spell) => !EXCLUDED_SPELLS.includes(spell.name)
+);
 
 const swap = (i: number, j: number, a: any[]) => {
   const swappingItem = a[i];

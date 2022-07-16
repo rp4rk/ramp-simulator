@@ -3,30 +3,10 @@
  */
 import { Item, ItemType } from "./types";
 
-export const ClarityOfMind: Item = {
-  id: 336067,
-  icon: "spell_holy_spiritualguidence",
-  type: ItemType.Legendary,
-  name: "Clarity of Mind",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const ThePenitentOne: Item = {
-  id: 336011,
-  icon: "spell_holy_penance",
-  type: ItemType.Legendary,
-  name: "The Penitent One",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
 export const ShiningRadiance: Item = {
   id: 1445240,
   icon: "ability_priest_spiritoftheredeemer",
-  type: ItemType.Conduit,
+  type: ItemType.Talent,
   name: "Shining Radiance",
   applied: 0,
   duration: Infinity,
@@ -36,7 +16,7 @@ export const ShiningRadiance: Item = {
 export const SwiftPenitence: Item = {
   id: 337891,
   icon: "spell_holy_purify",
-  type: ItemType.Conduit,
+  type: ItemType.Talent,
   name: "Swift Penitence",
   applied: 0,
   duration: Infinity,
@@ -46,7 +26,7 @@ export const SwiftPenitence: Item = {
 export const RabidShadows: Item = {
   id: 237524,
   icon: "spell_deathknight_gnaw_ghoul",
-  type: ItemType.Conduit,
+  type: ItemType.Talent,
   name: "Rabid Shadows",
   applied: 0,
   duration: Infinity,
@@ -56,38 +36,8 @@ export const RabidShadows: Item = {
 export const Exaltation: Item = {
   id: 135977,
   icon: "spell_holy_spiritualguidence",
-  type: ItemType.Conduit,
+  type: ItemType.Talent,
   name: "Exaltation",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const CourageousAscension: Item = {
-  id: 181974,
-  icon: "spell_animabastion_wave",
-  type: ItemType.Conduit,
-  name: "Courageous Ascension",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const ShatteredPerceptions: Item = {
-  id: 3528308,
-  icon: "spell_animarevendreth_debuff",
-  type: ItemType.Conduit,
-  name: "Shattered Perceptions",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const Tier4: Item = {
-  id: 363494,
-  icon: "ability_priest_innerlightandshadow",
-  type: ItemType.Item,
-  name: "Til' Dawn",
   applied: 0,
   duration: Infinity,
   expires: Infinity,
@@ -96,38 +46,8 @@ export const Tier4: Item = {
 export const CrystallineReflection: Item = {
   id: 336507,
   icon: "ability_priest_reflectiveshield",
-  type: ItemType.Legendary,
+  type: ItemType.Talent,
   name: "Crystalline Reflection",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const PallidCommand: Item = {
-  id: 356390,
-  icon: "ability_maldraxxus_priest",
-  type: ItemType.Legendary,
-  name: "Pallid Command",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const FesteringTransfusion: Item = {
-  id: 337979,
-  icon: "spell_animamaldraxxus_debuff",
-  type: ItemType.Conduit,
-  name: "Festering Transfusion",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const ShadowWordManipulation: Item = {
-  id: 357028,
-  icon: "ability_revendreth_priest",
-  type: ItemType.Legendary,
-  name: "Shadow Word: Manipulation",
   applied: 0,
   duration: Infinity,
   expires: Infinity,
@@ -153,21 +73,91 @@ export const ShieldDiscipline: Item = {
   expires: Infinity,
 };
 
-export const CombatMeditation: Item = {
-  id: 328266,
-  icon: "spell_animabastion_buff",
+export const MaliciousScission: Item = {
+  id: 372969,
+  icon: "ability_demonhunter_darkness",
   type: ItemType.Talent,
-  name: "Combat Meditation",
+  name: "Malicious Scission",
   applied: 0,
   duration: Infinity,
   expires: Infinity,
 };
 
-export const AmalgamsSeventhSpine: Item = {
-  id: 215266,
-  icon: "spell_priest_mindspike",
-  type: ItemType.Item,
-  name: "Amalgam's Seventh Spine",
+export const LessonsInHumility: Item = {
+  id: 373052,
+  icon: "ability_paladin_blessedhands",
+  type: ItemType.Talent,
+  name: "Lessons in Humility",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const ImprovedMindBlast: Item = {
+  id: 319899,
+  icon: "spell_shadow_unholyfrenzy",
+  type: ItemType.Talent,
+  name: "Improved Mind Blast",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const EmbraceShadow: Item = {
+  id: 372985,
+  icon: "spell_warlock_demonsoul",
+  type: ItemType.Talent,
+  name: "Embrace Shadow",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const ShadowFlamePrism: Item = {
+  id: 373427,
+  icon: "inv_jewelcrafting_shadowsongamethyst_02",
+  type: ItemType.Talent,
+  name: "Shadowflame Prism",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const Indemity: Item = {
+  id: 373049,
+  icon: "spell_holy_divineprotection",
+  type: ItemType.Talent,
+  name: "Indemnity",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const Solatium: Item = {
+  id: 373050,
+  icon: "spell_shadow_twistedfaith",
+  type: ItemType.Talent,
+  name: "Solatium",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const Wickedness: Item = {
+  id: 374358,
+  icon: "spell_priest_divinestar_shadow",
+  type: ItemType.Talent,
+  name: "Wickedness",
+  applied: 0,
+  duration: Infinity,
+  expires: Infinity,
+};
+
+export const PuppetMaster: Item = {
+  id: 377387,
+  icon: "ability_rogue_masterofsubtlety",
+  type: ItemType.Talent,
+  name: "Puppet Master Talent",
   applied: 0,
   duration: Infinity,
   expires: Infinity,

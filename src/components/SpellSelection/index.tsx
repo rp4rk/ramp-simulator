@@ -1,6 +1,7 @@
 import CopyToClipboard from "react-copy-to-clipboard";
 import { DragSpell } from "components/Spell";
-import { Spells } from "lib";
+import Spells from "lib/spells";
+
 import { Spell as SpellType, SpellCategory } from "lib/types";
 import { Button } from "components/Button";
 import React, { useCallback, useContext } from "react";

@@ -1,7 +1,7 @@
 import { Card } from "components/Card";
 import { FC, memo, useCallback, useContext, useEffect, useState } from "react";
 import { useKey, useKeys } from "rooks";
-import { Spells } from "lib";
+import Spells from "lib/spells";
 import { QuickFillSearch } from "./QuickFillSearch";
 import { Channel, Spell } from "lib/types";
 import Fuse from "fuse.js";
