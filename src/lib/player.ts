@@ -2,10 +2,10 @@ import { Player, StatBuffType } from "./types";
 
 type getStat = (p: Player) => number;
 
-const MASTERY_COEFFICIENT = 35;
-const HASTE_COEFFICIENT = 33;
-const CRIT_COEFFICIENT = 35;
-const VERS_COEFFICIENT = 40;
+const MASTERY_COEFFICIENT = 180;
+const HASTE_COEFFICIENT = 170;
+const CRIT_COEFFICIENT = 180;
+const VERS_COEFFICIENT = 205;
 
 const DIMINISHING_RETURNS = [
   [30, 0],
