@@ -31,6 +31,7 @@ const createMockSimState = (overrides: Partial<SimState> = {}): SimState => {
     player: createPlayer(0, 0, 0, 0, 0),
     cooldowns: new Map(),
     buffs: new Map(),
+    talents: {},
     ...overrides,
   };
 };

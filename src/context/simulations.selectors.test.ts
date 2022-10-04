@@ -7,7 +7,9 @@ import { SimulationConfiguration } from "./simulations";
 import { getSerializableConfiguration } from "./simulations.selectors";
 
 // Create a simulation configuration for testing
-const createSimulationConfiguration = (overrides: Partial<SimulationConfiguration> = {}): SimulationConfiguration => ({
+const createSimulationConfiguration = (
+  overrides: Partial<SimulationConfiguration> = {}
+): SimulationConfiguration => ({
   rampSpells: [],
   items: [],
   state: {
@@ -19,6 +21,7 @@ const createSimulationConfiguration = (overrides: Partial<SimulationConfiguratio
     time: 0,
     buffs: new Map(),
     cooldowns: new Map(),
+    talents: {},
   },
   ...overrides,
 });
@@ -60,6 +63,7 @@ describe("getSerializableSimulationState", () => {
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,
+      talents: {},
       buffs: new Map(),
     };
 
@@ -86,6 +90,7 @@ describe("getSerializableSimulationState", () => {
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,
+      talents: {},
       buffs: new Map(),
     };
 
@@ -106,6 +111,8 @@ describe("getSerializableSimulationState", () => {
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.simState.buffs).toEqual([["Atonement", [atonementTestBuff, atonementTestBuff]]]);
+    expect(serializableState.simState.buffs).toEqual([
+      ["Atonement", [atonementTestBuff, atonementTestBuff]],
+    ]);
   });
 });

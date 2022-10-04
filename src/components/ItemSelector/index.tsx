@@ -6,7 +6,6 @@ import { FC, useCallback } from "react";
 const LEGENDARIES = Object.values(Items).filter((item: Item) => item.type === ItemType.Legendary);
 const CONDUITS = Object.values(Items).filter((item: Item) => item.type === ItemType.Conduit);
 const TIERS = Object.values(Items).filter((item: Item) => item.type === ItemType.Item);
-const TALENTS = Object.values(Items).filter((item: Item) => item.type === ItemType.Talent);
 
 type ItemSelectorProps = {
   items: Item[];
@@ -56,17 +55,6 @@ export const ItemSelector: FC<ItemSelectorProps> = ({ items, onItemAdd, onItemRe
       <div className="sm:grow">
         <h4 className="text-lg text-gray-600 font-semibold">Items</h4>
         {TIERS.map((tier) => (
-          <Spell
-            key={tier.id}
-            spell={tier}
-            onClick={(spell) => toggleItems(spell)}
-            toggled={itemExists(items, tier.id)}
-          />
-        ))}
-      </div>
-      <div className="sm:grow">
-        <h4 className="text-lg text-gray-600 font-semibold">Talents</h4>
-        {TALENTS.map((tier) => (
           <Spell
             key={tier.id}
             spell={tier}

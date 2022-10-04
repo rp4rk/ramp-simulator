@@ -93,71 +93,11 @@ export const Tier4: Item = {
   expires: Infinity,
 };
 
-export const CrystallineReflection: Item = {
-  id: 336507,
-  icon: "ability_priest_reflectiveshield",
-  type: ItemType.Legendary,
-  name: "Crystalline Reflection",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const PallidCommand: Item = {
-  id: 356390,
-  icon: "ability_maldraxxus_priest",
-  type: ItemType.Legendary,
-  name: "Pallid Command",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const FesteringTransfusion: Item = {
-  id: 337979,
-  icon: "spell_animamaldraxxus_debuff",
-  type: ItemType.Conduit,
-  name: "Festering Transfusion",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
 export const ShadowWordManipulation: Item = {
   id: 357028,
   icon: "ability_revendreth_priest",
   type: ItemType.Legendary,
   name: "Shadow Word: Manipulation",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const Castigation: Item = {
-  id: 193134,
-  icon: "spell_holy_searinglightpriest",
-  type: ItemType.Talent,
-  name: "Castigation",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const ShieldDiscipline: Item = {
-  id: 47755,
-  icon: "spell_holy_divineprotection",
-  type: ItemType.Talent,
-  name: "Shield Discipline",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};
-
-export const CombatMeditation: Item = {
-  id: 328266,
-  icon: "spell_animabastion_buff",
-  type: ItemType.Talent,
-  name: "Combat Meditation",
   applied: 0,
   duration: Infinity,
   expires: Infinity,

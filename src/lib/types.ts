@@ -11,7 +11,6 @@ export enum ItemType {
   Legendary = "Legendary",
   Conduit = "Conduit",
   Item = "Item",
-  Talent = "Talent",
 }
 
 export interface Item extends Buff {
@@ -27,9 +26,6 @@ export enum SpellCategory {
   Applicator = "Applicator",
   Damage = "Damage",
   Cooldown = "Cooldown",
-  Kyrian = "Kyrian",
-  Venthyr = "Venthyr",
-  Necrolord = "Necrolord",
   Ignored = "Ignored",
 }
 
@@ -132,4 +128,5 @@ export interface SimState {
   damage: number;
   buffs: Map<string, (CalculatedBuff | OverTime | HoT)[]>;
   cooldowns: Map<string, number>;
+  talents: { [key: number]: { talentId: number; points: number } };
 }
