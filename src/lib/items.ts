@@ -102,13 +102,3 @@ export const ShadowWordManipulation: Item = {
   duration: Infinity,
   expires: Infinity,
 };
-
-export const AmalgamsSeventhSpine: Item = {
-  id: 215266,
-  icon: "spell_priest_mindspike",
-  type: ItemType.Item,
-  name: "Amalgam's Seventh Spine",
-  applied: 0,
-  duration: Infinity,
-  expires: Infinity,
-};

@@ -12,8 +12,8 @@ import {
   channel,
 } from "./mechanics";
 import { getHastePerc } from "./player";
-import { Channel, SimState, Spell, SpellCategory, StatBuffType } from "./types";
-import { createManaCost, MANA_COST_TYPE } from "./mechanics/mana";
+import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
+import { createManaCost } from "./mechanics/mana";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -339,95 +339,6 @@ export const PowerWordRadiance: Spell = {
   ],
 };
 
-const ATONEMENT_BASE_DURATION = 15000;
-const applyAtonement = (state: SimState) =>
-  applyAura(state, {
-    name: "Atonement",
-    applied: state.time,
-    duration: (state) => {
-      const hasClarityOfMind = hasAura(state, "Clarity of Mind");
-      const hasRaptureActive = hasAura(state, "Rapture");
-      const bonusDuration = hasClarityOfMind && hasRaptureActive ? 6000 : 0;
-
-      return ATONEMENT_BASE_DURATION + bonusDuration;
-    },
-  });
-
-const RAPTURE_COEFFICIENT = 2;
-const EXALTATION_COEFFICIENT = RAPTURE_COEFFICIENT * (1 + 0.115);
-const calculateShieldAbsorb = (state: SimState) => {
-  const hasRaptureActive = hasAura(state, "Rapture");
-  const hasExaltation = hasAura(state, "Exaltation");
-
-  const raptureBonus = hasExaltation ? 1 + EXALTATION_COEFFICIENT : 1 + RAPTURE_COEFFICIENT;
-
-  const shieldCoefficient = 165.6 * (hasRaptureActive ? raptureBonus : 1);
-
-  return shieldCoefficient;
-};
-
-const calculateCrystallineReflection = (state: SimState) => {
-  const hasCrystallineReflection = hasAura(state, "Crystalline Reflection");
-
-  return hasCrystallineReflection ? 42 : 0;
-};
-
-const calculateCrystallineReflectionDamage = (state: SimState) => {
-  const hasCrystallineReflection = hasAura(state, "Crystalline Reflection");
-  const shieldAbsorbValue = calculateShieldAbsorb(state);
-
-  return shieldAbsorbValue * (hasCrystallineReflection ? 0.2 : 0);
-};
-
-export const PowerWordShield: Spell = {
-  category: SpellCategory.Applicator,
-  id: 17,
-  icon: "spell_holy_powerwordshield",
-  metadata: ["Applicator"],
-  cost: (state) => {
-    const hasShieldDiscipline = hasAura(state, "Shield Discipline");
-    const hasAmalgams = hasAura(state, "Amalgam's Seventh Spine");
-    const sdDiscount = hasShieldDiscipline ? 0.5 : 0;
-    const amDiscount = hasAmalgams ? 263 : 0; // https://ptr.wowhead.com/spell=215266/fragile-echoes @ 272
-    const initialCost = createManaCost(3.1 - sdDiscount)(state) - amDiscount;
-
-    return createManaCost(initialCost, MANA_COST_TYPE.ABSOLUTE)(state);
-  },
-  name: "Power Word: Shield",
-  absorb: calculateShieldAbsorb,
-  healing: calculateCrystallineReflection,
-  damage: calculateCrystallineReflectionDamage,
-  effect: [absorb, healing, damage, applyAtonement, advanceTime],
-};
-
-export const Rapture: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 47536,
-  icon: "spell_holy_rapture",
-  name: "Rapture",
-  cost: createManaCost(3.1),
-  absorb: calculateShieldAbsorb,
-  healing: calculateCrystallineReflection,
-  damage: calculateCrystallineReflectionDamage,
-  effect: [
-    (state) =>
-      applyAura(state, {
-        name: "Rapture",
-        applied: state.time,
-        duration: (state) => {
-          const hasExaltation = hasAura(state, "Exaltation");
-
-          return 8000 + (hasExaltation ? 1000 : 0);
-        },
-      }),
-    healing,
-    damage,
-    absorb,
-    applyAtonement,
-    advanceTime,
-  ],
-};
-
 export const PowerInfusion: Spell = {
   category: SpellCategory.Cooldown,
   id: 10060,
@@ -482,3 +393,6 @@ export const Innervate: Spell = {
       }),
   ],
 };
+
+export { Rapture } from "./spells/Rapture";
+export { PowerWordShield } from "./spells/PowerWordShield";
