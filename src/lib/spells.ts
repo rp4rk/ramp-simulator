@@ -14,6 +14,7 @@ import {
 import { getHastePerc } from "./player";
 import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
+import { Manipulation } from "./talents/Manipulation";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -160,7 +161,7 @@ export const Penance: Channel = {
   },
   healing: 375,
   castTime: 2000,
-  effect: [cooldown, channel([damage, atonement])],
+  effect: [cooldown, Manipulation, channel([damage, atonement])],
 };
 
 export const Schism: Spell = {
@@ -240,51 +241,6 @@ export const MindBlast: Spell = {
   absorb: 300,
   castTime: 1500,
   effect: [advanceTime, damage, absorb, atonement],
-};
-
-export const Mindgames: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 323673,
-  icon: "ability_revendreth_priest",
-  name: "Mindgames",
-  absorb: (state) => {
-    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
-
-    return 450 * mgAmp;
-  },
-  healing: (state) => {
-    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
-
-    return 450 * mgAmp;
-  },
-  damage: (state) => {
-    const mgAmp = hasAura(state, "Shattered Perceptions") ? 1.208 : 1;
-
-    return 253.8 * mgAmp;
-  },
-  castTime: 1500,
-  effect: [
-    advanceTime,
-    damage,
-    absorb,
-    healing,
-    atonement,
-    (state) => {
-      const hasShadowWordManipulationEquipped = hasAura(state, "Shadow Word: Manipulation");
-      if (!hasShadowWordManipulationEquipped) return state;
-
-      return applyAura(state, {
-        name: "Shadow Word: Manipulation",
-        duration: 10_000,
-        applied: (state) => state.time + 500,
-        statBuff: {
-          amount: 0.05 * 8,
-          type: StatBuffType.ADDITIVE,
-          stat: "crit",
-        },
-      });
-    },
-  ],
 };
 
 export const PowerWordSolace: Spell = {
@@ -388,3 +344,4 @@ export { PowerWordShield } from "./spells/PowerWordShield";
 export { Renew } from "./spells/Renew";
 export { LightsWrath } from "./spells/LightsWrath";
 export { Smite } from "./spells/Smite";
+export { Mindgames } from "./spells/Mindgames";

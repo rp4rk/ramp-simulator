@@ -2,6 +2,7 @@ import { advanceTime, atonement, damage } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 import { hasAura } from "lib/buff";
+import { Manipulation } from "lib/talents/Manipulation";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -14,5 +15,5 @@ export const Smite: Spell = {
   damage: (state) =>
     hasAura(state, "Wrath Unleashed") ? DAMAGE_COEFFICIENT * 1.4 : DAMAGE_COEFFICIENT,
   castTime: 1500,
-  effect: [advanceTime, damage, atonement],
+  effect: [advanceTime, damage, atonement, Manipulation],
 };
