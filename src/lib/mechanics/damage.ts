@@ -1,6 +1,7 @@
 import { SimState, Spell, OverTime, StateSpellReducer, Channel } from "../types";
 import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
+import { hasTalent } from "lib/talents";
 
 const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender"];
 const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
@@ -31,17 +32,17 @@ export function calculateDamage(
   const isScovActive = hasAura(state, "Shadow Covenant");
   const schismMultiplier = isSchismActive ? 1.25 : 1;
   const scovMultiplier = isScovActive ? 1.25 : 1;
-
   const { player } = state;
+
+  const wrathUnleashedBonus = spell.name === "Light's Wrath" && hasTalent(state, 390781) ? 0.15 : 0;
 
   return (
     (initialDamage / 100) *
     (IGNORED_FOR_SCHISM.includes(spell.name) ? 1 : schismMultiplier) *
     (CONSIDERED_FOR_SCOV[spell.name] ? scovMultiplier : 1) *
     player.spellpower *
-    getCritPerc(player) *
-    getVersPerc(player) *
-    1.03
+    (getCritPerc(player) + wrathUnleashedBonus) *
+    getVersPerc(player)
   );
 }
 

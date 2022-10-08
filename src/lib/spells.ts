@@ -207,17 +207,6 @@ export const ShadowCovenant: Spell = {
   ],
 };
 
-export const Smite: Spell = {
-  category: SpellCategory.Damage,
-  id: 585,
-  icon: "spell_holy_holysmite",
-  cost: createManaCost(0.4),
-  name: "Smite",
-  damage: 49.7,
-  castTime: 1500,
-  effect: [advanceTime, damage, atonement],
-};
-
 export const Halo: Spell = {
   category: SpellCategory.Cooldown,
   id: 120517,
@@ -397,3 +386,5 @@ export const Innervate: Spell = {
 export { Rapture } from "./spells/Rapture";
 export { PowerWordShield } from "./spells/PowerWordShield";
 export { Renew } from "./spells/Renew";
+export { LightsWrath } from "./spells/LightsWrath";
+export { Smite } from "./spells/Smite";
