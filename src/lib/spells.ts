@@ -396,3 +396,4 @@ export const Innervate: Spell = {
 
 export { Rapture } from "./spells/Rapture";
 export { PowerWordShield } from "./spells/PowerWordShield";
+export { Renew } from "./spells/Renew";
