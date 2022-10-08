@@ -45,19 +45,20 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
   const spells = props.simulationConfiguration.rampSpells;
   const items = props.simulationConfiguration.items;
   const player = props.simulationConfiguration.state.player;
+  const talents = props.simulationConfiguration.state.talents;
   useEffect(() => {
     if (spells.length === 0) return;
 
     // Run simulation with existing player template
     if (state.simulations[simId]) {
-      const simResult = QuickSim(createInitialState(player), spells, items);
+      const simResult = QuickSim(createInitialState(player, { talents }), spells, items);
       setSimResult(simResult);
     } else {
       const player = createPlayer(2000, 990, 350, 350, 400);
-      const simResult = QuickSim(createInitialState(player), spells, items);
+      const simResult = QuickSim(createInitialState(player, { talents }), spells, items);
       setSimResult(simResult);
     }
-  }, [player, items, spells, simId, state.simulations]);
+  }, [player, items, spells, simId, state.simulations, talents]);
 
   /**
    * Callbacks for state management
