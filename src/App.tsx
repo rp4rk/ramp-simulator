@@ -41,7 +41,7 @@ function App() {
         })
       );
     } else {
-      const player = createPlayer(2400, 1100, 650, 550, 250);
+      const player = createPlayer(2087, 0, 0, 0, 0);
       const initialSimState = createInitialState(player);
 
       dispatch(

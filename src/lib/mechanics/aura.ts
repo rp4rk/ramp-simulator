@@ -5,14 +5,20 @@ import { SimState, Buff, OverTime, HoT, CalculatedBuff } from "../types";
  *
  * TODO: Remove the third argument here and incorporate it into a data structure
  */
-export const applyAura = (state: SimState, uncalculatedAura: Buff | OverTime | HoT, num: number = 1): SimState => {
+export const applyAura = (
+  state: SimState,
+  uncalculatedAura: Buff | OverTime | HoT,
+  num: number = 1
+): SimState => {
   const auraApplication =
     typeof uncalculatedAura.applied === "function"
       ? uncalculatedAura.applied(state)
       : uncalculatedAura.applied || state.time;
 
   const auraDuration =
-    typeof uncalculatedAura.duration === "function" ? uncalculatedAura.duration(state) : uncalculatedAura.duration;
+    typeof uncalculatedAura.duration === "function"
+      ? uncalculatedAura.duration(state)
+      : uncalculatedAura.duration;
 
   const auraExpiry =
     typeof uncalculatedAura.expires === "function"
@@ -33,7 +39,7 @@ export const applyAura = (state: SimState, uncalculatedAura: Buff | OverTime | H
   const newAuraArr = [...existingAuras, ...newAuras];
 
   // Regular buff handling
-  if (!("interval" in aura)) {
+  if (!("interval" in aura) || "hot" in aura) {
     state.buffs.set(aura.name, newAuraArr);
     return state;
   }

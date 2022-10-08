@@ -40,7 +40,7 @@ export interface Spell {
   healing?: number | Calculated;
   absorb?: number | Calculated;
   cost?: number | Calculated;
-  castTime?: number;
+  castTime?: number | Calculated;
   fixedGcd?: boolean;
   shortGcd?: boolean;
   effect?: StateSpellReducer[];
