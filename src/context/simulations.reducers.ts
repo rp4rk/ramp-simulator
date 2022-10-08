@@ -102,6 +102,7 @@ export const simulationsReducer = (
                 ...simulation.simState,
                 buffs: new Map(simulation.simState.buffs),
                 cooldowns: new Map(simulation.simState.cooldowns),
+                talents: new Map(simulation.simState.talents),
               },
               rampSpells: simulationSpells,
               items: simulationItems,
@@ -116,6 +117,7 @@ export const simulationsReducer = (
             ...simulation.simState,
             buffs: new Map(simulation.simState.buffs),
             cooldowns: new Map(simulation.simState.cooldowns),
+            talents: new Map(simulation.simState.talents),
           },
           rampSpells: simulationSpells,
           items: simulationItems,
@@ -125,6 +127,22 @@ export const simulationsReducer = (
     case "SET_FOCUSED_SIMULATION": {
       return produce(state, (projectedState) => {
         projectedState.focusedSimulation = action.payload.simulation;
+      });
+    }
+    case "SET_SIMULATION_TALENTS": {
+      return produce(state, (projectedState) => {
+        const generalTalents = action.payload.talents.GENERAL?.selectedTalents?.values();
+        const classTalents = action.payload.talents.TREE?.selectedTalents?.values();
+
+        const talentMap = [...(generalTalents || []), ...(classTalents || [])].reduce(
+          (talents, talent) => {
+            talents.set(talent.talentId, talent);
+            return talents;
+          },
+          new Map()
+        );
+
+        projectedState.simulations[action.payload.guid].state.talents = talentMap;
       });
     }
     default:

@@ -128,5 +128,5 @@ export interface SimState {
   damage: number;
   buffs: Map<string, (CalculatedBuff | OverTime | HoT)[]>;
   cooldowns: Map<string, number>;
-  talents: { [key: number]: { talentId: number; points: number } };
+  talents: Map<number, { talentId: number; points: number }>;
 }

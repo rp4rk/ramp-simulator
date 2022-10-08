@@ -34,7 +34,9 @@ const toIdList = (idList: Partial<hasId>[]): number[] => {
 /**
  * Returns the simulation config in a serializable form for storage
  */
-export const getSerializableConfiguration = (simConfig: SimulationConfiguration): SerializedSimulationState => {
+export const getSerializableConfiguration = (
+  simConfig: SimulationConfiguration
+): SerializedSimulationState => {
   const { state, rampSpells, items } = simConfig;
   const spellIdList = toIdList(rampSpells);
 
@@ -43,6 +45,7 @@ export const getSerializableConfiguration = (simConfig: SimulationConfiguration)
       ...state,
       buffs: [...state.buffs.entries()],
       cooldowns: [...state.cooldowns.entries()],
+      talents: [...state.talents.entries()],
     },
     items: items.map(({ id }) => id),
     rampSpells: spellIdList,

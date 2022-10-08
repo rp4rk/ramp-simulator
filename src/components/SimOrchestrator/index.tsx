@@ -14,12 +14,15 @@ import {
   addSimulationItems,
   removeSimulationItems,
   setSimulationSpells,
+  setSimulationTalents,
   updatePlayerStat,
 } from "context/simulations.actions";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { getSerializableConfiguration } from "context/simulations.selectors";
 import lzbase62 from "lzbase62";
 import { setFocusedSimulation } from "../../context/simulations.actions";
+import { TalentWindow } from "components/TalentModal";
+import { TalentSetReturn } from "@focused-will/components";
 
 interface SimOrchestratorProps {
   simId: string;
@@ -32,6 +35,7 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
   const { simId } = props;
   const { state, dispatch } = useContext(SimulationsContext);
   const [showConfiguration, setShowConfiguration] = useState<boolean>(false);
+  const [showTalentModal, setShowTalentModal] = useState<boolean>(false);
   const [simResult, setSimResult] = useState<SimState>();
   const isFocused = state.focusedSimulation === simId;
 
@@ -64,6 +68,18 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
         setSimulationSpells({
           guid: props.simId,
           spells,
+        })
+      );
+    },
+    [props.simId, dispatch]
+  );
+
+  const setTalents = useCallback(
+    (talentResults: TalentSetReturn) => {
+      dispatch(
+        setSimulationTalents({
+          guid: props.simId,
+          talents: talentResults,
         })
       );
     },
@@ -119,10 +135,16 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
 
   return (
     <div>
+      {showTalentModal && (
+        <TalentWindow onSave={setTalents} onClose={() => setShowTalentModal(false)} />
+      )}
       <div className="mb-4">
         <div className="flex justify-between mb-4">
           <h4 className="text-lg text-gray-600 font-semibold mb-2">Ramp Timeline</h4>
           <div className="space-x-2">
+            <Button icon="LightningBoltIcon" onClick={() => setShowTalentModal(true)}>
+              Talents
+            </Button>
             {(isFocused && (
               <Button onClick={unfocusSim}>
                 <img alt="unfocus icon" className="w-5 mr-1 inline-block" src={UnfocusedWill} />{" "}

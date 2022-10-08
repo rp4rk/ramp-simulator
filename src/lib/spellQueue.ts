@@ -30,7 +30,7 @@ export const createInitialState = (
   time: 0,
   player: player,
   cooldowns: new Map(),
-  talents: {},
+  talents: new Map(),
   ...overrides,
 });
 

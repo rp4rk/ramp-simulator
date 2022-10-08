@@ -21,7 +21,7 @@ const createSimulationConfiguration = (
     time: 0,
     buffs: new Map(),
     cooldowns: new Map(),
-    talents: {},
+    talents: new Map(),
   },
   ...overrides,
 });
@@ -63,7 +63,7 @@ describe("getSerializableSimulationState", () => {
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,
-      talents: {},
+      talents: new Map(),
       buffs: new Map(),
     };
 
@@ -90,7 +90,7 @@ describe("getSerializableSimulationState", () => {
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,
-      talents: {},
+      talents: new Map(),
       buffs: new Map(),
     };
 
