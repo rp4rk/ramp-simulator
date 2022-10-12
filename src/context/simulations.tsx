@@ -2,6 +2,9 @@ import { Item, SimState, Spell } from "lib/types";
 import { createContext, FC, useReducer, Dispatch, useMemo } from "react";
 import { simulationsReducer } from "./simulations.reducers";
 import { SimulationStatesAction } from "./simulations.actions";
+import { v4 } from "uuid";
+import { createPlayer } from "lib";
+import { createInitialState } from "../lib/spellQueue";
 
 // RampSpell is a spell that has been placed into a ramp simulation
 export interface RampSpell extends Spell {
@@ -25,8 +28,16 @@ export interface SimulationStates {
   focusedSimulation?: string;
 }
 
+const player = createPlayer(2087, 0, 0, 0, 0);
+const initialSimState = createInitialState(player);
 const initialState: SimulationStates = {
-  simulations: {},
+  simulations: {
+    [v4()]: {
+      state: initialSimState,
+      rampSpells: [],
+      items: [],
+    },
+  },
   focusedSimulation: undefined,
 };
 

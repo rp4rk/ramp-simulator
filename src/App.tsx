@@ -40,18 +40,6 @@ function App() {
           items: simClone.items,
         })
       );
-    } else {
-      const player = createPlayer(2087, 0, 0, 0, 0);
-      const initialSimState = createInitialState(player);
-
-      dispatch(
-        addSimulation({
-          guid: simulationId,
-          sim: initialSimState,
-          rampSpells: [],
-          items: [],
-        })
-      );
     }
   }, [dispatch, primarySim]);
 
@@ -61,13 +49,6 @@ function App() {
 
     return [simEntries, simEntries.length];
   }, [state.simulations]);
-
-  // Creates the initial simulation pane
-  useEffect(() => {
-    if (simCount !== 0) return;
-
-    addSim();
-  }, [simCount, addSim]);
 
   return (
     <>
