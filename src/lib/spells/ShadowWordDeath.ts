@@ -3,8 +3,6 @@ import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 import { hasTalent } from "../talents";
 
-export const RAPTURE_COEFFICIENT = 0.3;
-
 export const ShadowWordDeath: Spell = {
   category: SpellCategory.Damage,
   id: 32379,
