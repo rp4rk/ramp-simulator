@@ -8,7 +8,8 @@ import { SimulationsContext } from "context/simulations";
 import { isSerializedSimulationState } from "context/simulations.selectors";
 import clipboard from "clipboardy";
 import lzbase62 from "lzbase62";
-import { importSimulation } from "context/simulations.actions";
+import { addSimulationSpells, importSimulation } from "context/simulations.actions";
+import { toRampSpell } from "features/QuickFill";
 
 function set<T>(s: string, o: { [index: string]: T[] }, i: T) {
   if (o[s]) {
@@ -76,7 +77,13 @@ export const SpellSelection = React.memo(function () {
             <h5 className="text-md text-gray-600 font-semibold">{key}</h5>
             <div className="bg-gradient-to-b from-gray-100 to-gray-200 p-2 rounded drop-shadow-sm">
               {spells.map((spell) => (
-                <DragSpell key={spell.id + spell.name} spell={spell} />
+                <DragSpell
+                  onClick={(spell) =>
+                    dispatch(addSimulationSpells({ spells: [toRampSpell(spell)] }))
+                  }
+                  key={spell.id + spell.name}
+                  spell={spell}
+                />
               ))}
             </div>
           </div>

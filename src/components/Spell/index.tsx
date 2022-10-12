@@ -31,6 +31,7 @@ export type HoverSpellProps = {
   index?: number;
   swapHandler?: (i: number, j: number) => void;
   deleteHandler?: (idx: number) => void;
+  onClick?: (spell: SpellType | Item) => void;
 };
 
 export interface DragItem {
