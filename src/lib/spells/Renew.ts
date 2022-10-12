@@ -3,6 +3,7 @@ import { createManaCost } from "lib/mechanics/mana";
 import { Spell, SpellCategory } from "../types";
 import { applyAtonement } from "./Atonement";
 import { getHastePerc } from "../player";
+import { TrainOfThought } from "lib/talents/TrainOfThought";
 
 export const Renew: Spell = {
   id: 139,
@@ -25,6 +26,7 @@ export const Renew: Spell = {
       }),
     healing,
     applyAtonement,
+    TrainOfThought,
     executeHoT,
     advanceTime,
   ],
