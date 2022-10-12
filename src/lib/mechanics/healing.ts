@@ -1,6 +1,7 @@
 import { StateSpellReducer, SimState, Spell } from "../types";
 import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
+import { createDivineAegisShield } from "../talents/DivineAegis";
 
 const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
   "Shadow Mend": true,
@@ -28,5 +29,8 @@ export const healing: StateSpellReducer = (state: SimState, spell: Spell): SimSt
     player.spellpower *
     (CONSIDERED_FOR_SCOV[spell.name] ? scovBonus : 1);
 
-  return { ...state, healing: state.healing + calculatedHealing };
+  return createDivineAegisShield(calculatedHealing)(
+    { ...state, healing: state.healing + calculatedHealing },
+    spell
+  );
 };
