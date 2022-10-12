@@ -13,6 +13,7 @@ const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
   "Shadow Mend": true,
   "Unholy Transfusion": true,
   "Unholy Nova": true,
+  "Shadow Word: Death": true,
 };
 
 /**

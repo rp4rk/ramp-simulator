@@ -3,7 +3,8 @@ import { SpellListContainer } from "./styled";
 
 import { Spells } from "lib";
 import { Spell as SpellType } from "lib/types";
-import { DragSpell, SwappableSpell } from "components/Spell";
+import { SwappableSpell } from "components/Spell/SwappableSpell";
+import { DragSpell } from "components/Spell/DragSpell";
 import { RampSpell } from "context/simulations";
 
 type SpellProps = {
@@ -17,8 +18,10 @@ type SpellProps = {
   className?: string;
 };
 
-const EXCLUDED_SPELLS = ["Ascended Eruption"];
-const SPELL_LIST_DEFAULTS = Object.values(Spells).filter((spell) => !EXCLUDED_SPELLS.includes(spell.name));
+const EXCLUDED_SPELLS: string[] = [];
+const SPELL_LIST_DEFAULTS = Object.values(Spells).filter(
+  (spell) => !EXCLUDED_SPELLS.includes(spell.name)
+);
 
 const swap = (i: number, j: number, a: any[]) => {
   const swappingItem = a[i];

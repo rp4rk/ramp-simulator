@@ -18,7 +18,7 @@ const SPELL_LIST = new Fuse(
   }
 );
 
-const toRampSpell = (spell: Channel | Spell): RampSpell => ({
+export const toRampSpell = (spell: Channel | Spell): RampSpell => ({
   ...spell,
   guid: v4(),
 });

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import rfdc from "rfdc";
 
 import { SimOrchestrator } from "components/SimOrchestrator";
@@ -10,9 +10,6 @@ import { Button } from "components/Button";
 import { v4 } from "uuid";
 import { SimulationsContext } from "context/simulations";
 import { deleteSimulation, addSimulation } from "context/simulations.actions";
-import { createPlayer } from "lib";
-import { createInitialState } from "lib/spellQueue";
-
 const clone = rfdc();
 
 function App() {
@@ -40,18 +37,6 @@ function App() {
           items: simClone.items,
         })
       );
-    } else {
-      const player = createPlayer(2087, 0, 0, 0, 0);
-      const initialSimState = createInitialState(player);
-
-      dispatch(
-        addSimulation({
-          guid: simulationId,
-          sim: initialSimState,
-          rampSpells: [],
-          items: [],
-        })
-      );
     }
   }, [dispatch, primarySim]);
 
@@ -61,13 +46,6 @@ function App() {
 
     return [simEntries, simEntries.length];
   }, [state.simulations]);
-
-  // Creates the initial simulation pane
-  useEffect(() => {
-    if (simCount !== 0) return;
-
-    addSim();
-  }, [simCount, addSim]);
 
   return (
     <>
