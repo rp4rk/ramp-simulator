@@ -345,5 +345,6 @@ export { Renew } from "./spells/Renew";
 export { LightsWrath } from "./spells/LightsWrath";
 export { Smite } from "./spells/Smite";
 export { Mindgames } from "./spells/Mindgames";
-export { ShadowWordDeath } from "./spells/ShadowWordDeath"
-export { ShadowWordDeathExecute } from "./spells/ShadowWordDeath"
+export { ShadowWordDeath } from "./spells/ShadowWordDeath";
+export { ShadowWordDeathExecute } from "./spells/ShadowWordDeath";
+export { FlashHeal } from "./spells/FlashHeal";
