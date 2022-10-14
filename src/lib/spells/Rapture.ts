@@ -3,7 +3,7 @@ import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 import { hasTalent } from "../talents";
 import { applyAtonement } from "./Atonement";
-import { calculateShieldAbsorb } from "./PowerWordShield";
+import { calculateShieldAbsorb, PowerWordShield } from "./PowerWordShield";
 
 export const RAPTURE_COEFFICIENT = 0.3;
 
@@ -15,8 +15,10 @@ export const Rapture: Spell = {
   cost: createManaCost(3.1),
   absorb: calculateShieldAbsorb,
   effect: [
-    (state) =>
-      applyAura(state, {
+    (state) => {
+      state.cooldowns.set(PowerWordShield.name, state.time);
+
+      return applyAura(state, {
         name: "Rapture",
         applied: state.time,
         duration: (state) => {
@@ -24,7 +26,8 @@ export const Rapture: Spell = {
 
           return 8000 + (hasExaltation ? 3000 : 0);
         },
-      }),
+      });
+    },
     healing,
     damage,
     absorb,
