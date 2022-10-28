@@ -10,7 +10,6 @@ import {
   evangelismExtension,
   channel,
 } from "./mechanics";
-import { getHastePerc } from "./player";
 import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
 import { Manipulation } from "./talents/Manipulation";
