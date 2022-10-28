@@ -11,7 +11,7 @@ export const Renew: Spell = {
   icon: "spell_holy_renew",
   category: SpellCategory.Applicator,
   metadata: ["Applicator"],
-  cost: createManaCost(1.8),
+  cost: createManaCost(2.7),
   healing: 32,
   effect: [
     (state) =>
