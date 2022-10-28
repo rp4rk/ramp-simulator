@@ -10,10 +10,10 @@ import {
   evangelismExtension,
   channel,
 } from "./mechanics";
-import { getHastePerc } from "./player";
 import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
 import { Manipulation } from "./talents/Manipulation";
+import { InescapableTorment } from "./talents/InescapableTorment";
 
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
@@ -72,7 +72,7 @@ export const Shadowfiend: Spell = {
   id: 34433,
   icon: "spell_shadow_shadowfiend",
   name: "Shadowfiend",
-  damage: 46.2,
+  damage: 44.4,
   effect: [
     (state) =>
       applyAura(state, {
@@ -81,12 +81,9 @@ export const Shadowfiend: Spell = {
         duration: 15_000,
         applied: state.time,
         expires: state.time + 15_000,
-        interval: (state) =>
-          hasAura(state, "Rabid Shadows")
-            ? 1150 / getHastePerc(state.player)
-            : 1500 / getHastePerc(state.player),
-        ticks: 10,
-        coefficient: 46.2,
+        interval: 1500,
+        ticks: 9,
+        coefficient: 44.4,
       }),
     damage,
     atonement,
@@ -100,7 +97,7 @@ export const Mindbender: Spell = {
   id: 123040,
   icon: "spell_shadow_soulleech_3",
   name: "Mindbender",
-  damage: 33.88,
+  damage: 32.6,
   effect: [
     (state) =>
       applyAura(state, {
@@ -109,18 +106,24 @@ export const Mindbender: Spell = {
         duration: 12_000,
         applied: state.time,
         expires: state.time + 12_000,
-        interval: (state) =>
-          hasAura(state, "Rabid Shadows")
-            ? 1150 / getHastePerc(state.player)
-            : 1500 / getHastePerc(state.player),
-        ticks: 10,
-        coefficient: 33.88,
+        interval: 1500,
+        ticks: 7,
+        coefficient: 32.6,
       }),
     damage,
     atonement,
     executeDoT,
     advanceTime,
   ],
+};
+
+export const Skip: Spell = {
+  category: SpellCategory.Applicator,
+  id: -1,
+  icon: "ability_racial_timeismoney",
+  name: "Skip",
+  castTime: 1500,
+  effect: [advanceTime],
 };
 
 export const Evangelism: Spell = {
@@ -238,7 +241,7 @@ export const MindBlast: Spell = {
   cost: createManaCost(2.5),
   damage: () => 78.336 * 1.32,
   castTime: 1500,
-  effect: [advanceTime, damage, atonement],
+  effect: [advanceTime, damage, atonement, InescapableTorment],
 };
 
 export const PowerWordSolace: Spell = {

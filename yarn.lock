@@ -1210,10 +1210,10 @@
     "@floating-ui/dom" "^0.5.3"
     use-isomorphic-layout-effect "^1.1.1"
 
-"@focused-will/components@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.npmjs.org/@focused-will/components/-/components-0.3.2.tgz"
-  integrity sha512-JKAg+NBS387iNnai4Ub+P4E8A7KPya3hrpJUjcHQQ9o54/e3RwfJbjHTmkZtQ/+WEhF067krOy5EU8E7V7+9Vw==
+"@focused-will/components@^0.3.3":
+  version "0.3.3"
+  resolved "https://registry.npmjs.org/@focused-will/components/-/components-0.3.3.tgz"
+  integrity sha512-pDGUjBTfL5WY4/SOLLDQD7vEJURilagZJpAtqpbN7reG1QY8T562Jm3Xx2mPcTFa3jdwB3NMrIbGiPsaiPMnNA==
   dependencies:
     "@radix-ui/react-tooltip" "^1.0.0"
     react-xarrows "^2.0.2"
@@ -2191,7 +2191,7 @@
 
 "@types/react-dom@^18.0.6":
   version "18.0.6"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.6.tgz#36652900024842b74607a17786b6662dd1e103a1"
+  resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.0.6.tgz"
   integrity sha512-/5OFZgfIPSwy+YuIBP/FgJnQnsxhZhjjrnxudMddeblOouIodEQ75X14Rr4wGSG/bknL+Omy9iWlLo1u/9GzAA==
   dependencies:
     "@types/react" "*"
