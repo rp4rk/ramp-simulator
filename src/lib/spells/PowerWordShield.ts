@@ -11,7 +11,7 @@ export const calculateShieldAbsorb = (state: SimState) => {
   const hasRaptureActive = hasAura(state, "Rapture");
   const raptureBonus = 1 + RAPTURE_COEFFICIENT;
 
-  const shieldCoefficient = 280 * (hasRaptureActive ? raptureBonus : 1);
+  const shieldCoefficient = 3.36 * (hasRaptureActive ? raptureBonus : 1);
 
   return shieldCoefficient;
 };

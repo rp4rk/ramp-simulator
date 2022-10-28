@@ -236,11 +236,10 @@ export const MindBlast: Spell = {
   id: 8092,
   icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
-  cost: createManaCost(3),
-  damage: 74.42,
-  absorb: 300,
+  cost: createManaCost(2.5),
+  damage: () => 78.336 * 1.32,
   castTime: 1500,
-  effect: [advanceTime, damage, absorb, atonement],
+  effect: [advanceTime, damage, atonement],
 };
 
 export const PowerWordSolace: Spell = {
