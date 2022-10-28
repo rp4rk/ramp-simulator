@@ -9,6 +9,8 @@ import { clarityOfMind } from "./clarityOfMind";
 import { advanceTime } from "./time";
 import { healing } from "./healing";
 import { executeDoT, executeHoT } from "./overtime";
+import { cast } from "./cast";
+import { extendOvertime, reduceOvertime } from "./extend";
 
 export {
   absorb,
@@ -23,4 +25,7 @@ export {
   healing,
   executeDoT,
   executeHoT,
+  cast,
+  extendOvertime,
+  reduceOvertime,
 };
