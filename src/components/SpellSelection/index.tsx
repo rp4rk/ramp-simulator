@@ -61,21 +61,22 @@ export const SpellSelection = React.memo(function () {
   return (
     <>
       <div className="flex justify-between mb-4">
-        <h4 className="text-lg text-gray-600 font-semibold">Spell Selection</h4>
+        <h4 className="text-lg text-gray-600 font-semibold font-sans">Spell Selection</h4>
         <div className="space-x-2">
-          <Button outline icon="DownloadIcon" onClick={importString}>
+          {/* TODO: Unbreak */}
+          {/* <Button outline icon="DownloadIcon" onClick={importString}>
             Import
-          </Button>
-          <CopyToClipboard text={"No ramp available for Dragonflight right now 😥"}>
+          </Button> */}
+          {/* <CopyToClipboard text={"No ramp available for Dragonflight right now 😥"}>
             <Button icon="ClipboardCopyIcon">Copy Ramp Sequence</Button>
-          </CopyToClipboard>
+          </CopyToClipboard> */}
         </div>
       </div>
-      <div className="flex justify-center space-x-2 ">
+      <div className="flex flex-col">
         {Object.entries(SPELL_CATEGORIES).map(([key, spells]) => (
-          <div key={key}>
-            <h5 className="text-md text-gray-600 font-semibold">{key}</h5>
-            <div className="bg-gradient-to-b from-gray-100 to-gray-200 p-2 rounded drop-shadow-sm">
+          <div key={key} className="mb-4">
+            <h5 className="text-gray-600 font-semibold font-sans">{key}</h5>
+            <div className="border-gray-300 border rounded drop-shadow-sm">
               {spells.map((spell) => (
                 <DragSpell
                   onClick={(spell) =>

@@ -1,6 +1,7 @@
 import logo from "./fw.jpg";
 import discordLogo from "./discord-mark-white.png";
 import { Button } from "components/Button";
+import React from "react";
 
 const FUN_STRINGS = [
   "Attonment Simulator™️",
@@ -15,10 +16,10 @@ const FUN_STRINGS = [
   "Power Word: Barrier Isn't That Good",
 ];
 
-export default function Header() {
+function _Header({ className }: { className?: string }) {
   return (
-    <header className="flex p-6 mb-4 justify-between">
-      <div>
+    <header className={"flex p-6 mb-4 justify-between".concat(` ${className}`)}>
+      <div className="flex items-center">
         <img className="rounded-md inline-block w-14 mr-4" src={logo} alt="Focused Will logo" />
         <div className="inline-block align-middle">
           <h1 className="font-sans font-normal text-gray-500 dark:text-white text-xl tracking-tight">
@@ -41,3 +42,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default React.memo(_Header);

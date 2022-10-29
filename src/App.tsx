@@ -48,25 +48,29 @@ function App() {
   }, [state.simulations]);
 
   return (
-    <>
-      <Header></Header>
-      <Card className=" z-50">
-        <SpellSelection />
-      </Card>
-      {sims.map(([id, config]) => (
-        <Card key={id}>
-          <SimOrchestrator
-            deletionAllowed={simCount > 1}
-            onDelete={deleteSim}
-            simId={id}
-            simulationConfiguration={config}
-          />
+    <div className="grid grid-cols-6 p-6 gap-6">
+      <Header className="col-span-6"></Header>
+      <aside className="col-span-1">
+        <Card className="sticky top-4">
+          <SpellSelection />
+          <Button className="mx-auto block" outline icon="PlusCircleIcon" onClick={addSim}>
+            Add Simulation
+          </Button>
         </Card>
-      ))}
-      <Button className="mx-auto block mb-4" outline icon="PlusCircleIcon" onClick={addSim}>
-        Add Simulation
-      </Button>
-    </>
+      </aside>
+      <main className="col-span-5 overflow-y-scroll">
+        {sims.map(([id, config]) => (
+          <Card key={id}>
+            <SimOrchestrator
+              deletionAllowed={simCount > 1}
+              onDelete={deleteSim}
+              simId={id}
+              simulationConfiguration={config}
+            />
+          </Card>
+        ))}
+      </main>
+    </div>
   );
 }
 
