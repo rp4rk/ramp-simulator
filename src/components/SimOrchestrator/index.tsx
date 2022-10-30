@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback, FC, useContext, memo } from "react";
 import { Stats } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
-import { ItemSelector } from "components/ItemSelector";
-import { Item, SimState, Stats as StatsType } from "lib/types";
+import { SimState, Stats as StatsType } from "lib/types";
 import { createInitialState, QuickSim } from "lib/spellQueue";
 import { createPlayer } from "lib";
 import { Button } from "components/Button";
@@ -11,8 +10,6 @@ import UnfocusedWill from "./unfocused-will.webp";
 
 import { RampSpell, SimulationConfiguration, SimulationsContext } from "context/simulations";
 import {
-  addSimulationItems,
-  removeSimulationItems,
   setSimulationSpells,
   setSimulationTalents,
   updatePlayerStat,
@@ -87,30 +84,6 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
     [props.simId, dispatch]
   );
 
-  const addItem = useCallback(
-    (items: Item[]) => {
-      dispatch(
-        addSimulationItems({
-          guid: props.simId,
-          items,
-        })
-      );
-    },
-    [props.simId, dispatch]
-  );
-
-  const removeItem = useCallback(
-    (items: Item[]) => {
-      dispatch(
-        removeSimulationItems({
-          guid: props.simId,
-          items,
-        })
-      );
-    },
-    [props.simId, dispatch]
-  );
-
   const changeStat = useCallback(
     (stat: keyof StatsType, amount: number) => {
       dispatch(updatePlayerStat({ guid: props.simId, stat, amount }));
@@ -122,6 +95,7 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
     () => dispatch(setFocusedSimulation({ simulation: simId })),
     [dispatch, simId]
   );
+
   const unfocusSim = useCallback(
     () => dispatch(setFocusedSimulation({ simulation: undefined })),
     [dispatch]
@@ -184,13 +158,8 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
         <Timeline setSpells={setSpells} spells={spells} />
       </div>
       {showConfiguration && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="flex gap-4 justify-between">
           <Stats stats={props.simulationConfiguration.state.player} onChange={changeStat} />
-          <ItemSelector
-            items={props.simulationConfiguration.items}
-            onItemAdd={addItem}
-            onItemRemove={removeItem}
-          />
           <SimResults simState={simResult} />
         </div>
       )}
