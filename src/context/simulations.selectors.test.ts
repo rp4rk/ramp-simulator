@@ -1,5 +1,4 @@
 import { createPlayer } from "lib";
-import { ClarityOfMind } from "lib/items";
 import { applyAura } from "lib/mechanics";
 import { PowerWordShield } from "lib/spells";
 import { SimState } from "lib/types";
@@ -11,7 +10,6 @@ const createSimulationConfiguration = (
   overrides: Partial<SimulationConfiguration> = {}
 ): SimulationConfiguration => ({
   rampSpells: [],
-  items: [],
   state: {
     damage: 0,
     absorb: 0,
@@ -40,19 +38,6 @@ describe("getSerializableSimulationState", () => {
     expect(serializableState.rampSpells).toEqual([17]);
   });
 
-  test("correctly serializes items", () => {
-    // given
-    const simulationConfiguration = createSimulationConfiguration({
-      items: [ClarityOfMind],
-    });
-
-    // when
-    const serializableState = getSerializableConfiguration(simulationConfiguration);
-
-    // then
-    expect(serializableState.items).toEqual([336067]);
-  });
-
   test("correctly serializes buffs", () => {
     // given
     const testSimState: SimState = {
@@ -67,7 +52,10 @@ describe("getSerializableSimulationState", () => {
       buffs: new Map(),
     };
 
-    applyAura(testSimState, ClarityOfMind);
+    applyAura(testSimState, {
+      name: "test",
+      duration: 1000,
+    });
 
     const simulationConfiguration = createSimulationConfiguration({
       state: testSimState,
@@ -77,7 +65,17 @@ describe("getSerializableSimulationState", () => {
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.simState.buffs).toEqual([["Clarity of Mind", [ClarityOfMind]]]);
+    expect(serializableState.simState.buffs).toEqual([
+      [
+        "test",
+        [
+          {
+            name: "test",
+            duration: 1000,
+          },
+        ],
+      ],
+    ]);
   });
 
   it("correctly serializes multiple buffs", () => {

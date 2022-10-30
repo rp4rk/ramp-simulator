@@ -1,4 +1,4 @@
-import { Item, SimState, Spell } from "lib/types";
+import { SimState, Spell } from "lib/types";
 import { createContext, FC, useReducer, Dispatch, useMemo } from "react";
 import { simulationsReducer } from "./simulations.reducers";
 import { SimulationStatesAction } from "./simulations.actions";
@@ -16,8 +16,6 @@ export interface SimulationConfiguration {
   state: SimState;
   // The spells used for this simulation, in order
   rampSpells: RampSpell[];
-  // The items used for this simulation
-  items: Item[];
 }
 
 // A mapping of simulations to their respective initial states and configurations
@@ -35,7 +33,6 @@ const initialState: SimulationStates = {
     [v4()]: {
       state: initialSimState,
       rampSpells: [],
-      items: [],
     },
   },
   focusedSimulation: undefined,
