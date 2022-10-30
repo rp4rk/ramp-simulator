@@ -1,14 +1,11 @@
 import produce from "immer";
-import { Item } from "lib/types";
 import { RampSpell, SimulationStates } from "./simulations";
 import { SimulationStatesAction } from "./simulations.actions";
 
 import * as spellMap from "lib/spells";
-import * as itemMap from "lib/items";
 import { v4 } from "uuid";
 
 const spells = Object.values(spellMap);
-const items = Object.values(itemMap);
 
 export const simulationsReducer = (
   state: SimulationStates,
@@ -24,7 +21,6 @@ export const simulationsReducer = (
           [payload.guid]: {
             state: payload.sim,
             rampSpells: payload.rampSpells,
-            items: payload.items,
           },
         };
       });
@@ -53,24 +49,6 @@ export const simulationsReducer = (
         }
       });
     }
-    case "ADD_SIMULATION_ITEMS": {
-      const targetSimulation = state.simulations[action.payload.guid];
-      const newItems: Item[] = [...targetSimulation.items, ...action.payload.items];
-
-      return produce(state, (projectedState) => {
-        projectedState.simulations[action.payload.guid].items = newItems;
-      });
-    }
-    case "REMOVE_SIMULATION_ITEMS": {
-      const targetSimulation = state.simulations[action.payload.guid];
-      const newItems: Item[] = targetSimulation.items.filter((item) =>
-        action.payload.items.find((i) => i.id !== item.id)
-      );
-
-      return produce(state, (projectedState) => {
-        projectedState.simulations[action.payload.guid].items = newItems;
-      });
-    }
     case "UPDATE_PLAYER_STAT": {
       return produce(state, (projectedState) => {
         projectedState.simulations[action.payload.guid].state.player[action.payload.stat] =
@@ -79,9 +57,6 @@ export const simulationsReducer = (
     }
     case "IMPORT_SIMULATION": {
       const { simulation } = action.payload;
-      const simulationItems = simulation.items.map((item) =>
-        items.find((i) => i.id === item)
-      ) as Item[];
       const simulationSpells = simulation.rampSpells.map((spell) => {
         const foundSpell = spells.find((s) => s.id === spell);
         if (!foundSpell) return undefined;
@@ -105,7 +80,6 @@ export const simulationsReducer = (
                 talents: new Map(simulation.simState.talents),
               },
               rampSpells: simulationSpells,
-              items: simulationItems,
             },
           };
 
@@ -120,7 +94,6 @@ export const simulationsReducer = (
             talents: new Map(simulation.simState.talents),
           },
           rampSpells: simulationSpells,
-          items: simulationItems,
         };
       });
     }

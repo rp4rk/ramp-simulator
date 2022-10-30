@@ -1,5 +1,5 @@
 import { Card } from "components/Card";
-import { FC, memo, useCallback, useContext, useEffect, useState } from "react";
+import { FC, memo, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useKey, useKeys } from "rooks";
 import { Spells } from "lib";
 import { QuickFillSearch } from "./QuickFillSearch";
@@ -31,17 +31,17 @@ export const QuickFill: FC<QuickFillProps> = memo((props) => {
   const [search, setSearch] = useState("");
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(0);
-  const [hasCombinator, setHasCombinator] = useState(false);
+  const combinator = useRef(false);
 
   const [results, setResults] = useState<(Spell | Channel)[]>([]);
 
   /**
    * Detect Shift Combinator
    */
-  useKey("ShiftLeft", () => setHasCombinator(true), {
+  useKey("ShiftLeft", () => (combinator.current = true), {
     eventTypes: ["keydown"],
   });
-  useKey("ShiftLeft", () => setHasCombinator(false), {
+  useKey("ShiftLeft", () => (combinator.current = false), {
     eventTypes: ["keyup"],
   });
 
@@ -88,11 +88,11 @@ export const QuickFill: FC<QuickFillProps> = memo((props) => {
         })
       );
 
-      if (!hasCombinator) {
+      if (!combinator.current) {
         setShow(false);
       }
     },
-    [search, hasCombinator, dispatch, results, selected]
+    [search, combinator, dispatch, results, selected]
   );
 
   if (!show) return null;

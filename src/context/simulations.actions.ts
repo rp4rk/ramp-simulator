@@ -1,4 +1,4 @@
-import { SimState, Item, Stats } from "lib/types";
+import { SimState, Stats } from "lib/types";
 import { Action } from "../types";
 import { RampSpell } from "./simulations";
 import { SerializedSimulationState } from "./simulations.selectors";
@@ -9,7 +9,6 @@ interface AddSimulationAction extends Action {
   payload: {
     guid: string;
     sim: SimState;
-    items: Item[];
     rampSpells: RampSpell[];
   };
 }
@@ -57,32 +56,6 @@ export const addSimulationSpells = (
   payload: AddSimulationSpells["payload"]
 ): AddSimulationSpells => ({
   type: "ADD_SIMULATION_SPELLS",
-  payload,
-});
-
-interface AddSimulationItems extends Action {
-  type: "ADD_SIMULATION_ITEMS";
-  payload: {
-    guid: string;
-    items: Item[];
-  };
-}
-export const addSimulationItems = (payload: AddSimulationItems["payload"]): AddSimulationItems => ({
-  type: "ADD_SIMULATION_ITEMS",
-  payload,
-});
-
-interface RemoveSimulationItems extends Action {
-  type: "REMOVE_SIMULATION_ITEMS";
-  payload: {
-    guid: string;
-    items: Item[];
-  };
-}
-export const removeSimulationItems = (
-  payload: RemoveSimulationItems["payload"]
-): RemoveSimulationItems => ({
-  type: "REMOVE_SIMULATION_ITEMS",
   payload,
 });
 
@@ -144,8 +117,6 @@ export type SimulationStatesAction =
   | DeleteSimulationAction
   | SetSimulationSpells
   | AddSimulationSpells
-  | AddSimulationItems
-  | RemoveSimulationItems
   | UpdatePlayerStat
   | ImportSimulation
   | SetFocusedSimulation

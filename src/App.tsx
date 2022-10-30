@@ -34,7 +34,6 @@ function App() {
           guid: simulationId,
           sim: simClone.state,
           rampSpells: simClone.rampSpells,
-          items: simClone.items,
         })
       );
     }

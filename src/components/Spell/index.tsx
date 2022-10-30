@@ -1,10 +1,10 @@
-import { Item, Spell as SpellType } from "lib/types";
+import { Spell as SpellType } from "lib/types";
 import { SpellImage, SpellContainer } from "./styled";
 import Tippy from "@tippyjs/react";
 
 export type SpellProps = {
-  spell: SpellType | Item;
-  onClick: (arg0: SpellType | Item) => void;
+  spell: SpellType;
+  onClick: (arg0: SpellType) => void;
   toggled?: boolean;
 };
 
@@ -26,12 +26,12 @@ export type HoverSpellProps = {
   /**
    * A spell from the quicksim library.
    */
-  spell: SpellType | Item;
+  spell: SpellType;
   id?: string;
   index?: number;
   swapHandler?: (i: number, j: number) => void;
   deleteHandler?: (idx: number) => void;
-  onClick?: (spell: SpellType | Item) => void;
+  onClick?: (spell: SpellType) => void;
 };
 
 export interface DragItem {
