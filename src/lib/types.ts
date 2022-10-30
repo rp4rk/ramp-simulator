@@ -11,6 +11,8 @@ export enum SpellCategory {
   Applicator = "Applicator",
   Damage = "Damage",
   Cooldown = "Cooldown",
+  Buff = "Buff",
+  Tool = "Tool",
   Ignored = "Ignored",
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import * as Toast from "@radix-ui/react-toast";
 
 import "./index.css";
 import "tippy.js/dist/tippy.css";
@@ -19,12 +20,15 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <SimulationsProvider>
-      <DndProvider backend={HTML5Backend}>
-        <QuickFill />
-        <App />
-      </DndProvider>
-    </SimulationsProvider>
+    <Toast.Provider swipeDirection="right">
+      <SimulationsProvider>
+        <DndProvider backend={HTML5Backend}>
+          <QuickFill />
+          <App />
+          <Toast.Viewport className="fixed bottom-4 right-4 z-50" />
+        </DndProvider>
+      </SimulationsProvider>
+    </Toast.Provider>
   </React.StrictMode>
 );
 

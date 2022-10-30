@@ -118,7 +118,7 @@ export const Mindbender: Spell = {
 };
 
 export const Skip: Spell = {
-  category: SpellCategory.Applicator,
+  category: SpellCategory.Tool,
   id: -1,
   icon: "ability_racial_timeismoney",
   name: "Skip",
@@ -286,7 +286,7 @@ export const PowerWordRadiance: Spell = {
 };
 
 export const PowerInfusion: Spell = {
-  category: SpellCategory.Cooldown,
+  category: SpellCategory.Buff,
   id: 10060,
   icon: "spell_holy_powerinfusion",
   name: "Power Infusion",
@@ -306,7 +306,7 @@ export const PowerInfusion: Spell = {
 };
 
 export const Bloodlust: Spell = {
-  category: SpellCategory.Cooldown,
+  category: SpellCategory.Buff,
   id: 2825,
   icon: "spell_nature_bloodlust",
   name: "Bloodlust",
@@ -326,7 +326,7 @@ export const Bloodlust: Spell = {
 };
 
 export const Innervate: Spell = {
-  category: SpellCategory.Cooldown,
+  category: SpellCategory.Buff,
   id: 29166,
   icon: "spell_nature_lightning",
   name: "Innervate",

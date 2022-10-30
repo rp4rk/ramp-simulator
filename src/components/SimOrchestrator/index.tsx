@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, FC, useContext, memo } from "react";
+import { useState, useEffect, useCallback, FC, useContext, memo, useMemo } from "react";
 import { Stats } from "components/Stats";
 import { Timeline } from "components/Timeline";
 import { SimResults } from "components/SimResults";
@@ -14,9 +14,9 @@ import {
   setSimulationTalents,
   updatePlayerStat,
 } from "context/simulations.actions";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
-// import { getSerializableConfiguration } from "context/simulations.selectors";
-// import lzbase62 from "lzbase62";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { getSerializableConfiguration } from "context/simulations.selectors";
+import lzbase62 from "lzbase62";
 import { setFocusedSimulation } from "../../context/simulations.actions";
 import { TalentWindow } from "components/TalentModal";
 import { TalentSetReturn } from "@focused-will/components";
@@ -100,12 +100,12 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
     [dispatch]
   );
 
-  // const compressedSimState = useMemo(() => {
-  //   const serializableConfig = getSerializableConfiguration(state.simulations[props.simId]);
-  //   const compressed = lzbase62.compress(JSON.stringify(serializableConfig));
+  const compressedSimState = useMemo(() => {
+    const serializableConfig = getSerializableConfiguration(state.simulations[props.simId]);
+    const compressed = lzbase62.compress(JSON.stringify(serializableConfig));
 
-  //   return `ramp-${compressed}`;
-  // }, [props.simId, state.simulations]);
+    return `ramp-${compressed}`;
+  }, [props.simId, state.simulations]);
 
   return (
     <div>
@@ -129,11 +129,11 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
                 Focus
               </Button>
             )}
-            {/* <CopyToClipboard text={compressedSimState}>
+            <CopyToClipboard text={compressedSimState}>
               <Button outline icon="ShareIcon">
                 Export
               </Button>
-            </CopyToClipboard> */}
+            </CopyToClipboard>
             <Button onClick={() => setShowConfiguration(!showConfiguration)} outline icon="CogIcon">
               Config
             </Button>
