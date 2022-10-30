@@ -7,21 +7,6 @@ export type StateSpellReducer = (
 export type Calculated = (state: SimState) => number;
 export type ChannelCalculated = (state: SimState, tick?: number) => number;
 
-export enum ItemType {
-  Legendary = "Legendary",
-  Conduit = "Conduit",
-  Item = "Item",
-}
-
-export interface Item extends Buff {
-  id: number;
-  icon: string;
-  type: ItemType;
-  applied: number;
-  expires: number;
-  duration: number;
-}
-
 export enum SpellCategory {
   Applicator = "Applicator",
   Damage = "Damage",
