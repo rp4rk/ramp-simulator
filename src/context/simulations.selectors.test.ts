@@ -70,7 +70,9 @@ describe("getSerializableSimulationState", () => {
         "test",
         [
           {
+            applied: 0,
             name: "test",
+            expires: 1000,
             duration: 1000,
           },
         ],

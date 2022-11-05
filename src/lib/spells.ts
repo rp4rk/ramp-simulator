@@ -166,29 +166,6 @@ export const Penance: Channel = {
   effect: [cooldown, Manipulation, channel([damage, atonement])],
 };
 
-export const Schism: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 214621,
-  icon: "spell_warlock_focusshadow",
-  name: "Schism",
-  cost: createManaCost(0.5),
-  damage: 141,
-  castTime: 1500,
-  cooldown: 24000,
-  effect: [
-    cooldown,
-    advanceTime,
-    damage,
-    atonement,
-    (state) => {
-      return applyAura(state, {
-        name: "Schism",
-        duration: 9000,
-      });
-    },
-  ],
-};
-
 export const ShadowCovenant: Spell = {
   category: SpellCategory.Cooldown,
   id: 314867,
@@ -252,37 +229,6 @@ export const PowerWordSolace: Spell = {
   name: "Power Word: Solace",
   damage: 75.2,
   effect: [damage, atonement, advanceTime],
-};
-
-export const PowerWordRadiance: Spell = {
-  category: SpellCategory.Applicator,
-  id: 194509,
-  icon: "spell_priest_powerword",
-  name: "Power Word: Radiance",
-  metadata: ["Applicator"],
-  cost: createManaCost(6.5),
-  healing: (state) => {
-    const hasShiningRadiance = hasAura(state, "Shining Radiance");
-
-    return 525 * (hasShiningRadiance ? 1.72 : 1);
-  },
-  castTime: 2000,
-  effect: [
-    advanceTime,
-    healing,
-    (state) => {
-      return applyAura(
-        state,
-        {
-          name: "Atonement",
-          applied: state.time,
-          duration: 9000,
-          expires: state.time + 9000,
-        },
-        5
-      );
-    },
-  ],
 };
 
 export const PowerInfusion: Spell = {
