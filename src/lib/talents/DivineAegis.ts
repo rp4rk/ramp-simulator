@@ -3,7 +3,7 @@ import { getTalentPoints } from "lib/talents";
 import { StateSpellReducer } from "lib/types";
 
 export const DIVINE_AEGIS_ID = 47515;
-export const DIVINE_AEGIS_BENEFIT_PER_POINT = 0.075;
+export const DIVINE_AEGIS_BENEFIT_PER_POINT = 0.05;
 
 export const calculateCritContribution = (critPerc: number) => ((critPerc - 1) * 2) / critPerc;
 
