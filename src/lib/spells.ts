@@ -13,8 +13,6 @@ import {
 import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
 import { Manipulation } from "./talents/Manipulation";
-import { InescapableTorment } from "./talents/InescapableTorment";
-import { Expiation } from "./talents/Expiation";
 
 const PURGE_THE_WICKED_AURA_NERF = 0.94;
 export const PurgeTheWicked: Spell = {
@@ -212,17 +210,6 @@ export const DivineStar: Spell = {
   effect: [advanceTime, healing, damage, atonement],
 };
 
-export const MindBlast: Spell = {
-  category: SpellCategory.Damage,
-  id: 8092,
-  icon: "spell_shadow_unholyfrenzy",
-  name: "Mind Blast",
-  cost: createManaCost(2.5),
-  damage: () => 78.336 * 1.32,
-  castTime: 1500,
-  effect: [advanceTime, damage, atonement, InescapableTorment, Expiation],
-};
-
 export const PowerWordSolace: Spell = {
   category: SpellCategory.Cooldown,
   id: 129250,
@@ -297,3 +284,4 @@ export { Mindgames } from "./spells/Mindgames";
 export { ShadowWordDeath } from "./spells/ShadowWordDeath";
 export { ShadowWordDeathExecute } from "./spells/ShadowWordDeath";
 export { FlashHeal } from "./spells/FlashHeal";
+export { MindBlast } from "./spells/MindBlast";

@@ -6,7 +6,7 @@ import { getAura } from "lib/buff";
 import { getRemainingTicks } from "lib/mechanics/overtime";
 import { getHastePerc } from "../player";
 
-const EXPIATION_ID = 390832;
+export const EXPIATION_ID = 390832;
 const EXPIATION_DECAY_PER_POINT = 3000;
 export const EXPIATION_DAMAGE_BONUS_PER_POINT = 0.1;
 
