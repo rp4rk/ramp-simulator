@@ -5,7 +5,7 @@ import { cooldown } from "lib/mechanics";
 
 const SHATTERED_PERCEPTIONS_ID = 391112;
 const SHATTERED_PERCEPTIONS_BONUS = 0.25;
-const COEFFICIENT = 300 * 0.85;
+const COEFFICIENT = 225 * 0.57;
 
 export const Mindgames: Spell = {
   category: SpellCategory.Cooldown,
