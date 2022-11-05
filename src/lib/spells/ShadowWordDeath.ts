@@ -3,6 +3,7 @@ import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 import { hasTalent } from "../talents";
 import { InescapableTorment } from "lib/talents/InescapableTorment";
+import { Expiation } from "lib/talents/Expiation";
 
 export const ShadowWordDeath: Spell = {
   category: SpellCategory.Damage,
@@ -11,7 +12,7 @@ export const ShadowWordDeath: Spell = {
   name: "Shadow Word: Death",
   cost: createManaCost(0.5),
   damage: 79.9,
-  effect: [advanceTime, damage, atonement, InescapableTorment],
+  effect: [advanceTime, damage, atonement, InescapableTorment, Expiation],
   cooldown: 20000,
 };
 
@@ -22,7 +23,7 @@ export const ShadowWordDeathExecute: Spell = {
   name: "Shadow Word: Death (Execute)",
   cost: createManaCost(0.5),
   damage: 199.75,
-  effect: [advanceTime, damage, atonement, InescapableTorment],
+  effect: [advanceTime, damage, atonement, InescapableTorment, Expiation],
   cooldown: (state) => {
     const hasDeathAndMadness = hasTalent(state, 321291);
 

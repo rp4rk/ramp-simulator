@@ -14,13 +14,15 @@ import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
 import { Manipulation } from "./talents/Manipulation";
 import { InescapableTorment } from "./talents/InescapableTorment";
+import { Expiation } from "./talents/Expiation";
 
+const PURGE_THE_WICKED_AURA_NERF = 0.94;
 export const PurgeTheWicked: Spell = {
   category: SpellCategory.Damage,
   id: 204197,
   icon: "ability_mage_firestarter",
   name: "Purge the Wicked",
-  damage: 22.3,
+  damage: 22.3 * PURGE_THE_WICKED_AURA_NERF,
   cost: createManaCost(1.8),
   effect: [
     (state) =>
@@ -32,7 +34,7 @@ export const PurgeTheWicked: Spell = {
         expires: state.time + 20000,
         interval: 2000,
         ticks: 10,
-        coefficient: 11.656,
+        coefficient: 12.4 * PURGE_THE_WICKED_AURA_NERF,
       }),
     damage,
     atonement,
@@ -218,7 +220,7 @@ export const MindBlast: Spell = {
   cost: createManaCost(2.5),
   damage: () => 78.336 * 1.32,
   castTime: 1500,
-  effect: [advanceTime, damage, atonement, InescapableTorment],
+  effect: [advanceTime, damage, atonement, InescapableTorment, Expiation],
 };
 
 export const PowerWordSolace: Spell = {

@@ -1,16 +1,22 @@
 import { SimState, OverTime, CalculatedBuff, HoT } from "./types";
 
 /**
+ * Gets the most recent aura
+ */
+export const getAura = (state: SimState, name: string): CalculatedBuff | OverTime | undefined => {
+  const buff = state.buffs.get(name)?.at(-1);
+  if (!buff) return undefined;
+
+  if (state.time >= buff.applied && state.time <= buff.expires) {
+    return buff;
+  }
+};
+
+/**
  * Checks if a buff is active
  */
 export const hasAura = (state: SimState, name: string): Boolean => {
-  return (
-    state.buffs.get(name)?.reduceRight((acc, curr) => {
-      if (acc === true) return acc;
-
-      return state.time >= curr.applied && state.time <= curr.expires;
-    }, false) || false
-  );
+  return !!getAura(state, name);
 };
 
 /**

@@ -107,3 +107,11 @@ const getTickTimes = function getTickTimes(xot: OverTime, haste: number, state: 
 function pickBetween(n: number, o: number, numbers: Tick[]): Tick[] {
   return numbers.filter(([_, , i]) => i >= n && i < o);
 }
+
+export const getRemainingTicks = (xot: OverTime, haste: number, state: SimState): number => {
+  const remainingDuration = xot.expires - state.time;
+  const baseInterval = typeof xot.interval === "function" ? xot.interval(state) : xot.interval;
+  const hastedInterval = baseInterval / haste;
+
+  return remainingDuration / hastedInterval;
+};
