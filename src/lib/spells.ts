@@ -285,3 +285,5 @@ export { ShadowWordDeath } from "./spells/ShadowWordDeath";
 export { ShadowWordDeathExecute } from "./spells/ShadowWordDeath";
 export { FlashHeal } from "./spells/FlashHeal";
 export { MindBlast } from "./spells/MindBlast";
+export { PowerWordRadiance } from "./spells/PowerWordRadiance";
+export { Schism } from "./spells/Schism";
