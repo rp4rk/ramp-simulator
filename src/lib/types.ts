@@ -4,8 +4,8 @@ export type StateSpellReducer = (
   spell: Spell | OverTime | Channel,
   tick?: number
 ) => SimState;
-export type Calculated = (state: SimState) => number;
-export type ChannelCalculated = (state: SimState, tick?: number) => number;
+export type Calculated = (state: SimState, spell?: Spell) => number;
+export type ChannelCalculated = (state: SimState, spell?: Spell, tick?: number) => number;
 
 export enum SpellCategory {
   Applicator = "Applicator",

@@ -13,6 +13,13 @@ import {
 import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
 import { Manipulation } from "./talents/Manipulation";
+import { buildDamage } from "./mechanics/util/buildDamage";
+import {
+  applyTwilightEquilibriumShadow,
+  twilightEquilibriumBuff,
+  TwilightEquilibriumSchool,
+  applyTwilightEquilibriumHoly,
+} from "./talents/TwilightEquilibrium";
 
 const PURGE_THE_WICKED_AURA_NERF = 0.94;
 export const PurgeTheWicked: Spell = {
@@ -20,11 +27,18 @@ export const PurgeTheWicked: Spell = {
   id: 204197,
   icon: "ability_mage_firestarter",
   name: "Purge the Wicked",
-  damage: 22.3 * PURGE_THE_WICKED_AURA_NERF,
+  damage: buildDamage(22.3 * PURGE_THE_WICKED_AURA_NERF, [
+    twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
+  ]),
   cost: createManaCost(1.8),
   effect: [
-    (state) =>
-      applyAura(state, {
+    (state, spell) => {
+      const modifier = buildDamage(1, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)])(
+        state,
+        spell
+      );
+
+      return applyAura(state, {
         dot: true,
         name: "Purge the Wicked",
         duration: 20000,
@@ -32,11 +46,13 @@ export const PurgeTheWicked: Spell = {
         expires: state.time + 20000,
         interval: 2000,
         ticks: 10,
-        coefficient: 12.4 * PURGE_THE_WICKED_AURA_NERF,
-      }),
+        coefficient: 12.4 * PURGE_THE_WICKED_AURA_NERF * modifier,
+      });
+    },
     damage,
     atonement,
     executeDoT,
+    applyTwilightEquilibriumShadow,
     advanceTime,
   ],
 };
@@ -46,11 +62,16 @@ export const ShadowWordPain: Spell = {
   id: 579,
   icon: "spell_shadow_shadowwordpain",
   name: "Shadow Word: Pain",
-  damage: 12.92,
+  damage: buildDamage(12.92 * 1.01, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow)]),
   cost: createManaCost(1.8),
   effect: [
-    (state) =>
-      applyAura(state, {
+    (state, spell) => {
+      const modifier = buildDamage(1, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow)])(
+        state,
+        spell
+      );
+
+      return applyAura(state, {
         dot: true,
         name: "Shadow Word: Pain",
         duration: 16000,
@@ -58,11 +79,13 @@ export const ShadowWordPain: Spell = {
         expires: state.time + 16000,
         interval: 2000,
         ticks: 8,
-        coefficient: 9.588,
-      }),
+        coefficient: 9.588 * modifier * 1.01,
+      });
+    },
     damage,
     atonement,
     executeDoT,
+    applyTwilightEquilibriumHoly,
     advanceTime,
   ],
 };
@@ -142,28 +165,20 @@ export const Penance: Channel = {
   icon: "spell_holy_penance",
   name: "Penance",
   cost: (state) => {
-    if (hasAura(state, "The Penitent One")) return 0;
+    if (hasAura(state, "Harsh Discipline")) return 0;
 
     return createManaCost(1.6)(state);
   },
   cooldown: 9000,
   ticks: (state) => {
-    const hasThePenitentOne = hasAura(state, "The Penitent One");
-    const hasCastigation = hasAura(state, "Castigation");
+    const hasHarshDiscipline = hasAura(state, "Harsh Discipline");
 
-    return 3 + (hasThePenitentOne ? 3 : 0) + (hasCastigation ? 1 : 0);
+    return 3 + (hasHarshDiscipline ? 3 : 0);
   },
-  damage: (state, tick) => {
-    const hasSwiftPenitence = hasAura(state, "Swift Penitence");
-    const hasTilDawn = hasAura(state, "Til' Dawn");
-    const spMultiplier = tick === 1 && hasSwiftPenitence ? 1.54 : 1;
-
-    const multiplier = hasTilDawn ? 1.95 : 1;
-    return 37.6 * multiplier * spMultiplier;
-  },
+  damage: buildDamage(37.6, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
   healing: 375,
   castTime: 2000,
-  effect: [cooldown, Manipulation, channel([damage, atonement])],
+  effect: [cooldown, Manipulation, applyTwilightEquilibriumShadow, channel([damage, atonement])],
 };
 
 export const ShadowCovenant: Spell = {
@@ -193,10 +208,10 @@ export const Halo: Spell = {
   icon: "ability_priest_halo",
   name: "Halo",
   cost: createManaCost(2.7),
-  damage: 96.82,
+  damage: buildDamage(96.82, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
   healing: 115 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
   castTime: 1500,
-  effect: [advanceTime, healing, damage, atonement],
+  effect: [advanceTime, healing, damage, atonement, applyTwilightEquilibriumShadow],
 };
 
 export const DivineStar: Spell = {
@@ -205,9 +220,9 @@ export const DivineStar: Spell = {
   icon: "spell_priest_divinestar",
   name: "Divine Star",
   cost: createManaCost(2),
-  damage: 56,
+  damage: buildDamage(56, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
   healing: 140 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
-  effect: [advanceTime, healing, damage, atonement],
+  effect: [advanceTime, healing, damage, atonement, applyTwilightEquilibriumShadow],
 };
 
 export const PowerWordSolace: Spell = {
@@ -216,8 +231,8 @@ export const PowerWordSolace: Spell = {
   cost: createManaCost(-0.5),
   icon: "ability_priest_flashoflight",
   name: "Power Word: Solace",
-  damage: 75.2,
-  effect: [damage, atonement, advanceTime],
+  damage: buildDamage(75.2, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
+  effect: [damage, atonement, advanceTime, applyTwilightEquilibriumShadow],
 };
 
 export const PowerInfusion: Spell = {

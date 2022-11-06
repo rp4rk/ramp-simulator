@@ -1,7 +1,13 @@
 import { hasTalent } from "lib/talents";
 import { absorb, advanceTime, atonement, damage, healing } from "../mechanics";
-import { Spell, SpellCategory } from "../types";
+import { Spell, SpellCategory, SimState } from "../types";
 import { cooldown } from "lib/mechanics";
+import { buildDamage } from "../mechanics/util/buildDamage";
+import { applyTwilightEquilibriumHoly } from "../talents/TwilightEquilibrium";
+import {
+  twilightEquilibriumBuff,
+  TwilightEquilibriumSchool,
+} from "lib/talents/TwilightEquilibrium";
 
 const SHATTERED_PERCEPTIONS_ID = 391112;
 const SHATTERED_PERCEPTIONS_BONUS = 0.25;
@@ -23,11 +29,11 @@ export const Mindgames: Spell = {
 
     return 300 * mgAmp;
   },
-  damage: (state) => {
-    const mgAmp = hasTalent(state, SHATTERED_PERCEPTIONS_ID) ? SHATTERED_PERCEPTIONS_BONUS : 1;
-
-    return COEFFICIENT * mgAmp;
-  },
+  damage: buildDamage(COEFFICIENT, [
+    twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
+    (state: SimState) =>
+      hasTalent(state, SHATTERED_PERCEPTIONS_ID) ? 1 + SHATTERED_PERCEPTIONS_BONUS : 1,
+  ]),
   castTime: 1500,
-  effect: [cooldown, advanceTime, damage, absorb, healing, atonement],
+  effect: [cooldown, advanceTime, damage, absorb, healing, atonement, applyTwilightEquilibriumHoly],
 };
