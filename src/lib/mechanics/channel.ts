@@ -17,7 +17,10 @@ export const channel =
     const channelInterval = castTime / (ticks - 1);
 
     const effectsToRepeat: StateSpellReducer[] = [...effects, advanceTime];
-    const computedEffects = Array<StateSpellReducer[]>(ticks).fill(effectsToRepeat).flat();
+    const computedEffects = Array<StateSpellReducer[]>(ticks)
+      .fill(effectsToRepeat)
+      .flat()
+      .slice(0, -1);
 
     const channelWithDuration = {
       ...spell,

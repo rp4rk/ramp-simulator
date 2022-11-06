@@ -52,6 +52,42 @@ describe("buffs", () => {
 
       expect(buffs.getAura(state, "test aura")).toEqual(undefined);
     });
+
+    it("will not return a consumed aura", () => {
+      const state = createMockSimState({
+        buffs: new Map([
+          ["test aura", [createMockBuff({ applied: 200, expires: 300, consumed: true })]],
+        ]),
+      });
+
+      state.time = 150;
+      buffs.consumeAura("test aura")(state);
+
+      expect(buffs.getAura(state, "test aura")).toEqual(undefined);
+    });
+  });
+
+  describe("consumeAura", () => {
+    it("consumes the most recent aura", () => {
+      const state = createMockSimState({
+        buffs: new Map([
+          [
+            "test aura",
+            [
+              createMockBuff({ applied: 0, expires: 100 }),
+              createMockBuff({ applied: 100, expires: 200 }),
+              createMockBuff({ applied: 200, expires: 300 }),
+            ],
+          ],
+        ]),
+      });
+
+      state.time = 250;
+
+      buffs.consumeAura("test aura")(state);
+
+      expect(state.buffs.get("test aura")?.at(-1)?.consumed).toEqual(true);
+    });
   });
 
   describe("hasAura", () => {

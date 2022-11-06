@@ -28,7 +28,7 @@ export function calculateDamage(
   const damage = "dot" in spell ? spell.coefficient : spell.damage;
   if (!damage) return 0;
 
-  const initialDamage = typeof damage === "function" ? damage(state, tick) : damage;
+  const initialDamage = typeof damage === "function" ? damage(state, spell, tick) : damage;
 
   const isSchismActive = hasAura(state, "Schism");
   const isScovActive = hasAura(state, "Shadow Covenant");

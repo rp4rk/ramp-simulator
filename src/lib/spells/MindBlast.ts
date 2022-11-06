@@ -2,9 +2,13 @@ import { advanceTime, atonement, damage } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 import { InescapableTorment } from "../talents/InescapableTorment";
-import { Expiation } from "../talents/Expiation";
-import { getTalentPoints } from "lib/talents";
-import { EXPIATION_ID, EXPIATION_DAMAGE_BONUS_PER_POINT } from "lib/talents/Expiation";
+import { Expiation, expiationBuff } from "../talents/Expiation";
+import {
+  TwilightEquilibriumSchool,
+  twilightEquilibriumBuff,
+} from "lib/talents/TwilightEquilibrium";
+import { buildDamage } from "lib/mechanics/util/buildDamage";
+import { applyTwilightEquilibriumHoly } from "../talents/TwilightEquilibrium";
 
 export const MindBlast: Spell = {
   category: SpellCategory.Damage,
@@ -12,8 +16,17 @@ export const MindBlast: Spell = {
   icon: "spell_shadow_unholyfrenzy",
   name: "Mind Blast",
   cost: createManaCost(2.5),
-  damage: (state) =>
-    78.336 * 1.32 * (1 + getTalentPoints(state, EXPIATION_ID) * EXPIATION_DAMAGE_BONUS_PER_POINT),
+  damage: buildDamage(78.336 * 1.32, [
+    twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
+    expiationBuff,
+  ]),
   castTime: 1500,
-  effect: [advanceTime, damage, atonement, InescapableTorment, Expiation],
+  effect: [
+    advanceTime,
+    damage,
+    atonement,
+    InescapableTorment,
+    Expiation,
+    applyTwilightEquilibriumHoly,
+  ],
 };

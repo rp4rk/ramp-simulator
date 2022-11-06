@@ -14,6 +14,8 @@ const FUN_STRINGS = [
   "Flash Concentration Coming Soon!",
   "I Miss 5.2 Mistweaver",
   "Power Word: Barrier Isn't That Good",
+  "Now With 100% More Attonment",
+  "Penance is working now!",
 ];
 
 function _Header({ className }: { className?: string }) {
