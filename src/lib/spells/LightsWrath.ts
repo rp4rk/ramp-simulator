@@ -12,8 +12,8 @@ import { buildDamage } from "../mechanics/util/buildDamage";
 
 const WRATH_UNLEASHED_ID = 390781;
 const RESPLENDENT_LIGHT_ID = 390765;
-const DAMAGE_COEFFICIENT = 175 * 0.94;
-const STACK_BONUS = 0.1;
+const DAMAGE_COEFFICIENT = 218.75 * 0.94;
+const STACK_BONUS = 0.06;
 const STACK_BONUS_RL = 0.02;
 const CAST_TIME = 2500;
 
