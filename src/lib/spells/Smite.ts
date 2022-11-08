@@ -9,6 +9,7 @@ import {
 } from "../talents/TwilightEquilibrium";
 import { buildDamage } from "lib/mechanics/util/buildDamage";
 import { unleashedWrathBuff } from "./LightsWrath";
+import { TrainOfThoughtPenance } from "lib/talents/TrainOfThought";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -23,5 +24,12 @@ export const Smite: Spell = {
     unleashedWrathBuff,
   ]),
   castTime: 1500,
-  effect: [advanceTime, damage, atonement, Manipulation, applyTwilightEquilibriumShadow],
+  effect: [
+    advanceTime,
+    damage,
+    atonement,
+    Manipulation,
+    applyTwilightEquilibriumShadow,
+    TrainOfThoughtPenance,
+  ],
 };
