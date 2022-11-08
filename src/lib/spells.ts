@@ -18,77 +18,7 @@ import {
   applyTwilightEquilibriumShadow,
   twilightEquilibriumBuff,
   TwilightEquilibriumSchool,
-  applyTwilightEquilibriumHoly,
 } from "./talents/TwilightEquilibrium";
-
-const PURGE_THE_WICKED_AURA_NERF = 0.94;
-export const PurgeTheWicked: Spell = {
-  category: SpellCategory.Damage,
-  id: 204197,
-  icon: "ability_mage_firestarter",
-  name: "Purge the Wicked",
-  damage: buildDamage(22.3 * PURGE_THE_WICKED_AURA_NERF, [
-    twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
-  ]),
-  cost: createManaCost(1.8),
-  effect: [
-    (state, spell) => {
-      const modifier = buildDamage(1, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)])(
-        state,
-        spell
-      );
-
-      return applyAura(state, {
-        dot: true,
-        name: "Purge the Wicked",
-        duration: 20000,
-        applied: state.time,
-        expires: state.time + 20000,
-        interval: 2000,
-        ticks: 10,
-        coefficient: 12.4 * PURGE_THE_WICKED_AURA_NERF * modifier,
-      });
-    },
-    damage,
-    atonement,
-    executeDoT,
-    applyTwilightEquilibriumShadow,
-    advanceTime,
-  ],
-};
-
-export const ShadowWordPain: Spell = {
-  category: SpellCategory.Damage,
-  id: 579,
-  icon: "spell_shadow_shadowwordpain",
-  name: "Shadow Word: Pain",
-  damage: buildDamage(12.92 * 1.01, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow)]),
-  cost: createManaCost(1.8),
-  effect: [
-    (state, spell) => {
-      const modifier = buildDamage(1, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow)])(
-        state,
-        spell
-      );
-
-      return applyAura(state, {
-        dot: true,
-        name: "Shadow Word: Pain",
-        duration: 16000,
-        applied: state.time,
-        expires: state.time + 16000,
-        interval: 2000,
-        ticks: 8,
-        coefficient: 9.588 * modifier * 1.01,
-      });
-    },
-    damage,
-    atonement,
-    executeDoT,
-    applyTwilightEquilibriumHoly,
-    advanceTime,
-  ],
-};
 
 export const Shadowfiend: Spell = {
   category: SpellCategory.Cooldown,
@@ -302,3 +232,5 @@ export { FlashHeal } from "./spells/FlashHeal";
 export { MindBlast } from "./spells/MindBlast";
 export { PowerWordRadiance } from "./spells/PowerWordRadiance";
 export { Schism } from "./spells/Schism";
+export { PurgeTheWicked } from "./spells/PurgeTheWicked";
+export { ShadowWordPain } from "./spells/ShadowWordPain";
