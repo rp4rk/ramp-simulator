@@ -6,6 +6,7 @@ import { createManaCost, MANA_COST_TYPE } from "../mechanics/mana";
 import { applyAtonement } from "./Atonement";
 
 import { RAPTURE_COEFFICIENT } from "./Rapture";
+import { BorrowedTime } from "lib/talents/BorrowedTime";
 
 export const calculateShieldAbsorb = (state: SimState) => {
   const hasRaptureActive = hasAura(state, "Rapture");
@@ -36,5 +37,5 @@ export const PowerWordShield: Spell = {
   },
   name: "Power Word: Shield",
   absorb: calculateShieldAbsorb,
-  effect: [cooldown, absorb, healing, damage, applyAtonement, advanceTime],
+  effect: [BorrowedTime, cooldown, absorb, healing, damage, applyAtonement, advanceTime],
 };
