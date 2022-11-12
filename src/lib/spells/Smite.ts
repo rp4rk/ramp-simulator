@@ -10,6 +10,7 @@ import {
 import { buildDamage } from "lib/mechanics/util/buildDamage";
 import { unleashedWrathBuff } from "./LightsWrath";
 import { TrainOfThoughtPenance } from "lib/talents/TrainOfThought";
+import { blazeOfLightBuff } from "../talents/BlazeOfLight";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -22,6 +23,7 @@ export const Smite: Spell = {
   damage: buildDamage(DAMAGE_COEFFICIENT, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
     unleashedWrathBuff,
+    blazeOfLightBuff,
   ]),
   castTime: 1500,
   effect: [
