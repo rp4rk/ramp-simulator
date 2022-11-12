@@ -8,6 +8,7 @@ import { ATONEMENT_BASE_DURATION } from "./Atonement";
 import { RAPTURE_COEFFICIENT } from "./Rapture";
 import { BorrowedTime } from "lib/talents/BorrowedTime";
 import { hasTalent } from "lib/talents";
+import { applyWordsOfThePious } from "lib/talents/WordsOfThePious";
 
 export const calculateShieldAbsorb = (state: SimState) => {
   const hasRaptureActive = hasAura(state, "Rapture");
@@ -54,6 +55,7 @@ export const PowerWordShield: Spell = {
   name: "Power Word: Shield",
   absorb: calculateShieldAbsorb,
   effect: [
+    applyWordsOfThePious,
     BorrowedTime,
     cooldown,
     absorb,
