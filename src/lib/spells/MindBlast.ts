@@ -7,7 +7,7 @@ import {
   TwilightEquilibriumSchool,
   twilightEquilibriumBuff,
 } from "lib/talents/TwilightEquilibrium";
-import { buildDamage } from "lib/mechanics/util/buildDamage";
+import { buildCoefficient } from "lib/mechanics/util/buildDamage";
 import { applyTwilightEquilibriumHoly } from "../talents/TwilightEquilibrium";
 import { getHastePerc } from "lib/player";
 
@@ -22,7 +22,7 @@ export const MindBlast: Spell = {
 
     return 9000 / haste;
   },
-  damage: buildDamage(78.336 * 1.32, [
+  damage: buildCoefficient(78.336 * 1.32, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
     expiationBuff,
   ]),

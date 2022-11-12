@@ -1,7 +1,7 @@
 import { advanceTime, applyAura, atonement, damage, executeDoT } from "lib/mechanics";
 import { Spell, SpellCategory } from "lib/types";
 import { createManaCost } from "lib/mechanics/mana";
-import { buildDamage } from "lib/mechanics/util/buildDamage";
+import { buildCoefficient } from "lib/mechanics/util/buildDamage";
 import { throesOfPainBonus } from "lib/talents/ThroesOfPain";
 import {
   twilightEquilibriumBuff,
@@ -15,7 +15,7 @@ export const ShadowWordPain: Spell = {
   id: 579,
   icon: "spell_shadow_shadowwordpain",
   name: "Shadow Word: Pain",
-  damage: buildDamage(12.92 * 1.01, [
+  damage: buildCoefficient(12.92 * 1.01, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
     throesOfPainBonus,
     painAndSufferingBonus,
@@ -23,7 +23,7 @@ export const ShadowWordPain: Spell = {
   cost: createManaCost(1.8),
   effect: [
     (state, spell) => {
-      const modifier = buildDamage(1, [
+      const modifier = buildCoefficient(1, [
         twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
         throesOfPainBonus,
         painAndSufferingBonus,

@@ -2,7 +2,7 @@ import { hasTalent } from "lib/talents";
 import { absorb, advanceTime, atonement, damage, healing } from "../mechanics";
 import { Spell, SpellCategory, SimState } from "../types";
 import { cooldown } from "lib/mechanics";
-import { buildDamage } from "../mechanics/util/buildDamage";
+import { buildCoefficient } from "../mechanics/util/buildDamage";
 import { applyTwilightEquilibriumHoly } from "../talents/TwilightEquilibrium";
 import {
   twilightEquilibriumBuff,
@@ -29,7 +29,7 @@ export const Mindgames: Spell = {
 
     return 300 * mgAmp;
   },
-  damage: buildDamage(COEFFICIENT, [
+  damage: buildCoefficient(COEFFICIENT, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
     (state: SimState) =>
       hasTalent(state, SHATTERED_PERCEPTIONS_ID) ? 1 + SHATTERED_PERCEPTIONS_BONUS : 1,

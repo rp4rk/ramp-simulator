@@ -1,7 +1,7 @@
 import { advanceTime, applyAura, atonement, damage, executeDoT } from "lib/mechanics";
 import { Spell, SpellCategory } from "lib/types";
 import { createManaCost } from "lib/mechanics/mana";
-import { buildDamage } from "lib/mechanics/util/buildDamage";
+import { buildCoefficient } from "lib/mechanics/util/buildDamage";
 import {
   applyTwilightEquilibriumShadow,
   twilightEquilibriumBuff,
@@ -17,7 +17,7 @@ export const PurgeTheWicked: Spell = {
   id: 204197,
   icon: "ability_mage_firestarter",
   name: "Purge the Wicked",
-  damage: buildDamage(22.3 * PURGE_THE_WICKED_AURA_NERF, [
+  damage: buildCoefficient(22.3 * PURGE_THE_WICKED_AURA_NERF, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
     throesOfPainBonus,
     painAndSufferingBonus,
@@ -26,7 +26,7 @@ export const PurgeTheWicked: Spell = {
   cost: createManaCost(1.8),
   effect: [
     (state, spell) => {
-      const modifier = buildDamage(1, [
+      const modifier = buildCoefficient(1, [
         twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
         throesOfPainBonus,
         painAndSufferingBonus,
