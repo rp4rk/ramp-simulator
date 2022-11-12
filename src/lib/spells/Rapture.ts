@@ -5,6 +5,8 @@ import { hasTalent } from "../talents";
 import { calculateShieldAbsorb, applyPowerWordShieldAtonement } from "./PowerWordShield";
 import { cdr } from "lib/mechanics/cdr";
 import { StateSpellReducer } from "../types";
+import { applyWordsOfThePious } from "lib/talents/WordsOfThePious";
+import { BorrowedTime } from "lib/talents/BorrowedTime";
 
 export const RAPTURE_COEFFICIENT = 0.4;
 export const POWER_WORD_SHIELD_COOLDOWN_MS = 7500;
@@ -21,6 +23,8 @@ export const Rapture: Spell = {
   cost: createManaCost(3.1),
   absorb: calculateShieldAbsorb,
   effect: [
+    applyWordsOfThePious,
+    BorrowedTime,
     (state) =>
       applyAura(state, {
         name: "Rapture",
