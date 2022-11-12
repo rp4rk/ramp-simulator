@@ -10,6 +10,7 @@ import {
   TwilightEquilibriumSchool,
 } from "lib/talents/TwilightEquilibrium";
 import { blazeOfLightBuff } from "lib/talents/BlazeOfLight";
+import { painfulPunishmentPtw, painfulPunishmentSwp } from "../talents/PainfulPunishment";
 
 export const Penance: Channel = {
   category: SpellCategory.Damage,
@@ -34,5 +35,10 @@ export const Penance: Channel = {
   ]),
   healing: 375,
   castTime: 2000,
-  effect: [cooldown, Manipulation, applyTwilightEquilibriumShadow, channel([damage, atonement])],
+  effect: [
+    cooldown,
+    Manipulation,
+    applyTwilightEquilibriumShadow,
+    channel([damage, atonement, painfulPunishmentPtw, painfulPunishmentSwp]),
+  ],
 };
