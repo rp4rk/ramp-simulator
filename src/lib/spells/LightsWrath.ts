@@ -8,7 +8,7 @@ import {
   TwilightEquilibriumSchool,
 } from "../talents/TwilightEquilibrium";
 import { Calculated } from "../types";
-import { buildDamage } from "../mechanics/util/buildDamage";
+import { buildCoefficient } from "../mechanics/util/buildDamage";
 
 const WRATH_UNLEASHED_ID = 390781;
 const RESPLENDENT_LIGHT_ID = 390765;
@@ -26,7 +26,7 @@ export const LightsWrath: Spell = {
   castTime: (state) => (hasTalent(state, WRATH_UNLEASHED_ID) ? 1500 : CAST_TIME),
 
   damage: (state, spell) => {
-    const teMod = buildDamage(1, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)])(
+    const teMod = buildCoefficient(1, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)])(
       state,
       spell
     );

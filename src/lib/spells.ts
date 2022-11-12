@@ -10,7 +10,7 @@ import {
 } from "./mechanics";
 import { Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
-import { buildDamage } from "./mechanics/util/buildDamage";
+import { buildCoefficient } from "./mechanics/util/buildDamage";
 import {
   applyTwilightEquilibriumShadow,
   twilightEquilibriumBuff,
@@ -106,36 +106,13 @@ export const ShadowCovenant: Spell = {
   ],
 };
 
-export const Halo: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 120517,
-  icon: "ability_priest_halo",
-  name: "Halo",
-  cost: createManaCost(2.7),
-  damage: buildDamage(96.82, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
-  healing: 115 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
-  castTime: 1500,
-  effect: [advanceTime, healing, damage, atonement, applyTwilightEquilibriumShadow],
-};
-
-export const DivineStar: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 110744,
-  icon: "spell_priest_divinestar",
-  name: "Divine Star",
-  cost: createManaCost(2),
-  damage: buildDamage(56, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
-  healing: 140 * (6 + 5.414), // 5.414 here represents the additional healing from healing beyond 6 targets
-  effect: [advanceTime, healing, damage, atonement, applyTwilightEquilibriumShadow],
-};
-
 export const PowerWordSolace: Spell = {
   category: SpellCategory.Cooldown,
   id: 129250,
   cost: createManaCost(-0.5),
   icon: "ability_priest_flashoflight",
   name: "Power Word: Solace",
-  damage: buildDamage(75.2, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
+  damage: buildCoefficient(75.2, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
   effect: [damage, atonement, advanceTime, applyTwilightEquilibriumShadow],
 };
 
@@ -211,3 +188,6 @@ export { ShadowWordPain } from "./spells/ShadowWordPain";
 export { Penance } from "./spells/Penance";
 export { PowerOfTheDarkSide } from "./talents/PowerOfTheDarkSide";
 export { HarshDiscipline } from "./talents/HarshDiscipline";
+export { HolyNova } from "./talents/HolyNova";
+export { Halo } from "./talents/Halo";
+export { DivineStar } from "./talents/DivineStar";

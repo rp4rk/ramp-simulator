@@ -7,7 +7,7 @@ import {
   twilightEquilibriumBuff,
   TwilightEquilibriumSchool,
 } from "../talents/TwilightEquilibrium";
-import { buildDamage } from "lib/mechanics/util/buildDamage";
+import { buildCoefficient } from "lib/mechanics/util/buildDamage";
 import { unleashedWrathBuff } from "./LightsWrath";
 import { TrainOfThoughtPenance } from "lib/talents/TrainOfThought";
 import { blazeOfLightBuff } from "../talents/BlazeOfLight";
@@ -25,7 +25,7 @@ export const Smite: Spell = {
   icon: "spell_holy_holysmite",
   cost: createManaCost(0.4),
   name: "Smite",
-  damage: buildDamage(DAMAGE_COEFFICIENT, [
+  damage: buildCoefficient(DAMAGE_COEFFICIENT, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
     unleashedWrathBuff,
     blazeOfLightBuff,

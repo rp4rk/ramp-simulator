@@ -3,7 +3,7 @@ import { Calculated, ChannelCalculated } from "../../types";
 /**
  * Calculate the damage coefficient of a spell
  */
-export const buildDamage =
+export const buildCoefficient =
   (
     coefficient: number,
     buffs: (Calculated | ChannelCalculated)[] = []

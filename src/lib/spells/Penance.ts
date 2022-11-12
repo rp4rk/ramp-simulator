@@ -3,7 +3,7 @@ import { atonement, cooldown, damage, channel } from "lib/mechanics";
 import { Channel, SpellCategory } from "lib/types";
 import { createManaCost } from "lib/mechanics/mana";
 import { Manipulation } from "lib/talents/Manipulation";
-import { buildDamage } from "lib/mechanics/util/buildDamage";
+import { buildCoefficient } from "lib/mechanics/util/buildDamage";
 import {
   applyTwilightEquilibriumShadow,
   twilightEquilibriumBuff,
@@ -37,7 +37,7 @@ export const Penance: Channel = {
 
     return 3 + (hasHarshDiscipline ? 3 : 0) + (hasCastigation ? 1 : 0);
   },
-  damage: buildDamage(37.6, [
+  damage: buildCoefficient(37.6, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
     blazeOfLightBuff,
     powerOfTheDarkSideBuff,
