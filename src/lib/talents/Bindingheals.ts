@@ -1,4 +1,4 @@
-import { consumePlayerAura, getPlayerAura } from "lib/buff";
+import { getPlayerAura } from "lib/buff";
 import { cast, healing } from "lib/mechanics";
 import { hasTalent } from "lib/talents";
 import { Spell, SpellCategory, StateSpellReducer } from "lib/types";
