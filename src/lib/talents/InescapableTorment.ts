@@ -5,7 +5,7 @@ import { getTalentPoints, hasTalent } from "lib/talents";
 import { Spell, SpellCategory, StateSpellReducer } from "lib/types";
 
 const INESCAPABLE_TORMENT_ID = 373427;
-const INESCAPABLE_TORMENT_COEFFICIENT_PER_POINT = 58.25;
+const INESCAPABLE_TORMENT_COEFFICIENT_PER_POINT = 29.24;
 const INESCAPABLE_TORMENT_EXTENSION_PER_POINT = 500;
 
 const _InescapableTorment: Spell = {

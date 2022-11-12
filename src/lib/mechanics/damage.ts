@@ -32,7 +32,7 @@ export function calculateDamage(
   const isScovActive = hasAura(state, "Shadow Covenant");
   const schismMultiplier = isSchismActive ? 1.15 : 1;
   const scovMultiplier = isScovActive ? 1.25 : 1;
-  const sinsMultiplier = calculateSinsDamageBonus(state);
+  const sinsMultiplier = calculateSinsDamageBonus(state, spell);
   const { player } = state;
 
   const wrathUnleashedBonus = spell.name === "Light's Wrath" && hasTalent(state, 390781) ? 0.15 : 0;

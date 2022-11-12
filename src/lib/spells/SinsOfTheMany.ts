@@ -1,5 +1,6 @@
 import { numBuffsActive } from "lib/buff";
-import { SimState } from "lib/types";
+import { Channel, SimState, Spell } from "lib/types";
+import { OverTime } from "../types";
 
 const SINS_TOTAL = 0.3;
 const SINS_MAP = {
@@ -12,9 +13,14 @@ const SINS_MAP = {
   20: 0.0025,
 };
 const SINS_MAP_ENTRIES = Object.entries(SINS_MAP);
+const IGNORED_SPELLS = new Set(["Mindbender", "Shadowfiend"]);
 
-export const calculateSinsDamageBonus = (state: SimState): number => {
+export const calculateSinsDamageBonus = (
+  state: SimState,
+  spell: Spell | OverTime | Channel
+): number => {
   const atonementCount = numBuffsActive(state, "Atonement");
+  if (IGNORED_SPELLS.has(spell.name)) return 1;
 
   const [bonus] = SINS_MAP_ENTRIES.reduce(
     ([bonus, stacks, prevThreshold], [stackThreshold, penalty]) => {
