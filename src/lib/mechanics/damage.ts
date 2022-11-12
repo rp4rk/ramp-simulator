@@ -4,7 +4,7 @@ import { getCritPerc, getVersPerc } from "../player";
 import { hasTalent } from "lib/talents";
 import { calculateSinsDamageBonus } from "lib/spells/SinsOfTheMany";
 
-const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender"];
+const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender", "Expiation"];
 const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
   Schism: true,
   Mindgames: true,
