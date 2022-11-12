@@ -14,6 +14,7 @@ import { blazeOfLightBuff } from "../talents/BlazeOfLight";
 import { wordsOfThePiousBuff } from "lib/talents/WordsOfThePious";
 import { wealAndWoeSmiteBuff } from "../talents/WealAndWoe";
 import { consumeAura } from "lib/buff";
+import { applyHarshDisciplineStack, applyHarshDiscipline } from "../talents/HarshDiscipline";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -33,6 +34,8 @@ export const Smite: Spell = {
   castTime: 1500,
   effect: [
     advanceTime,
+    applyHarshDisciplineStack,
+    applyHarshDiscipline,
     damage,
     atonement,
     Manipulation,

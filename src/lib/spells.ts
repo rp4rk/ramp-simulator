@@ -210,3 +210,4 @@ export { PurgeTheWicked } from "./spells/PurgeTheWicked";
 export { ShadowWordPain } from "./spells/ShadowWordPain";
 export { Penance } from "./spells/Penance";
 export { PowerOfTheDarkSide } from "./talents/PowerOfTheDarkSide";
+export { HarshDiscipline } from "./talents/HarshDiscipline";

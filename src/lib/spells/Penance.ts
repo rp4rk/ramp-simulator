@@ -14,6 +14,7 @@ import { painfulPunishmentPtw, painfulPunishmentSwp } from "../talents/PainfulPu
 import { hasTalent } from "lib/talents";
 import { applyWealAndWoe } from "../talents/WealAndWoe";
 import { powerOfTheDarkSideBuff } from "../talents/PowerOfTheDarkSide";
+import { HARSH_DISCIPLINE_ID } from "lib/talents/HarshDiscipline";
 
 const CASTIGATION_ID = 193134;
 
@@ -31,7 +32,8 @@ export const Penance: Channel = {
   cooldown: 9000,
   ticks: (state) => {
     const hasCastigation = hasTalent(state, CASTIGATION_ID);
-    const hasHarshDiscipline = hasAura(state, "Harsh Discipline");
+    const hasHarshDiscipline =
+      hasTalent(state, HARSH_DISCIPLINE_ID) && hasAura(state, "Harsh Discipline");
 
     return 3 + (hasHarshDiscipline ? 3 : 0) + (hasCastigation ? 1 : 0);
   },
@@ -48,5 +50,6 @@ export const Penance: Channel = {
     applyTwilightEquilibriumShadow,
     channel([damage, atonement, painfulPunishmentPtw, painfulPunishmentSwp, applyWealAndWoe]),
     consumeAura("Power of the Dark Side"),
+    consumeAura("Harsh Discipline"),
   ],
 };
