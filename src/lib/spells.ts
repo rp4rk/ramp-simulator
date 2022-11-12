@@ -1,4 +1,3 @@
-import { hasAura } from "./buff";
 import {
   advanceTime,
   applyAura,
@@ -8,11 +7,9 @@ import {
   executeDoT,
   healing,
   evangelismExtension,
-  channel,
 } from "./mechanics";
-import { Channel, Spell, SpellCategory, StatBuffType } from "./types";
+import { Spell, SpellCategory, StatBuffType } from "./types";
 import { createManaCost } from "./mechanics/mana";
-import { Manipulation } from "./talents/Manipulation";
 import { buildDamage } from "./mechanics/util/buildDamage";
 import {
   applyTwilightEquilibriumShadow,
@@ -86,29 +83,6 @@ export const Evangelism: Spell = {
   name: "Evangelism",
   offGcd: false,
   effect: [evangelismExtension, advanceTime],
-};
-
-export const Penance: Channel = {
-  category: SpellCategory.Damage,
-  channel: true,
-  id: 47540,
-  icon: "spell_holy_penance",
-  name: "Penance",
-  cost: (state) => {
-    if (hasAura(state, "Harsh Discipline")) return 0;
-
-    return createManaCost(1.6)(state);
-  },
-  cooldown: 9000,
-  ticks: (state) => {
-    const hasHarshDiscipline = hasAura(state, "Harsh Discipline");
-
-    return 3 + (hasHarshDiscipline ? 3 : 0);
-  },
-  damage: buildDamage(37.6, [twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy)]),
-  healing: 375,
-  castTime: 2000,
-  effect: [cooldown, Manipulation, applyTwilightEquilibriumShadow, channel([damage, atonement])],
 };
 
 export const ShadowCovenant: Spell = {
@@ -234,3 +208,4 @@ export { PowerWordRadiance } from "./spells/PowerWordRadiance";
 export { Schism } from "./spells/Schism";
 export { PurgeTheWicked } from "./spells/PurgeTheWicked";
 export { ShadowWordPain } from "./spells/ShadowWordPain";
+export { Penance } from "./spells/Penance";

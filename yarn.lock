@@ -1210,10 +1210,10 @@
     "@floating-ui/dom" "^0.5.3"
     "use-isomorphic-layout-effect" "^1.1.1"
 
-"@focused-will/components@^0.3.5":
-  "integrity" "sha512-sfpp8LAweUE7dNoPONhQoh82DJeLpmUV+5B3cqfWRZFvR+46lSmGP6D0GYvMNU3ZTPVbt4WFUB95CSu4gtpu9Q=="
-  "resolved" "https://registry.npmjs.org/@focused-will/components/-/components-0.3.5.tgz"
-  "version" "0.3.5"
+"@focused-will/components@^0.3.6":
+  "integrity" "sha512-PxfR2XG+ZVQVbYePF+wNU8RuO01Uv3vUBiUPYnCXknlzpMYAhVK/onNFJCsxAqX36mPlP3ye3bLcr3aBcwA09Q=="
+  "resolved" "https://registry.npmjs.org/@focused-will/components/-/components-0.3.6.tgz"
+  "version" "0.3.6"
   dependencies:
     "@radix-ui/react-tooltip" "^1.0.0"
     "react-xarrows" "^2.0.2"
