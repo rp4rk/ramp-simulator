@@ -1,4 +1,4 @@
-import { consumePlayerAura } from "lib/buff";
+import { consumePlayerAura, getPlayerAura } from "lib/buff";
 import { cast, healing } from "lib/mechanics";
 import { hasTalent } from "lib/talents";
 import { Spell, SpellCategory, StateSpellReducer } from "lib/types";
@@ -20,9 +20,14 @@ const _bindingHeal: Spell = {
 export const BindingHeals: StateSpellReducer = (state) => {
   if (!hasTalent(state, BINDING_HEALS_ID)) return state;
   const bindingHealState = cast(state, _bindingHeal);
-  const playerAtonementConsumedState = consumePlayerAura("Atonement")(bindingHealState);
 
-  return applyAura(playerAtonementConsumedState, {
+  const existingAura = getPlayerAura(bindingHealState, "Atonement");
+  if (existingAura) {
+    existingAura.expires = bindingHealState.time + ATONEMENT_BASE_DURATION;
+    return bindingHealState;
+  }
+
+  return applyAura(bindingHealState, {
     name: "Atonement",
     duration: ATONEMENT_BASE_DURATION,
     self: true,

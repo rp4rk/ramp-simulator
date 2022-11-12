@@ -16,6 +16,7 @@ export const atonement: StateSpellReducer = (state, spell, tick): SimState => {
   const activeAtonementCount = numBuffsActive(state, "Atonement");
   const { player } = state;
   const mastery = getMasteryPerc(player);
+  console.log(activeAtonementCount);
 
   const stolenPsychePoints = getTalentPoints(state, STOLEN_PSYCHE_ID);
   const stolenPsycheBonus =
