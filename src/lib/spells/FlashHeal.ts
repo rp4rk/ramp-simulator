@@ -4,6 +4,7 @@ import { Spell, SpellCategory } from "../types";
 import { applyAtonement } from "./Atonement";
 import { TrainOfThought } from "lib/talents/TrainOfThought";
 import { hasTalent } from "lib/talents";
+import { BindingHeals } from "../talents/Bindingheals";
 
 export const FlashHeal: Spell = {
   id: 2061,
@@ -14,5 +15,5 @@ export const FlashHeal: Spell = {
   castTime: (state) => (hasTalent(state, 373456) ? 1500 / 1.1 : 1500),
   cost: createManaCost(3.6),
   healing: 203,
-  effect: [advanceTime, healing, applyAtonement, TrainOfThought],
+  effect: [advanceTime, healing, applyAtonement, TrainOfThought, BindingHeals],
 };

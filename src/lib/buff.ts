@@ -13,11 +13,37 @@ export const getAura = (state: SimState, name: string): CalculatedBuff | OverTim
   }
 };
 
+/**
+ * Gets the most recent aura for the player
+ */
+export const getPlayerAura = (
+  state: SimState,
+  name: string
+): CalculatedBuff | OverTime | undefined => {
+  const buffs = state.buffs.get(name);
+  if (!buffs) return undefined;
+
+  return buffs.find(
+    (buff) => buff.self && state.time >= buff.applied && state.time <= buff.expires
+  );
+};
+
 // Note: Mutating
 export const consumeAura =
   (name: string) =>
   (state: SimState): SimState => {
     const buff = getAura(state, name);
+    if (buff) {
+      buff.consumed = true;
+    }
+    return state;
+  };
+
+// Note: Mutating
+export const consumePlayerAura =
+  (name: string) =>
+  (state: SimState): SimState => {
+    const buff = getPlayerAura(state, name);
     if (buff) {
       buff.consumed = true;
     }
