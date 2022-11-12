@@ -1,4 +1,4 @@
-import { hasAura } from "lib/buff";
+import { consumeAura, hasAura } from "lib/buff";
 import { atonement, cooldown, damage, channel } from "lib/mechanics";
 import { Channel, SpellCategory } from "lib/types";
 import { createManaCost } from "lib/mechanics/mana";
@@ -13,6 +13,7 @@ import { blazeOfLightBuff } from "lib/talents/BlazeOfLight";
 import { painfulPunishmentPtw, painfulPunishmentSwp } from "../talents/PainfulPunishment";
 import { hasTalent } from "lib/talents";
 import { applyWealAndWoe } from "../talents/WealAndWoe";
+import { powerOfTheDarkSideBuff } from "../talents/PowerOfTheDarkSide";
 
 const CASTIGATION_ID = 193134;
 
@@ -37,6 +38,7 @@ export const Penance: Channel = {
   damage: buildDamage(37.6, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
     blazeOfLightBuff,
+    powerOfTheDarkSideBuff,
   ]),
   healing: 375,
   castTime: 2000,
@@ -45,5 +47,6 @@ export const Penance: Channel = {
     Manipulation,
     applyTwilightEquilibriumShadow,
     channel([damage, atonement, painfulPunishmentPtw, painfulPunishmentSwp, applyWealAndWoe]),
+    consumeAura("Power of the Dark Side"),
   ],
 };
