@@ -11,6 +11,9 @@ import {
 } from "lib/talents/TwilightEquilibrium";
 import { blazeOfLightBuff } from "lib/talents/BlazeOfLight";
 import { painfulPunishmentPtw, painfulPunishmentSwp } from "../talents/PainfulPunishment";
+import { hasTalent } from "lib/talents";
+
+const CASTIGATION_ID = 193134;
 
 export const Penance: Channel = {
   category: SpellCategory.Damage,
@@ -25,9 +28,10 @@ export const Penance: Channel = {
   },
   cooldown: 9000,
   ticks: (state) => {
+    const hasCastigation = hasTalent(state, CASTIGATION_ID);
     const hasHarshDiscipline = hasAura(state, "Harsh Discipline");
 
-    return 3 + (hasHarshDiscipline ? 3 : 0);
+    return 3 + (hasHarshDiscipline ? 3 : 0) + (hasCastigation ? 1 : 0);
   },
   damage: buildDamage(37.6, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
