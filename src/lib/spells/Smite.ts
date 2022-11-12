@@ -15,6 +15,7 @@ import { wordsOfThePiousBuff } from "lib/talents/WordsOfThePious";
 import { wealAndWoeSmiteBuff } from "../talents/WealAndWoe";
 import { consumeAura } from "lib/buff";
 import { applyHarshDisciplineStack, applyHarshDiscipline } from "../talents/HarshDiscipline";
+import { hasTalent } from "lib/talents";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -31,7 +32,7 @@ export const Smite: Spell = {
     wordsOfThePiousBuff,
     wealAndWoeSmiteBuff,
   ]),
-  castTime: 1500,
+  castTime: (state) => (hasTalent(state, 373456) ? 1500 / 1.1 : 1500),
   effect: [
     advanceTime,
     applyHarshDisciplineStack,

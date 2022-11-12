@@ -3,6 +3,7 @@ import { createManaCost } from "lib/mechanics/mana";
 import { Spell, SpellCategory } from "../types";
 import { applyAtonement } from "./Atonement";
 import { TrainOfThought } from "lib/talents/TrainOfThought";
+import { hasTalent } from "lib/talents";
 
 export const FlashHeal: Spell = {
   id: 2061,
@@ -10,6 +11,7 @@ export const FlashHeal: Spell = {
   icon: "spell_holy_flashheal",
   category: SpellCategory.Applicator,
   metadata: ["Applicator"],
+  castTime: (state) => (hasTalent(state, 373456) ? 1500 / 1.1 : 1500),
   cost: createManaCost(3.6),
   healing: 203,
   effect: [advanceTime, healing, applyAtonement, TrainOfThought],
