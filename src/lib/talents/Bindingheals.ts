@@ -4,7 +4,6 @@ import { hasTalent } from "lib/talents";
 import { Spell, SpellCategory, StateSpellReducer } from "lib/types";
 import { applyAura } from "../mechanics/aura";
 import { ATONEMENT_BASE_DURATION } from "../spells/Atonement";
-import { FlashHeal } from "lib/spells";
 
 const BINDING_HEALS_ID = 368275;
 
@@ -14,7 +13,7 @@ const _bindingHeal: Spell = {
   icon: "spell_holy_bindingheal",
   category: SpellCategory.Ignored,
   offGcd: true,
-  healing: (typeof FlashHeal.healing === "number" && FlashHeal.healing * 0.2) || 0,
+  healing: 203 * 0.2, // todo: import from FH
   effect: [healing],
 };
 

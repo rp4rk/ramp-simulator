@@ -4,7 +4,7 @@ import { Spell, SpellCategory } from "../types";
 import { applyAtonement } from "./Atonement";
 import { TrainOfThought } from "lib/talents/TrainOfThought";
 import { hasTalent } from "lib/talents";
-import { BindingHeals } from "../talents/Bindingheals";
+import { BindingHeals } from "lib/talents/Bindingheals";
 
 export const FlashHeal: Spell = {
   id: 2061,
