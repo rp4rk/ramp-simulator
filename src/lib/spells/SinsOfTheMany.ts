@@ -17,10 +17,10 @@ const IGNORED_SPELLS = new Set(["Mindbender", "Shadowfiend"]);
 
 export const calculateSinsDamageBonus = (
   state: SimState,
-  spell: Spell | OverTime | Channel
+  spell?: Spell | OverTime | Channel
 ): number => {
   const atonementCount = numBuffsActive(state, "Atonement");
-  if (IGNORED_SPELLS.has(spell.name)) return 1;
+  if (spell && IGNORED_SPELLS.has(spell.name)) return 1;
 
   const [bonus] = SINS_MAP_ENTRIES.reduce(
     ([bonus, stacks, prevThreshold], [stackThreshold, penalty]) => {
