@@ -1,12 +1,13 @@
 import { hasAura } from "../buff";
-import { absorb, advanceTime, cooldown, damage, healing } from "../mechanics";
+import { absorb, advanceTime, applyAura, cooldown, damage, healing } from "../mechanics";
 import { getHastePerc } from "../player";
 import { Spell, SpellCategory, SimState } from "../types";
 import { createManaCost, MANA_COST_TYPE } from "../mechanics/mana";
-import { applyAtonement } from "./Atonement";
+import { ATONEMENT_BASE_DURATION } from "./Atonement";
 
 import { RAPTURE_COEFFICIENT } from "./Rapture";
 import { BorrowedTime } from "lib/talents/BorrowedTime";
+import { hasTalent } from "lib/talents";
 
 export const calculateShieldAbsorb = (state: SimState) => {
   const hasRaptureActive = hasAura(state, "Rapture");
@@ -15,6 +16,21 @@ export const calculateShieldAbsorb = (state: SimState) => {
   const shieldCoefficient = 3.36 * (hasRaptureActive ? raptureBonus : 1);
 
   return shieldCoefficient;
+};
+
+/**
+ * Handle PWS Atonement (Indemnity)
+ */
+const INDEMNITY_ID = 373049;
+const INDEMNITY_BONUS_DURATION = 2000;
+export const applyPowerWordShieldAtonement = (state: SimState) => {
+  const hasIndemnity = hasTalent(state, INDEMNITY_ID);
+
+  return applyAura(state, {
+    name: "Atonement",
+    applied: state.time,
+    duration: ATONEMENT_BASE_DURATION + (hasIndemnity ? INDEMNITY_BONUS_DURATION : 0),
+  });
 };
 
 export const PowerWordShield: Spell = {
@@ -37,5 +53,13 @@ export const PowerWordShield: Spell = {
   },
   name: "Power Word: Shield",
   absorb: calculateShieldAbsorb,
-  effect: [BorrowedTime, cooldown, absorb, healing, damage, applyAtonement, advanceTime],
+  effect: [
+    BorrowedTime,
+    cooldown,
+    absorb,
+    healing,
+    damage,
+    applyPowerWordShieldAtonement,
+    advanceTime,
+  ],
 };
