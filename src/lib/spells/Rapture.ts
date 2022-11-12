@@ -2,8 +2,7 @@ import { absorb, advanceTime, applyAura, damage, healing } from "../mechanics";
 import { Spell, SpellCategory } from "../types";
 import { createManaCost } from "../mechanics/mana";
 import { hasTalent } from "../talents";
-import { applyAtonement } from "./Atonement";
-import { calculateShieldAbsorb } from "./PowerWordShield";
+import { calculateShieldAbsorb, applyPowerWordShieldAtonement } from "./PowerWordShield";
 import { cdr } from "lib/mechanics/cdr";
 import { StateSpellReducer } from "../types";
 
@@ -29,13 +28,13 @@ export const Rapture: Spell = {
         duration: (state) => {
           const hasExaltation = hasTalent(state, 373042);
 
-          return 8000 + (hasExaltation ? 3000 : 0);
+          return 8000 + (hasExaltation ? 5000 : 0);
         },
       }),
     healing,
     damage,
     absorb,
-    applyAtonement,
+    applyPowerWordShieldAtonement,
     advanceTime,
     resetPowerWordShieldCooldown,
   ],
