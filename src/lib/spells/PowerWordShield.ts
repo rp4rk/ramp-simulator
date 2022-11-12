@@ -1,4 +1,4 @@
-import { hasAura } from "../buff";
+import { consumeAura, hasAura } from "../buff";
 import { absorb, advanceTime, applyAura, cooldown, damage, healing } from "../mechanics";
 import { getHastePerc } from "../player";
 import { Spell, SpellCategory, SimState } from "../types";
@@ -9,12 +9,13 @@ import { RAPTURE_COEFFICIENT } from "./Rapture";
 import { BorrowedTime } from "lib/talents/BorrowedTime";
 import { hasTalent } from "lib/talents";
 import { applyWordsOfThePious } from "lib/talents/WordsOfThePious";
+import { wealAndWoePowerWordShieldBuff } from "../talents/WealAndWoe";
 
 export const calculateShieldAbsorb = (state: SimState) => {
+  const wealAndWoeBuff = wealAndWoePowerWordShieldBuff(state);
   const hasRaptureActive = hasAura(state, "Rapture");
   const raptureBonus = 1 + RAPTURE_COEFFICIENT;
-
-  const shieldCoefficient = 336 * (hasRaptureActive ? raptureBonus : 1);
+  const shieldCoefficient = 336 * (hasRaptureActive ? raptureBonus : 1) * wealAndWoeBuff;
 
   return shieldCoefficient;
 };
@@ -62,6 +63,7 @@ export const PowerWordShield: Spell = {
     healing,
     damage,
     applyPowerWordShieldAtonement,
+    consumeAura("Weal and Woe"),
     advanceTime,
   ],
 };

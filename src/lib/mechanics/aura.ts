@@ -1,3 +1,4 @@
+import { getAura } from "lib/buff";
 import { SimState, Buff, OverTime, HoT, CalculatedBuff } from "../types";
 
 /**
@@ -8,7 +9,8 @@ import { SimState, Buff, OverTime, HoT, CalculatedBuff } from "../types";
 export const applyAura = (
   state: SimState,
   uncalculatedAura: Buff | OverTime | HoT,
-  num: number = 1
+  num: number = 1,
+  stacks: number = 1
 ): SimState => {
   const auraApplication =
     typeof uncalculatedAura.applied === "function"
@@ -30,6 +32,7 @@ export const applyAura = (
     applied: auraApplication,
     expires: auraExpiry,
     duration: auraDuration,
+    stacks,
   };
 
   const existingAuras = state.buffs.get(aura.name) || [];
@@ -71,4 +74,43 @@ export const applyAura = (
   previousApplication.expires = time + duration + pandemicValue;
 
   return state;
+};
+
+export const applyAuraStack = (state: SimState, auraName: string, stacks: number): SimState => {
+  const aura = getAura(state, auraName);
+  if (!aura) {
+    return state;
+  }
+
+  const newAura = { ...aura, stacks: aura.stacks + stacks, expires: state.time + aura.duration };
+  const existingAuras = state.buffs.get(auraName)?.slice(0, -1) || [];
+
+  return {
+    ...state,
+    buffs: new Map(state.buffs).set(auraName, [...existingAuras, newAura]),
+  };
+};
+
+export const clearAuraStack = (state: SimState, auraName: string): SimState => {
+  const aura = getAura(state, auraName);
+  if (!aura) {
+    return state;
+  }
+
+  const newAura = { ...aura, stacks: 0 };
+  const existingAuras = state.buffs.get(auraName)?.slice(0, -1) || [];
+
+  return {
+    ...state,
+    buffs: new Map(state.buffs).set(auraName, [...existingAuras, newAura]),
+  };
+};
+
+export const getAuraStacks = (state: SimState, auraName: string): number => {
+  const aura = getAura(state, auraName);
+  if (!aura) {
+    return 0;
+  }
+
+  return aura.stacks;
 };
