@@ -82,6 +82,7 @@ export interface Buff {
   duration: number | Calculated;
   consumed?: boolean;
   statBuff?: StatBuff;
+  self?: boolean;
 }
 
 /**

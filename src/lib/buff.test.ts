@@ -69,6 +69,29 @@ describe("buffs", () => {
     });
   });
 
+  describe("getPlayerAura", () => {
+    it("returns the most recent aura for the player", () => {
+      const state = createMockSimState({
+        buffs: new Map([
+          [
+            "test aura",
+            [
+              createMockBuff({ applied: 0, expires: 100, self: true }),
+              createMockBuff({ applied: 100, expires: 200, self: true }),
+              createMockBuff({ applied: 125, expires: 300, self: false }),
+            ],
+          ],
+        ]),
+      });
+
+      state.time = 150;
+
+      expect(buffs.getPlayerAura(state, "test aura")).toEqual(
+        createMockBuff({ applied: 100, expires: 200, self: true })
+      );
+    });
+  });
+
   describe("consumeAura", () => {
     it("consumes the most recent aura", () => {
       const state = createMockSimState({

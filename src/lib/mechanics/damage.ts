@@ -10,11 +10,9 @@ const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
   Mindgames: true,
   "Shadow Word: Pain": true,
   "Mind Blast": true,
-  "Mind Sear": true,
-  "Shadow Mend": true,
-  "Unholy Transfusion": true,
-  "Unholy Nova": true,
   "Shadow Word: Death": true,
+  Expiation: true,
+  "Dark Reprimand": true,
 };
 
 /**
