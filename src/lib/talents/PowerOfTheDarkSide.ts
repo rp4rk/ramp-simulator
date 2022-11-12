@@ -30,7 +30,7 @@ export const powerOfTheDarkSideBuff: Calculated = (state) => {
 
 export const PowerOfTheDarkSide: Spell = {
   category: SpellCategory.Buff,
-  id: 10060,
+  id: 198068,
   icon: "inv_artifact_powerofthedarkside",
   name: "Power of the Dark Side",
   offGcd: true,
