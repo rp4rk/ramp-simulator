@@ -6,6 +6,7 @@ const createMockBuff = (overrides: Partial<CalculatedBuff> = {}): CalculatedBuff
   applied: 0,
   duration: 0,
   expires: 0,
+  stacks: 0,
   name: "test aura",
   ...overrides,
 });
@@ -16,6 +17,7 @@ const createMockDoT = (overrides: Partial<OverTime> = {}): OverTime => ({
   coefficient: 0,
   duration: 0,
   expires: 0,
+  stacks: 0,
   interval: 0,
   name: "test dot",
   ticks: 0,

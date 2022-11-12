@@ -12,6 +12,8 @@ import { unleashedWrathBuff } from "./LightsWrath";
 import { TrainOfThoughtPenance } from "lib/talents/TrainOfThought";
 import { blazeOfLightBuff } from "../talents/BlazeOfLight";
 import { wordsOfThePiousBuff } from "lib/talents/WordsOfThePious";
+import { wealAndWoeSmiteBuff } from "../talents/WealAndWoe";
+import { consumeAura } from "lib/buff";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -26,6 +28,7 @@ export const Smite: Spell = {
     unleashedWrathBuff,
     blazeOfLightBuff,
     wordsOfThePiousBuff,
+    wealAndWoeSmiteBuff,
   ]),
   castTime: 1500,
   effect: [
@@ -35,5 +38,6 @@ export const Smite: Spell = {
     Manipulation,
     applyTwilightEquilibriumShadow,
     TrainOfThoughtPenance,
+    consumeAura("Weal and Woe"),
   ],
 };

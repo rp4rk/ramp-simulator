@@ -12,6 +12,7 @@ import {
 import { blazeOfLightBuff } from "lib/talents/BlazeOfLight";
 import { painfulPunishmentPtw, painfulPunishmentSwp } from "../talents/PainfulPunishment";
 import { hasTalent } from "lib/talents";
+import { applyWealAndWoe } from "../talents/WealAndWoe";
 
 const CASTIGATION_ID = 193134;
 
@@ -43,6 +44,6 @@ export const Penance: Channel = {
     cooldown,
     Manipulation,
     applyTwilightEquilibriumShadow,
-    channel([damage, atonement, painfulPunishmentPtw, painfulPunishmentSwp]),
+    channel([damage, atonement, painfulPunishmentPtw, painfulPunishmentSwp, applyWealAndWoe]),
   ],
 };

@@ -74,6 +74,7 @@ describe("getSerializableSimulationState", () => {
             name: "test",
             expires: 1000,
             duration: 1000,
+            stacks: 1,
           },
         ],
       ],
@@ -99,6 +100,7 @@ describe("getSerializableSimulationState", () => {
       applied: testSimState.time,
       duration: 9000,
       expires: testSimState.time + 9000,
+      stacks: 1,
     };
     applyAura(testSimState, atonementTestBuff);
     applyAura(testSimState, atonementTestBuff);

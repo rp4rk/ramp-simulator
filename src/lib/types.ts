@@ -76,6 +76,7 @@ export enum StatBuffType {
 
 export interface Buff {
   name: string;
+  stacks?: number | Calculated;
   applied?: number | Calculated;
   expires?: number | Calculated;
   duration: number | Calculated;
@@ -90,6 +91,7 @@ export interface CalculatedBuff extends Buff {
   applied: number;
   expires: number;
   duration: number;
+  stacks: number;
 }
 
 export interface OverTime extends Buff {
@@ -100,6 +102,7 @@ export interface OverTime extends Buff {
   applied: number;
   expires: number;
   duration: number;
+  stacks: number;
 }
 
 export interface HoT extends OverTime {
