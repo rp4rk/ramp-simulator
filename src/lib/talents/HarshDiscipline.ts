@@ -8,8 +8,8 @@ import { applyAuraStack } from "../mechanics/aura";
 export const HARSH_DISCIPLINE_ID = 373180;
 const HARSH_DISCIPLINE_STACK_NAME = "Harsh Discipline (Stacks)";
 const HARSH_DISCIPLINE_STACK_MAP = new Map([
-  [1, 10],
-  [2, 5],
+  [1, 8],
+  [2, 4],
 ]);
 
 /**
