@@ -13,7 +13,7 @@ export const QuickFillList: FC<QuickFillListProps> = ({ spells, selected, ...res
     <ol className="list-none space-y-2 mt-4" {...rest}>
       {spells.map((spell, idx) => (
         <li
-          key={spell.id}
+          key={`${spell.id}-${spell.name}`}
           className={
             idx === selected
               ? `flex items-center rounded-sm text-sky-700 space-x-4 p-3 border-solid border border-sky-300 bg-gradient-to-b from-sky-100 to-sky-200`
@@ -31,7 +31,7 @@ export const QuickFillList: FC<QuickFillListProps> = ({ spells, selected, ...res
             {spell.metadata && (
               <ul className="space-x-1">
                 {spell.metadata.map((metadata) => (
-                  <Tag>{metadata}</Tag>
+                  <Tag key={metadata}>{metadata}</Tag>
                 ))}
               </ul>
             )}

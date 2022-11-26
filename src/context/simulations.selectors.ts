@@ -5,13 +5,11 @@ import { SimulationConfiguration } from "./simulations";
 export interface SerializedSimulationState {
   simState: Serializable<SimState>;
   rampSpells: Serializable<number[]>;
-  items: Serializable<number[]>;
 }
 
 export const isSerializedSimulationState = (x: object): x is SerializedSimulationState => {
   if (!("simState" in x)) return false;
   if (!("rampSpells" in x)) return false;
-  if (!("items" in x)) return false;
   return true;
 };
 
@@ -34,8 +32,10 @@ const toIdList = (idList: Partial<hasId>[]): number[] => {
 /**
  * Returns the simulation config in a serializable form for storage
  */
-export const getSerializableConfiguration = (simConfig: SimulationConfiguration): SerializedSimulationState => {
-  const { state, rampSpells, items } = simConfig;
+export const getSerializableConfiguration = (
+  simConfig: SimulationConfiguration
+): SerializedSimulationState => {
+  const { state, rampSpells } = simConfig;
   const spellIdList = toIdList(rampSpells);
 
   return {
@@ -43,8 +43,8 @@ export const getSerializableConfiguration = (simConfig: SimulationConfiguration)
       ...state,
       buffs: [...state.buffs.entries()],
       cooldowns: [...state.cooldowns.entries()],
+      talents: [...state.talents.entries()],
     },
-    items: items.map(({ id }) => id),
     rampSpells: spellIdList,
   };
 };

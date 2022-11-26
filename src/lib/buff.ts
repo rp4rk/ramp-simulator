@@ -1,16 +1,60 @@
 import { SimState, OverTime, CalculatedBuff, HoT } from "./types";
 
 /**
+ * Gets the most recent aura
+ */
+export const getAura = (state: SimState, name: string): CalculatedBuff | OverTime | undefined => {
+  const buff = state.buffs.get(name)?.at(-1);
+  if (!buff) return undefined;
+  if (buff.consumed) return undefined;
+
+  if (state.time >= buff.applied && state.time <= buff.expires) {
+    return buff;
+  }
+};
+
+/**
+ * Gets the most recent aura for the player
+ */
+export const getPlayerAura = (
+  state: SimState,
+  name: string
+): CalculatedBuff | OverTime | undefined => {
+  const buffs = state.buffs.get(name);
+  if (!buffs) return undefined;
+
+  return buffs.find(
+    (buff) => buff.self && state.time >= buff.applied && state.time <= buff.expires
+  );
+};
+
+// Note: Mutating
+export const consumeAura =
+  (name: string) =>
+  (state: SimState): SimState => {
+    const buff = getAura(state, name);
+    if (buff) {
+      buff.consumed = true;
+    }
+    return state;
+  };
+
+// Note: Mutating
+export const consumePlayerAura =
+  (name: string) =>
+  (state: SimState): SimState => {
+    const buff = getPlayerAura(state, name);
+    if (buff) {
+      buff.consumed = true;
+    }
+    return state;
+  };
+
+/**
  * Checks if a buff is active
  */
 export const hasAura = (state: SimState, name: string): Boolean => {
-  return (
-    state.buffs.get(name)?.reduceRight((acc, curr) => {
-      if (acc === true) return acc;
-
-      return state.time >= curr.applied && state.time <= curr.expires;
-    }, false) || false
-  );
+  return !!getAura(state, name);
 };
 
 /**
@@ -27,6 +71,9 @@ export const getActiveBuffs = (state: SimState, name: string): CalculatedBuff[] 
   return (
     state.buffs.get(name)?.reduceRight<CalculatedBuff[]>((acc, curr) => {
       if (state.time < curr.applied || state.time > curr.expires) {
+        return acc;
+      }
+      if (curr.consumed) {
         return acc;
       }
 
@@ -57,6 +104,9 @@ export const getActiveDoTs = (state: SimState): OverTime[] => {
       if (state.time > aura.expires) {
         return acc;
       }
+      if (aura.consumed) {
+        return acc;
+      }
 
       return [...acc, aura];
     }, []);
@@ -73,6 +123,9 @@ export const getActiveHoTs = (state: SimState): HoT[] => {
         return acc;
       }
       if (state.time > aura.expires) {
+        return acc;
+      }
+      if (aura.consumed) {
         return acc;
       }
 

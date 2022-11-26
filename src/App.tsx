@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import rfdc from "rfdc";
 
 import { SimOrchestrator } from "components/SimOrchestrator";
@@ -10,9 +10,6 @@ import { Button } from "components/Button";
 import { v4 } from "uuid";
 import { SimulationsContext } from "context/simulations";
 import { deleteSimulation, addSimulation } from "context/simulations.actions";
-import { createPlayer } from "lib";
-import { createInitialState } from "lib/spellQueue";
-
 const clone = rfdc();
 
 function App() {
@@ -37,19 +34,6 @@ function App() {
           guid: simulationId,
           sim: simClone.state,
           rampSpells: simClone.rampSpells,
-          items: simClone.items,
-        })
-      );
-    } else {
-      const player = createPlayer(2400, 1100, 650, 550, 250);
-      const initialSimState = createInitialState(player);
-
-      dispatch(
-        addSimulation({
-          guid: simulationId,
-          sim: initialSimState,
-          rampSpells: [],
-          items: [],
         })
       );
     }
@@ -62,33 +46,30 @@ function App() {
     return [simEntries, simEntries.length];
   }, [state.simulations]);
 
-  // Creates the initial simulation pane
-  useEffect(() => {
-    if (simCount !== 0) return;
-
-    addSim();
-  }, [simCount, addSim]);
-
   return (
-    <>
-      <Header></Header>
-      <Card className=" z-50">
-        <SpellSelection />
-      </Card>
-      {sims.map(([id, config]) => (
-        <Card key={id}>
-          <SimOrchestrator
-            deletionAllowed={simCount > 1}
-            onDelete={deleteSim}
-            simId={id}
-            simulationConfiguration={config}
-          />
+    <div className="grid grid-cols-6 p-6 gap-6">
+      <Header className="col-span-6"></Header>
+      <aside className="col-span-1">
+        <Card className="sticky top-4">
+          <SpellSelection />
+          <Button className="mx-auto block" outline icon="PlusCircleIcon" onClick={addSim}>
+            Add Simulation
+          </Button>
         </Card>
-      ))}
-      <Button className="mx-auto block mb-4" outline icon="PlusCircleIcon" onClick={addSim}>
-        Add Simulation
-      </Button>
-    </>
+      </aside>
+      <main className="col-span-5 overflow-y-scroll">
+        {sims.map(([id, config]) => (
+          <Card key={id}>
+            <SimOrchestrator
+              deletionAllowed={simCount > 1}
+              onDelete={deleteSim}
+              simId={id}
+              simulationConfiguration={config}
+            />
+          </Card>
+        ))}
+      </main>
+    </div>
   );
 }
 

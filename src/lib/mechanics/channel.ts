@@ -13,11 +13,14 @@ export const channel =
       throw new Error(`Skill Issue: Channel without a castTime encountered: ${spell.name}`);
 
     const ticks = typeof spell.ticks === "function" ? spell.ticks(state) : spell.ticks;
-    const { castTime } = spell;
+    const castTime = typeof spell.castTime === "function" ? spell.castTime(state) : spell.castTime;
     const channelInterval = castTime / (ticks - 1);
 
     const effectsToRepeat: StateSpellReducer[] = [...effects, advanceTime];
-    const computedEffects = Array<StateSpellReducer[]>(ticks).fill(effectsToRepeat).flat();
+    const computedEffects = Array<StateSpellReducer[]>(ticks)
+      .fill(effectsToRepeat)
+      .flat()
+      .slice(0, -1);
 
     const channelWithDuration = {
       ...spell,

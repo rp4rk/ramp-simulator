@@ -4,32 +4,15 @@ export type StateSpellReducer = (
   spell: Spell | OverTime | Channel,
   tick?: number
 ) => SimState;
-export type Calculated = (state: SimState) => number;
-export type ChannelCalculated = (state: SimState, tick?: number) => number;
-
-export enum ItemType {
-  Legendary = "Legendary",
-  Conduit = "Conduit",
-  Item = "Item",
-  Talent = "Talent",
-}
-
-export interface Item extends Buff {
-  id: number;
-  icon: string;
-  type: ItemType;
-  applied: number;
-  expires: number;
-  duration: number;
-}
+export type Calculated = (state: SimState, spell?: Spell) => number;
+export type ChannelCalculated = (state: SimState, spell?: Spell, tick?: number) => number;
 
 export enum SpellCategory {
   Applicator = "Applicator",
   Damage = "Damage",
   Cooldown = "Cooldown",
-  Kyrian = "Kyrian",
-  Venthyr = "Venthyr",
-  Necrolord = "Necrolord",
+  Buff = "Buff",
+  Tool = "Tool",
   Ignored = "Ignored",
 }
 
@@ -44,7 +27,7 @@ export interface Spell {
   healing?: number | Calculated;
   absorb?: number | Calculated;
   cost?: number | Calculated;
-  castTime?: number;
+  castTime?: number | Calculated;
   fixedGcd?: boolean;
   shortGcd?: boolean;
   effect?: StateSpellReducer[];
@@ -93,11 +76,13 @@ export enum StatBuffType {
 
 export interface Buff {
   name: string;
+  stacks?: number | Calculated;
   applied?: number | Calculated;
   expires?: number | Calculated;
   duration: number | Calculated;
   consumed?: boolean;
   statBuff?: StatBuff;
+  self?: boolean;
 }
 
 /**
@@ -107,6 +92,7 @@ export interface CalculatedBuff extends Buff {
   applied: number;
   expires: number;
   duration: number;
+  stacks: number;
 }
 
 export interface OverTime extends Buff {
@@ -117,6 +103,7 @@ export interface OverTime extends Buff {
   applied: number;
   expires: number;
   duration: number;
+  stacks: number;
 }
 
 export interface HoT extends OverTime {
@@ -132,4 +119,5 @@ export interface SimState {
   damage: number;
   buffs: Map<string, (CalculatedBuff | OverTime | HoT)[]>;
   cooldowns: Map<string, number>;
+  talents: Map<number, { talentId: number; points: number }>;
 }

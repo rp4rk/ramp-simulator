@@ -1,7 +1,7 @@
 import { hasAura } from "lib/buff";
 import { StateSpellReducer, SimState, Spell, Calculated } from "../types";
 
-export const BASE_MANA = 50_000;
+export const BASE_MANA = 250_000;
 export const ENCHANT_BONUS = 0.06;
 
 export enum MANA_COST_TYPE {
@@ -27,8 +27,6 @@ export const createManaCost =
     if (type === MANA_COST_TYPE.PERCENTAGE) {
       return BASE_MANA * normalizedValue;
     }
-
-    console.log();
 
     return normalizedValue;
   };

@@ -1,5 +1,11 @@
 import { StateSpellReducer, SimState, Spell } from "../types";
 import { getCritPerc, getVersPerc } from "../player";
+import { getTalentPoints } from "lib/talents";
+import {
+  DIVINE_AEGIS_ID,
+  DIVINE_AEGIS_BENEFIT_PER_POINT,
+  calculateCritContribution,
+} from "../talents/DivineAegis";
 
 /**
  * Returns a simulation state with the absorb from the provided spell included
@@ -12,8 +18,19 @@ export const absorb: StateSpellReducer = (state: SimState, spell: Spell): SimSta
   const { player } = state;
   const initialAbsorb = typeof spell.absorb === "function" ? spell.absorb(state) : spell.absorb;
 
+  /**
+   * Aegis of Wrath hackery
+   */
+  const critPerc = getCritPerc(state.player);
+  const aegisPoints = getTalentPoints(state, DIVINE_AEGIS_ID);
+  const aegisBenefit = aegisPoints * DIVINE_AEGIS_BENEFIT_PER_POINT;
+  const critContribution = calculateCritContribution(critPerc);
+  const totalCritBonus = 1 - critContribution + critContribution * (1 + aegisBenefit);
+
   return {
     ...state,
-    absorb: state.absorb + (initialAbsorb / 100) * player.spellpower * getCritPerc(player) * getVersPerc(player),
+    absorb:
+      state.absorb +
+      (initialAbsorb / 100) * player.spellpower * totalCritBonus * getVersPerc(player),
   };
 };

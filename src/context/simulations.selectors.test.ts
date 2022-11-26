@@ -1,5 +1,4 @@
 import { createPlayer } from "lib";
-import { ClarityOfMind } from "lib/items";
 import { applyAura } from "lib/mechanics";
 import { PowerWordShield } from "lib/spells";
 import { SimState } from "lib/types";
@@ -7,9 +6,10 @@ import { SimulationConfiguration } from "./simulations";
 import { getSerializableConfiguration } from "./simulations.selectors";
 
 // Create a simulation configuration for testing
-const createSimulationConfiguration = (overrides: Partial<SimulationConfiguration> = {}): SimulationConfiguration => ({
+const createSimulationConfiguration = (
+  overrides: Partial<SimulationConfiguration> = {}
+): SimulationConfiguration => ({
   rampSpells: [],
-  items: [],
   state: {
     damage: 0,
     absorb: 0,
@@ -19,6 +19,7 @@ const createSimulationConfiguration = (overrides: Partial<SimulationConfiguratio
     time: 0,
     buffs: new Map(),
     cooldowns: new Map(),
+    talents: new Map(),
   },
   ...overrides,
 });
@@ -37,19 +38,6 @@ describe("getSerializableSimulationState", () => {
     expect(serializableState.rampSpells).toEqual([17]);
   });
 
-  test("correctly serializes items", () => {
-    // given
-    const simulationConfiguration = createSimulationConfiguration({
-      items: [ClarityOfMind],
-    });
-
-    // when
-    const serializableState = getSerializableConfiguration(simulationConfiguration);
-
-    // then
-    expect(serializableState.items).toEqual([336067]);
-  });
-
   test("correctly serializes buffs", () => {
     // given
     const testSimState: SimState = {
@@ -60,10 +48,14 @@ describe("getSerializableSimulationState", () => {
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,
+      talents: new Map(),
       buffs: new Map(),
     };
 
-    applyAura(testSimState, ClarityOfMind);
+    applyAura(testSimState, {
+      name: "test",
+      duration: 1000,
+    });
 
     const simulationConfiguration = createSimulationConfiguration({
       state: testSimState,
@@ -73,7 +65,20 @@ describe("getSerializableSimulationState", () => {
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.simState.buffs).toEqual([["Clarity of Mind", [ClarityOfMind]]]);
+    expect(serializableState.simState.buffs).toEqual([
+      [
+        "test",
+        [
+          {
+            applied: 0,
+            name: "test",
+            expires: 1000,
+            duration: 1000,
+            stacks: 1,
+          },
+        ],
+      ],
+    ]);
   });
 
   it("correctly serializes multiple buffs", () => {
@@ -86,6 +91,7 @@ describe("getSerializableSimulationState", () => {
       cooldowns: new Map(),
       player: createPlayer(0, 0, 0, 0, 0),
       time: 0,
+      talents: new Map(),
       buffs: new Map(),
     };
 
@@ -94,6 +100,7 @@ describe("getSerializableSimulationState", () => {
       applied: testSimState.time,
       duration: 9000,
       expires: testSimState.time + 9000,
+      stacks: 1,
     };
     applyAura(testSimState, atonementTestBuff);
     applyAura(testSimState, atonementTestBuff);
@@ -106,6 +113,8 @@ describe("getSerializableSimulationState", () => {
     const serializableState = getSerializableConfiguration(simulationConfiguration);
 
     // then
-    expect(serializableState.simState.buffs).toEqual([["Atonement", [atonementTestBuff, atonementTestBuff]]]);
+    expect(serializableState.simState.buffs).toEqual([
+      ["Atonement", [atonementTestBuff, atonementTestBuff]],
+    ]);
   });
 });

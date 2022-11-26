@@ -1,5 +1,5 @@
-import CopyToClipboard from "react-copy-to-clipboard";
-import { DragSpell } from "components/Spell";
+// import CopyToClipboard from "react-copy-to-clipboard";
+import { DragSpell } from "components/Spell/DragSpell";
 import { Spells } from "lib";
 import { Spell as SpellType, SpellCategory } from "lib/types";
 import { Button } from "components/Button";
@@ -8,9 +8,10 @@ import { SimulationsContext } from "context/simulations";
 import { isSerializedSimulationState } from "context/simulations.selectors";
 import clipboard from "clipboardy";
 import lzbase62 from "lzbase62";
-import { importSimulation } from "context/simulations.actions";
-
-const RAMP_SEQUENCE = `ramp-uDritjZdDkRkVrisS2MtYVRcZeX2LsIEritURdRXxWDxLDtRSjfiSxLFtSlWWj2KtLN2Ltk25xfGtgcRuBtViyDEtjgVccgfnxOEsKI2B2ctYRjyeEsRRxMD3TxMDtiuB2OsLNxODtTiZkxLHtm2WyXDsMxwE2i4RsaynGySOy1EyQHxLEyPJxNEyOGxKEyNG2KuFFxWDtffcU3AtexRG2Q2ktVd0EHti5ltgDygExQEsMPNLOEJPxDY28`;
+import { addSimulationSpells, importSimulation } from "context/simulations.actions";
+import { toRampSpell } from "features/QuickFill";
+import { Toast } from "components/Toast";
+import { useState } from "react";
 
 function set<T>(s: string, o: { [index: string]: T[] }, i: T) {
   if (o[s]) {
@@ -34,6 +35,7 @@ const SPELL_CATEGORIES = Object.values(Spells).reduce((acc, spell) => {
 
 export const SpellSelection = React.memo(function () {
   const { dispatch } = useContext(SimulationsContext);
+  const [showToast, setShowToast] = useState(false);
 
   const importString = useCallback(async () => {
     const clipboardValue = await clipboard.read();
@@ -52,6 +54,8 @@ export const SpellSelection = React.memo(function () {
       return;
     }
 
+    setShowToast(true);
+
     dispatch(
       importSimulation({
         simulation: parsedValue,
@@ -62,23 +66,39 @@ export const SpellSelection = React.memo(function () {
   return (
     <>
       <div className="flex justify-between mb-4">
-        <h4 className="text-lg text-gray-600 font-semibold">Spell Selection</h4>
+        <h4 className="text-lg text-gray-600 font-semibold font-sans">Spell Selection</h4>
         <div className="space-x-2">
           <Button outline icon="DownloadIcon" onClick={importString}>
             Import
           </Button>
-          <CopyToClipboard text={RAMP_SEQUENCE}>
+          <Toast
+            open={showToast}
+            title="Imported"
+            content="Imported ramp successfully"
+            onClose={() => setShowToast(false)}
+            onOpenChange={setShowToast}
+          >
+            <Button outline icon="UploadIcon" onClick={importString} />
+          </Toast>
+          {/* Todo: Sane default */}
+          {/* <CopyToClipboard text={"No ramp available for Dragonflight right now 😥"}>
             <Button icon="ClipboardCopyIcon">Copy Ramp Sequence</Button>
-          </CopyToClipboard>
+          </CopyToClipboard> */}
         </div>
       </div>
-      <div className="flex justify-center space-x-2 ">
+      <div className="flex flex-col">
         {Object.entries(SPELL_CATEGORIES).map(([key, spells]) => (
-          <div key={key}>
-            <h5 className="text-md text-gray-600 font-semibold">{key}</h5>
-            <div className="bg-gradient-to-b from-gray-100 to-gray-200 p-2 rounded drop-shadow-sm">
+          <div key={key} className="mb-4">
+            <h5 className="text-gray-600 font-semibold font-sans">{key}</h5>
+            <div className="border-gray-300 border rounded drop-shadow-sm">
               {spells.map((spell) => (
-                <DragSpell key={spell.id} spell={spell} />
+                <DragSpell
+                  onClick={(spell) =>
+                    dispatch(addSimulationSpells({ spells: [toRampSpell(spell)] }))
+                  }
+                  key={spell.id + spell.name}
+                  spell={spell}
+                />
               ))}
             </div>
           </div>

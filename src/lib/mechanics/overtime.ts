@@ -31,7 +31,10 @@ export const executeDoT: StateSpellReducer = (state, spell): SimState => {
     const { time } = prevState;
     const [dot, calculatedDamage, projectedTime] = tick;
     const partialDot = { ...dot, damage: calculatedDamage };
-    const nextState = atonement(damage({ ...prevState, time: projectedTime }, partialDot), partialDot);
+    const nextState = atonement(
+      damage({ ...prevState, time: projectedTime }, partialDot),
+      partialDot
+    );
 
     return {
       ...nextState,
@@ -47,12 +50,12 @@ export const executeHoT: StateSpellReducer = (state, spell): SimState => {
   const { time: projectedTime } = advanceTime(state, spell);
   const haste = getHastePerc(state.player);
 
-  // Get currently active DoTs
+  // Get currently active HoTs
   const activeHoTs = getActiveHoTs(state);
   if (activeHoTs.length === 0) return state;
 
   const tickTimes = activeHoTs
-    .map((dot) => getTickTimes(dot, haste, state))
+    .map((hot) => getTickTimes(hot, haste, state))
     .flatMap((i) => pickBetween(time, projectedTime, i));
 
   // Log stuff out
@@ -63,9 +66,9 @@ export const executeHoT: StateSpellReducer = (state, spell): SimState => {
   // return state;
   return tickTimes.reduce((prevState, tick) => {
     const { time } = prevState;
-    const [dot, calculatedHealing, projectedTime] = tick;
+    const [hot, calculatedHealing, projectedTime] = tick;
 
-    const partialHoT = { ...dot, healing: calculatedHealing };
+    const partialHoT = { ...hot, healing: calculatedHealing };
     const nextState = healing({ ...prevState, time: projectedTime }, partialHoT);
 
     return {
@@ -104,3 +107,11 @@ const getTickTimes = function getTickTimes(xot: OverTime, haste: number, state: 
 function pickBetween(n: number, o: number, numbers: Tick[]): Tick[] {
   return numbers.filter(([_, , i]) => i >= n && i < o);
 }
+
+export const getRemainingTicks = (xot: OverTime, haste: number, state: SimState): number => {
+  const remainingDuration = xot.expires - state.time;
+  const baseInterval = typeof xot.interval === "function" ? xot.interval(state) : xot.interval;
+  const hastedInterval = baseInterval / haste;
+
+  return remainingDuration / hastedInterval;
+};

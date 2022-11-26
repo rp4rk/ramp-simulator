@@ -1,14 +1,14 @@
-import { SimState, Item, Stats } from "lib/types";
+import { SimState, Stats } from "lib/types";
 import { Action } from "../types";
 import { RampSpell } from "./simulations";
 import { SerializedSimulationState } from "./simulations.selectors";
+import { TalentSetReturn } from "@focused-will/components";
 
 interface AddSimulationAction extends Action {
   type: "ADD_SIMULATION";
   payload: {
     guid: string;
     sim: SimState;
-    items: Item[];
     rampSpells: RampSpell[];
   };
 }
@@ -59,32 +59,6 @@ export const addSimulationSpells = (
   payload,
 });
 
-interface AddSimulationItems extends Action {
-  type: "ADD_SIMULATION_ITEMS";
-  payload: {
-    guid: string;
-    items: Item[];
-  };
-}
-export const addSimulationItems = (payload: AddSimulationItems["payload"]): AddSimulationItems => ({
-  type: "ADD_SIMULATION_ITEMS",
-  payload,
-});
-
-interface RemoveSimulationItems extends Action {
-  type: "REMOVE_SIMULATION_ITEMS";
-  payload: {
-    guid: string;
-    items: Item[];
-  };
-}
-export const removeSimulationItems = (
-  payload: RemoveSimulationItems["payload"]
-): RemoveSimulationItems => ({
-  type: "REMOVE_SIMULATION_ITEMS",
-  payload,
-});
-
 interface UpdatePlayerStat extends Action {
   type: "UPDATE_PLAYER_STAT";
   payload: {
@@ -123,13 +97,27 @@ export const setFocusedSimulation = (
   payload,
 });
 
+interface SetSimulationTalents extends Action {
+  type: "SET_SIMULATION_TALENTS";
+  payload: {
+    guid: string;
+    talents: TalentSetReturn;
+  };
+}
+
+export const setSimulationTalents = (
+  payload: SetSimulationTalents["payload"]
+): SetSimulationTalents => ({
+  type: "SET_SIMULATION_TALENTS",
+  payload,
+});
+
 export type SimulationStatesAction =
   | AddSimulationAction
   | DeleteSimulationAction
   | SetSimulationSpells
   | AddSimulationSpells
-  | AddSimulationItems
-  | RemoveSimulationItems
   | UpdatePlayerStat
   | ImportSimulation
-  | SetFocusedSimulation;
+  | SetFocusedSimulation
+  | SetSimulationTalents;
