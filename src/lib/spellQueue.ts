@@ -13,7 +13,9 @@ type SpellQueueIterator = (
 /**
  * Creates the default player statistics
  */
-const defaultPlayer = () => createPlayer(1, 33 * 40, 35 * 25, 35 * 10, 202);
+// Midnight (12.0.1) default stats for level 90 with stat squish
+// TODO: Validate against live 12.0.1 gear values
+const defaultPlayer = () => createPlayer(1, 20 * 40, 20 * 25, 20 * 10, 120);
 
 /**
  * Creates the initial state for the simulation

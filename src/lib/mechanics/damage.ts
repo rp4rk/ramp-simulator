@@ -1,19 +1,9 @@
 import { SimState, Spell, OverTime, StateSpellReducer, Channel } from "../types";
-import { hasAura } from "../buff";
 import { getCritPerc, getVersPerc } from "../player";
 import { hasTalent } from "lib/talents";
-import { calculateSinsDamageBonus } from "lib/spells/SinsOfTheMany";
 
-const IGNORED_FOR_SCHISM = ["Shadowfiend", "Mindbender", "Expiation"];
-const CONSIDERED_FOR_SCOV: { [key: string]: boolean } = {
-  Schism: true,
-  Mindgames: true,
-  "Shadow Word: Pain": true,
-  "Mind Blast": true,
-  "Shadow Word: Death": true,
-  Expiation: true,
-  "Dark Reprimand": true,
-};
+// Midnight: All damage reduced by 15% baseline
+const MIDNIGHT_BASE_DAMAGE_MODIFIER = 0.85;
 
 /**
  * Calculates the damage for the provided spell or OverTime effect with the provided simulation state.
@@ -28,23 +18,16 @@ export function calculateDamage(
 
   const initialDamage = typeof damage === "function" ? damage(state, spell, tick) : damage;
 
-  const isSchismActive = hasAura(state, "Schism");
-  const isScovActive = hasAura(state, "Shadow Covenant");
-  const schismMultiplier = isSchismActive ? 1.15 : 1;
-  const scovMultiplier = isScovActive ? 1.25 : 1;
-  const sinsMultiplier = calculateSinsDamageBonus(state, spell);
   const { player } = state;
 
   const wrathUnleashedBonus = spell.name === "Light's Wrath" && hasTalent(state, 390781) ? 0.15 : 0;
 
   return (
     (initialDamage / 100) *
-    (IGNORED_FOR_SCHISM.includes(spell.name) ? 1 : schismMultiplier) *
-    (CONSIDERED_FOR_SCOV[spell.name] ? scovMultiplier : 1) *
+    MIDNIGHT_BASE_DAMAGE_MODIFIER *
     player.spellpower *
     (getCritPerc(player) + wrathUnleashedBonus) *
-    getVersPerc(player) *
-    sinsMultiplier
+    getVersPerc(player)
   );
 }
 

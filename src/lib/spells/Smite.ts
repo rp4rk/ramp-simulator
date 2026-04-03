@@ -16,6 +16,7 @@ import { wealAndWoeSmiteBuff } from "../talents/WealAndWoe";
 import { consumeAura } from "lib/buff";
 import { applyHarshDisciplineStack, applyHarshDiscipline } from "../talents/HarshDiscipline";
 import { hasTalent } from "lib/talents";
+import { greaterSmiteBuff, applyGreaterSmiteStack } from "../talents/GreaterSmite";
 
 const DAMAGE_COEFFICIENT = 49.35;
 
@@ -31,6 +32,8 @@ export const Smite: Spell = {
     blazeOfLightBuff,
     wordsOfThePiousBuff,
     wealAndWoeSmiteBuff,
+    // Midnight: Greater Smite stacking buff
+    greaterSmiteBuff,
   ]),
   castTime: (state) => (hasTalent(state, 373456) ? 1500 / 1.1 : 1500),
   effect: [
@@ -43,5 +46,7 @@ export const Smite: Spell = {
     applyTwilightEquilibriumShadow,
     TrainOfThoughtPenance,
     consumeAura("Weal and Woe"),
+    // Midnight: Greater Smite - apply stacking buff after Smite cast
+    applyGreaterSmiteStack,
   ],
 };

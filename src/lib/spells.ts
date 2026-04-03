@@ -5,7 +5,6 @@ import {
   cooldown,
   damage,
   executeDoT,
-  healing,
   evangelismExtension,
 } from "./mechanics";
 import { Spell, SpellCategory, StatBuffType } from "./types";
@@ -85,26 +84,7 @@ export const Evangelism: Spell = {
   effect: [evangelismExtension, advanceTime],
 };
 
-export const ShadowCovenant: Spell = {
-  category: SpellCategory.Cooldown,
-  id: 314867,
-  icon: "spell_shadow_summonvoidwalker",
-  name: "Shadow Covenant",
-  cost: createManaCost(4.5),
-  healing: 825,
-  cooldown: 30000,
-  effect: [
-    cooldown,
-    (state) => {
-      return applyAura(state, {
-        name: "Shadow Covenant",
-        duration: 7000,
-      });
-    },
-    advanceTime,
-    healing,
-  ],
-};
+// Shadow Covenant removed in Midnight (12.0.1) - replaced by Occultist passive
 
 export const PowerWordSolace: Spell = {
   category: SpellCategory.Cooldown,
@@ -176,13 +156,13 @@ export { PowerWordShield } from "./spells/PowerWordShield";
 export { Renew } from "./spells/Renew";
 export { LightsWrath } from "./spells/LightsWrath";
 export { Smite } from "./spells/Smite";
-export { Mindgames } from "./spells/Mindgames";
+// Mindgames removed in Midnight (12.0.1)
 export { ShadowWordDeath } from "./spells/ShadowWordDeath";
 export { ShadowWordDeathExecute } from "./spells/ShadowWordDeath";
 export { FlashHeal } from "./spells/FlashHeal";
 export { MindBlast } from "./spells/MindBlast";
 export { PowerWordRadiance } from "./spells/PowerWordRadiance";
-export { Schism } from "./spells/Schism";
+// Schism removed in Midnight (12.0.1)
 export { PurgeTheWicked } from "./spells/PurgeTheWicked";
 export { ShadowWordPain } from "./spells/ShadowWordPain";
 export { Penance } from "./spells/Penance";
@@ -191,3 +171,7 @@ export { HarshDiscipline } from "./talents/HarshDiscipline";
 export { HolyNova } from "./talents/HolyNova";
 export { Halo } from "./talents/Halo";
 export { DivineStar } from "./talents/DivineStar";
+
+// Midnight (12.0.1) new spells
+export { VoidShield } from "./spells/VoidShield";
+export { VoidBlast } from "./spells/VoidBlast";

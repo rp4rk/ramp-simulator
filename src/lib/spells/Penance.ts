@@ -15,8 +15,17 @@ import { hasTalent } from "lib/talents";
 import { applyWealAndWoe } from "../talents/WealAndWoe";
 import { powerOfTheDarkSideBuff } from "../talents/PowerOfTheDarkSide";
 import { HARSH_DISCIPLINE_ID } from "lib/talents/HarshDiscipline";
+import { applyAtonement } from "./Atonement";
+import { applyVoidShieldReady } from "../talents/MasterTheDarkness";
 
 const CASTIGATION_ID = 193134;
+
+// Midnight: Escalating bolt damage - each successive bolt increases damage
+const ESCALATION_PER_BOLT = 0.05;
+const escalatingBoltBuff = (state: any, spell: any, tick?: number): number => {
+  if (!tick) return 1;
+  return 1 + (tick - 1) * ESCALATION_PER_BOLT;
+};
 
 export const Penance: Channel = {
   category: SpellCategory.Damage,
@@ -37,19 +46,26 @@ export const Penance: Channel = {
 
     return 3 + (hasHarshDiscipline ? 3 : 0) + (hasCastigation ? 1 : 0);
   },
-  damage: buildCoefficient(37.6, [
+  // Midnight: Penance damage increased by 20% (37.6 * 1.2 = 45.12), with escalating bolts
+  damage: buildCoefficient(45.12, [
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Holy),
     blazeOfLightBuff,
     powerOfTheDarkSideBuff,
+    escalatingBoltBuff,
   ]),
-  healing: 375,
+  // Midnight: Penance healing increased by 20% (375 * 1.2 = 450)
+  healing: 450,
   castTime: 2000,
   effect: [
     cooldown,
+    // Midnight: Penance now applies Atonement
+    applyAtonement,
     Manipulation,
     applyTwilightEquilibriumShadow,
     channel([damage, atonement, painfulPunishmentPtw, painfulPunishmentSwp, applyWealAndWoe]),
     consumeAura("Power of the Dark Side"),
     consumeAura("Harsh Discipline"),
+    // Midnight: Master the Darkness - apply Void Shield Ready after Penance
+    applyVoidShieldReady,
   ],
 };

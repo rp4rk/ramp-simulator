@@ -7,6 +7,7 @@ import { Expiation } from "lib/talents/Expiation";
 import { buildCoefficient } from "lib/mechanics/util/buildDamage";
 import { expiationBuff } from "../talents/Expiation";
 import { applyTwilightEquilibriumHoly } from "../talents/TwilightEquilibrium";
+import { occultistBuff } from "../talents/Occultist";
 
 export const ShadowWordDeath: Spell = {
   category: SpellCategory.Damage,
@@ -14,7 +15,7 @@ export const ShadowWordDeath: Spell = {
   icon: "spell_shadow_demonicfortitude",
   name: "Shadow Word: Death",
   cost: createManaCost(0.5),
-  damage: buildCoefficient(79.9, [expiationBuff]),
+  damage: buildCoefficient(79.9, [expiationBuff, occultistBuff]),
   effect: [
     applyTwilightEquilibriumHoly,
     advanceTime,
@@ -32,7 +33,7 @@ export const ShadowWordDeathExecute: Spell = {
   icon: "spell_shadow_demonicfortitude",
   name: "Shadow Word: Death (Execute)",
   cost: createManaCost(0.5),
-  damage: buildCoefficient(199.75, [expiationBuff]),
+  damage: buildCoefficient(199.75, [expiationBuff, occultistBuff]),
   effect: [
     applyTwilightEquilibriumHoly,
     advanceTime,

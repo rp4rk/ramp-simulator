@@ -2,10 +2,12 @@ import { Player, StatBuffType } from "./types";
 
 type getStat = (p: Player) => number;
 
-const MASTERY_COEFFICIENT = 180;
-const HASTE_COEFFICIENT = 170;
-const CRIT_COEFFICIENT = 180;
-const VERS_COEFFICIENT = 205;
+// Midnight (12.0.1) stat coefficients for level 90
+// TODO: Validate against live 12.0.1 data
+const MASTERY_COEFFICIENT = 231;
+const HASTE_COEFFICIENT = 219;
+const CRIT_COEFFICIENT = 231;
+const VERS_COEFFICIENT = 264;
 
 const DIMINISHING_RETURNS = [
   [30, 0],

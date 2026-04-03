@@ -9,6 +9,7 @@ import {
   applyTwilightEquilibriumHoly,
 } from "lib/talents/TwilightEquilibrium";
 import { painAndSufferingBonus } from "lib/talents/PainAndSuffering";
+import { occultistBuff } from "../talents/Occultist";
 
 export const ShadowWordPain: Spell = {
   category: SpellCategory.Damage,
@@ -19,6 +20,7 @@ export const ShadowWordPain: Spell = {
     twilightEquilibriumBuff(TwilightEquilibriumSchool.Shadow),
     throesOfPainBonus,
     painAndSufferingBonus,
+    occultistBuff,
   ]),
   cost: createManaCost(1.8),
   effect: [

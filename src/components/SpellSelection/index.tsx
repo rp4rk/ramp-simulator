@@ -81,7 +81,7 @@ export const SpellSelection = React.memo(function () {
             <Button outline icon="UploadIcon" onClick={importString} />
           </Toast>
           {/* Todo: Sane default */}
-          {/* <CopyToClipboard text={"No ramp available for Dragonflight right now 😥"}>
+          {/* <CopyToClipboard text={"Midnight (12.0.1) ramp simulator"}>
             <Button icon="ClipboardCopyIcon">Copy Ramp Sequence</Button>
           </CopyToClipboard> */}
         </div>

@@ -5,10 +5,11 @@ import { StateSpellReducer } from "../types";
 const MANIPULATION_ID = 390996;
 const MANIPULATION_CDR_PER_POINT = 500;
 
+// Midnight: Mindgames removed, Manipulation now reduces Penance cooldown
 export const Manipulation: StateSpellReducer = (state, spell) => {
   const manipulationPoints = getTalentPoints(state, MANIPULATION_ID);
   if (manipulationPoints === 0) return state;
   const manipulationCdr = manipulationPoints * MANIPULATION_CDR_PER_POINT;
 
-  return cdr("Mindgames", manipulationCdr)(state, spell);
+  return cdr("Penance", manipulationCdr)(state, spell);
 };

@@ -50,7 +50,8 @@ export const SimOrchestrator: FC<SimOrchestratorProps> = memo((props) => {
       const simResult = QuickSim(createInitialState(player, { talents }), spells);
       setSimResult(simResult);
     } else {
-      const player = createPlayer(2000, 990, 350, 350, 400);
+      // Midnight (12.0.1) default stats - TODO: validate against live data
+      const player = createPlayer(1200, 600, 200, 200, 240);
       const simResult = QuickSim(createInitialState(player, { talents }), spells);
       setSimResult(simResult);
     }
